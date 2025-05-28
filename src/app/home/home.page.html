@@ -1,20 +1,20 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="player-1">
+  <round-timer class="player-1__round-timer"/>
+  <counter backgroundColor="#ff004a" [hp]="20" class="player-1__counter"/>
+  <turn-timer class="player-1__turn-timer"
+  #timer1
+  [initialTime]="'00:30'"
+  (finished)="onTimerFinished(1)"/>
+  <timeout class="player-1__time-out"/>
+</div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<div class="player-2">
+  <round-timer class="player-2__round-timer" time="00:00:15"/>
+  <counter backgroundColor="#4250fe" [hp]="20"/>
+  <turn-timer class="player-2__turn-timer"
+  #timer2
+  [initialTime]="'00:10'"
+  (finished)="onTimerFinished(2)"/>
+  <timeout class="player-2__time-out"/>
+</div>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
-</ion-content>

@@ -1,0 +1,60 @@
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
+
+@Component({
+  selector: 'counter',
+  templateUrl: './counter.component.html',
+  styleUrls: ['./counter.component.scss'],
+  imports: [CommonModule, IonicModule],
+})
+export class CounterComponent  implements OnInit {
+  ngOnInit() {}
+  @Input() hp: number = 0;
+  @Input() min: number = 0;
+  @Input() max: number = Infinity;
+  @Input() backgroundColor!: string;
+  @Output() valueChange = new EventEmitter<number>();
+
+  private animationTimeout: any;
+  public counter: number = 0;
+  public showAnimation: boolean = false;
+  public showVisible: boolean = false;
+
+  incrementDecrement(value: number) {
+      if (this.hp + value >= -999 && this.hp + value <= 999) {
+      this.hp += value;
+      this.valueChange.emit(this.hp);
+      this.triggerAnimationDelay();
+      this.counterNumber(value);
+
+    }
+    return;
+  }
+
+  triggerAnimationDelay() {
+
+  this.showAnimation = false;
+  this.showVisible = true;
+
+  if (this.animationTimeout) {
+    clearTimeout(this.animationTimeout);
+  }
+
+  this.animationTimeout = setTimeout(() => {
+    this.showVisible = false;
+    this.showAnimation = true;
+
+    setTimeout(() => {
+      this.showAnimation = false;
+    }, 2000);
+  }, 2000);
+}
+
+onAnimationEnd(){
+  this.counter = 0;
+}
+counterNumber(value: number) {
+  this.counter += value;
+}
+}

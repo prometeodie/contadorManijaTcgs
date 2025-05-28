@@ -1,0 +1,37 @@
+.turn-timer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+
+    .turn-timer__btn{
+      background-color: transparent;
+
+      &__icon{
+        font-size: xxx-large;
+      }
+    }
+}
+
+.hurry-up{
+  display: inline-block;
+  color: #FFD700;
+  font-weight: bold;
+  animation: pulseFontSize 2s ease-in-out infinite;
+}
+
+.time-out{
+  color: #fff;
+  animation: none;
+}
+// ANIMATION
+
+@keyframes pulseFontSize {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}

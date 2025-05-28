@@ -25,3 +25,34 @@
 #container a {
   text-decoration: none;
 }
+
+
+.player-1__round-timer,
+.player-2__round-timer{
+  left: 0.6rem;
+  padding-top: 0.2rem;
+  position: fixed;
+  z-index: 1;
+}
+.player-1__turn-timer,
+.player-2__turn-timer{
+  position: fixed;
+  bottom: 1rem;
+  right: 0.5rem;
+}
+
+.player-1{
+    transform: rotate(180deg);
+}
+
+.player-1__time-out,
+.player-2__time-out{
+  position: absolute;
+}
+
+.player-1__time-out{
+  top: 0;
+}
+.player-2__time-out{
+  bottom: 0;
+}

@@ -1,0 +1,16 @@
+<div lines="none" class="counter-container" [ngStyle]="{ 'background-color': backgroundColor }">
+  <div class="counter-btn" (click)="incrementDecrement(-1)">−</div>
+  <section class="counter-section">
+    <span  class="counter-section__number"
+    [ngClass]="{ 'animate': showAnimation, 'visible': showVisible }"
+     (animationend)="onAnimationEnd()"
+    >
+    <span *ngIf="counter > 0">+</span>{{counter}}
+  </span>
+    <ion-label class="counter-section__value" [ngClass]="{
+    'small-font': hp < -99,
+    'defeat-color': hp <= 0,
+  }">{{ hp }}</ion-label>
+  </section>
+  <div class="counter-btn" (click)="incrementDecrement(1)">+</div>
+</div>

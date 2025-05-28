@@ -1,0 +1,26 @@
+.timer-display{
+  font-size: large;
+}
+
+.time-out{
+  color: #1e1e1e;
+}
+
+.hurry-up{
+  display: inline-block;
+  color: #FFD700;
+  font-weight: bold;
+  animation: pulseFontSize 2s ease-in-out infinite;
+}
+
+
+// ANIMATION
+
+@keyframes pulseFontSize {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}

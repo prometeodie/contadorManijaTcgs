@@ -1,0 +1,61 @@
+.time-out-alert {
+  display: none;
+}
+
+.time-out {
+  height: 50vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeInOutEpic 3.5s ease-out forwards;
+
+  &-alert__text {
+    font-family: 'Cinzel', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #d6c089; // dorado desaturado
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 1;
+
+    text-shadow:
+      0 0 2px #8b6f2f,
+      0 0 8px rgba(0, 0, 0, 0.7),
+      2px 2px 4px rgba(0, 0, 0, 0.9);
+
+    backdrop-filter: blur(2px);
+    padding: 1rem 2rem;
+    border: 2px solid rgba(214, 192, 137, 0.2);
+    border-radius: 10px;
+    background-color: rgba(10, 10, 10, 0.3);
+  }
+}
+
+
+// ANIMATIONS
+@keyframes fadeInOutEpic {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+    display: block;
+  }
+
+  10% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  80% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.05);
+    display: none;
+  }
+}

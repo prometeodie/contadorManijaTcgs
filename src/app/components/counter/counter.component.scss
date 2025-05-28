@@ -1,0 +1,81 @@
+
+.counter-container,
+.counter-section{
+  display: flex;
+  align-items: center;
+  height: 50vh;
+}
+
+.counter-container {
+  --background: transparent;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+  font-size: 6rem;
+  font-weight: lighter;
+  text-align: center;
+  color: rgb(0, 0, 0);
+  border: none;
+}
+
+.counter-btn {
+  font-size: 4rem;
+  color: #000;
+  --padding-start: 0;
+  --padding-end: 0;
+  --background: transparent;
+}
+
+.counter-btn::part(native) {
+  background: transparent;
+  border-radius: 50%;
+  height: 3rem;
+  width: 3rem;
+}
+
+.small-font{
+  font-size: smaller;
+}
+
+.defeat-color{
+  color: #d0d0d0;
+}
+
+.counter-section{
+  flex-direction: column;
+  position: relative;
+  justify-content: center;
+
+  &__number{
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    display: inline-block;
+    position: absolute;
+    top: 3rem;
+    font-size: xx-large;
+  }
+
+}
+
+.animate {
+animation: riseAndFade 2s ease forwards;
+}
+
+.visible {
+  opacity: 1;
+}
+// ANIMATION
+
+@keyframes riseAndFade {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  30% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+}
