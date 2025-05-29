@@ -5,12 +5,14 @@
     [ngClass]="{ 'animate': showAnimation, 'visible': showVisible }"
      (animationend)="onAnimationEnd()"
     >
-    <span *ngIf="counter > 0">+</span>{{counter}}
-  </span>
+    <span *ngIf="counter > 0">+</span>{{counter}}</span>
+    <div>
     <ion-label class="counter-section__value" [ngClass]="{
     'small-font': hp < -99,
     'defeat-color': hp <= 0,
   }">{{ hp }}</ion-label>
+  <div class="counter-container__turns"><span>Turno</span> <strong>{{turnsCounter}}</strong></div>
+  </div>
   </section>
   <div class="counter-btn" (click)="incrementDecrement(1)">+</div>
 </div>

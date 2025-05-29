@@ -1,0 +1,17 @@
+<section class="menu">
+  <div class="vs-menu-container">
+    <button class="vs-button" (click)="toggleMenu($event)">VS</button>
+
+    <div class="vs-submenu" [ngClass]="{ 'menu-open': menuOpen }" (click)="$event.stopPropagation()">
+      <ul class="submenu-icons">
+        <li (click)="resetMatch()"><ion-icon class="icon" name="refresh"></ion-icon></li>
+        <li><ion-icon class="icon" name="timer"></ion-icon></li>
+        <li><ion-icon class="icon" name="heart-half"></ion-icon></li>
+        <li><ion-icon class="icon" name="play" *ngIf="!playPauseTimers; else stop" (click)="playPause()"></ion-icon></li>
+        <ng-template #stop>
+          <li (click)="playPause()"><ion-icon class="icon" name="pause"></ion-icon></li>
+        </ng-template>
+      </ul>
+    </div>
+  </div>
+</section>

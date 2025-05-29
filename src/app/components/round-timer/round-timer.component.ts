@@ -11,34 +11,19 @@ import { TimerServicesService } from 'src/app/services/timer-services.service';
   imports: [IonicModule, NgClass],
 })
 export class RoundTimerComponent implements OnInit {
-
-  @Input() time = '00:01:00'; // Formato hh:mm:ss
-  @Output() finished = new EventEmitter<void>();
-
+  @Input() time: string | undefined;
   private timerService = inject(TimerServicesService);
-  private intervalId: any;
-
-  totalSeconds = this.timerService.totalSeconds; // ahora es una signal usable directamente
+  public totalSeconds = this.timerService.totalSeconds;
 
   ngOnInit() {
-    const parsed = this.parseTimeToSeconds(this.time);
-    this.timerService.timerTime(parsed);
-    this.startCountdown();
+    if (this.time) {
+      const total = this.parseTimeToSeconds(this.time);
+      this.timerService.setInitialTime(total);
+    }
   }
 
-  ngOnDestroy() {
-    clearInterval(this.intervalId);
-  }
-
-  startCountdown() {
-    this.intervalId = setInterval(() => {
-      if (this.totalSeconds() > 0) {
-        this.timerService.counter();
-      } else {
-        clearInterval(this.intervalId);
-        this.finished.emit();
-      }
-    }, 1000);
+  formattedTime() {
+    return this.timerService.formattedTime();
   }
 
   parseTimeToSeconds(timeStr: string): number {
@@ -51,16 +36,11 @@ export class RoundTimerComponent implements OnInit {
     return hh * 3600 + mm * 60 + ss;
   }
 
-  formattedTime(): string {
-    const total = this.totalSeconds();
-    const hours = Math.floor(total / 3600);
-    const minutes = Math.floor((total % 3600) / 60);
-    const seconds = total % 60;
-
-    return [
-      hours.toString().padStart(2, '0'),
-      minutes.toString().padStart(2, '0'),
-      seconds.toString().padStart(2, '0'),
-    ].join(':');
+  resetTimer() {
+  if (this.time) {
+    const total = this.parseTimeToSeconds(this.time);
+    this.timerService.stopCountdown();
+    this.timerService.setInitialTime(total);
   }
+}
 }

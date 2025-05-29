@@ -1,0 +1,17 @@
+.next-match{
+  font-size: xx-large;
+  color: rgba(250, 235, 215, 0.616);
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover{
+    color: rgba(250, 235, 215, 0.9);
+    text-decoration: underline;
+    transform: scale(1.1);
+  }
+
+  &:active{
+    transform: scale(0.9);
+  }
+}

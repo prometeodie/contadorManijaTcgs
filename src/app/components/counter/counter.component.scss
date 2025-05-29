@@ -1,21 +1,31 @@
 
 .counter-container,
-.counter-section{
+.counter-section,
+.counter-container__turns{
   display: flex;
+}
+
+.counter-container,
+.counter-section{
   align-items: center;
   height: 50vh;
 }
 
 .counter-container {
   --background: transparent;
-  display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 0 2rem;
   font-size: 6rem;
   font-weight: lighter;
   text-align: center;
   color: rgb(0, 0, 0);
   border: none;
+
+  &__turns{
+    flex-direction: column;
+    font-size:15px;
+    color: aliceblue;
+  }
 }
 
 .counter-btn {

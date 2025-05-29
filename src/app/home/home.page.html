@@ -1,20 +1,34 @@
-<div class="player-1">
-  <round-timer class="player-1__round-timer"/>
-  <counter backgroundColor="#ff004a" [hp]="20" class="player-1__counter"/>
+<main class="home-page" *ngIf="configuration as config">
+  <div class="player-1">
+    <section class="matchs" *ngIf="configuration.threeMatches">
+      <span class="match-text">PARTIDAS</span>
+      <match-counter class="match-counter" [matchesCount]="matchesCoutn"/>
+      <next-match (nextMatchEvent)="nextMatch()" class="next-match"/>
+    </section>
+      <round-timer  #round1 class="player-1__round-timer" *ngIf="configuration?.roundTimerEnabled" [time]="configuration.roundTimerDuration"/>
+  <counter  #counter1 [backgroundColor]="configuration.player1Color" [hp]="configuration.hpValue" [turnsCounter]="fullTurnsCounter" class="player-1__counter"/>
   <turn-timer class="player-1__turn-timer"
+  *ngIf="configuration.turnTimerEnabled"
   #timer1
-  [initialTime]="'00:30'"
+  [initialTime]="configuration.turnTimerDuration"
   (finished)="onTimerFinished(1)"/>
-  <timeout class="player-1__time-out"/>
+  <timeout class="player-1__time-out" *ngIf="configuration?.roundTimerEnabled"/>
 </div>
-
+<menu class="menu"
+ (resetTimers)="resetGame()"></menu>
 <div class="player-2">
-  <round-timer class="player-2__round-timer" time="00:00:15"/>
-  <counter backgroundColor="#4250fe" [hp]="20"/>
+  <section class="matchs" *ngIf="configuration.threeMatches">
+       <span class="match-text">PARTIDAS</span>
+      <match-counter class="match-counter" [matchesCount]="matchesCoutn"/>
+      <next-match (nextMatchEvent)="nextMatch()" class="next-match"/>
+  </section>
+  <round-timer  #round2 class="player-2__round-timer" *ngIf="configuration?.roundTimerEnabled"/>
+  <counter #counter2 [backgroundColor]="configuration.player2Color" [hp]="configuration.hpValue" [turnsCounter]="fullTurnsCounter"/>
   <turn-timer class="player-2__turn-timer"
+  *ngIf="configuration.turnTimerEnabled"
   #timer2
-  [initialTime]="'00:10'"
+  [initialTime]="configuration.turnTimerDuration"
   (finished)="onTimerFinished(2)"/>
-  <timeout class="player-2__time-out"/>
+  <timeout class="player-2__time-out" *ngIf="configuration?.roundTimerEnabled"/>
 </div>
-
+</main>

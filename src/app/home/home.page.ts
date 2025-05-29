@@ -1,27 +1,50 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CounterComponent } from '../components/counter/counter.component';
 import { RoundTimerComponent } from '../components/round-timer/round-timer.component';
 import { TurnTimerComponent } from '../components/turn-timer/turn-timer.component';
 import { TimeoutComponent } from '../components/timeout/timeout.component';
+import { TimerServicesService } from '../services/timer-services.service';
+import { MenuComponent } from '../components/menu/menu.component';
+import { DataServicesService } from '../services/data-services.service';
+import { ConfigurationData } from '../interfaces/configuration-data.interface';
+import { CommonModule } from '@angular/common';
+import { MatchCounterComponent } from "../components/match-counter/match-counter.component";
+import { NextMatchComponent } from "../components/next-match/next-match.component";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [CounterComponent,RoundTimerComponent,TurnTimerComponent, TimeoutComponent],
+  imports: [CounterComponent, RoundTimerComponent, TurnTimerComponent, TimeoutComponent, MenuComponent, CommonModule, MatchCounterComponent, NextMatchComponent],
 })
-export class HomePage {
+export class HomePage implements OnInit, OnDestroy {
 @ViewChild('timer1') timer1!: TurnTimerComponent;
 @ViewChild('timer2') timer2!: TurnTimerComponent;
+@ViewChild('counter1') counter1!: CounterComponent;
+@ViewChild('counter2') counter2!: CounterComponent;
+@ViewChild('round1') round1!: RoundTimerComponent;
+@ViewChild('round2') round2!: RoundTimerComponent;
 
-activeTimer: 1 | 2 | null = null; // Nadie activo al inicio
+private timerService = inject(TimerServicesService);
+private dataServicesService = inject(DataServicesService);
+private cd = inject(ChangeDetectorRef);
+private subscriptions: Subscription[] = [];
+public configuration!: ConfigurationData;
+public isConfigurationLoaded: boolean = false;
+public matchesCoutn:number = 1;
+public turnsCounter: number = 0;
+public fullTurnsCounter: number = 0;
 
-ngAfterViewInit() {
-  this.timer1.finished.subscribe(() => this.onTimerFinished(1));
-  this.timer2.finished.subscribe(() => this.onTimerFinished(2));
-  this.timer1.clicked.subscribe(() => this.onTimerClicked(1));
-  this.timer2.clicked.subscribe(() => this.onTimerClicked(2));
-}
+activeTimer: 1 | 2 | null = null;
+
+ ngOnInit() {
+  this.loadConfiguration();
+    this.timerService.startCountdown(() => {});
+  }
+    ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
 
 onTimerFinished(timerNumber: number) {
   if (timerNumber === 1) {
@@ -33,11 +56,13 @@ onTimerFinished(timerNumber: number) {
     this.timer1.start();
     this.activeTimer = 1;
   }
+  this.turnsCount();
 }
 
 onTimerClicked(timerNumber: number) {
+
   if (this.activeTimer === null) {
-    // Primera vez: comienza el juego con el que apretó
+    this.timerService.startCountdown(() => {});
     if (timerNumber === 1) {
       this.timer1.start();
       this.activeTimer = 1;
@@ -48,8 +73,9 @@ onTimerClicked(timerNumber: number) {
     return;
   }
 
-  // Cambio de turno (solo si el que clickea es el activo)
-  if (this.activeTimer !== timerNumber) return;
+  if (this.activeTimer !== timerNumber) {
+    return;
+  }
 
   if (timerNumber === 1) {
     this.timer1.stopAndReset();
@@ -62,5 +88,70 @@ onTimerClicked(timerNumber: number) {
     this.timer1.start();
     this.activeTimer = 1;
   }
+
+  this.turnsCount();
+}
+
+ async loadConfiguration(): Promise<void> {
+  const config = await this.dataServicesService.get<ConfigurationData>('configuration');
+  this.configuration = config ?? this.dataServicesService.defaultConfig;
+
+  if (!config) {
+    await this.dataServicesService.set('configuration', this.configuration);
+  }
+  this.cd.detectChanges();
+
+  this.turnTimers()
+}
+
+  turnTimers() {
+  this.subscriptions.forEach(sub => sub.unsubscribe());
+  this.subscriptions = [];
+
+  this.subscriptions.push(
+    this.timer1.clicked.subscribe(() => this.onTimerClicked(1)),
+    this.timer2.clicked.subscribe(() => this.onTimerClicked(2)),
+  );
+}
+
+  matchesCountIncrement() {
+    if (this.matchesCoutn < 3){
+    confirm('¿Desea pasar a la siguiente partida?')
+      this.matchesCoutn++;
+    }else{
+      confirm('¿Desea reiniciar el contador de combates?') && this.resetGame();
+    }
+  }
+
+  turnsCount(){
+  this.turnsCounter++;
+    console.log(this.turnsCounter)
+  const nuevosTurnos = Math.floor(this.turnsCounter / 2);
+  if (nuevosTurnos > this.fullTurnsCounter) {
+    this.fullTurnsCounter = nuevosTurnos;
+  }
+}
+
+  resetGame(){
+  this.prepareNextMatch();
+  this.round1.resetTimer();
+  this.round2.resetTimer();
+  this.timerService.setInitialTime(this.timerService.totalSeconds());
+  this.matchesCoutn = 1;
+  this.activeTimer = null;
+}
+
+prepareNextMatch(){
+  this.timer1.stopAndReset();
+  this.timer2.stopAndReset();
+  this.counter1.resetHp(this.configuration.hpValue);
+  this.counter2.resetHp(this.configuration.hpValue);
+  this.turnsCounter = 0;
+  this.fullTurnsCounter = 0;
+}
+
+nextMatch(){
+    this.matchesCountIncrement();
+    this.prepareNextMatch();
 }
 }

@@ -1,0 +1,17 @@
+.match-counter{
+  list-style: none;
+  padding: 0;
+  display: flex;
+  transition: all 0.3s ease-in-out;
+  &__match{
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    background-color: #00000087;
+    margin: 0.15rem;
+  }
+}
+
+.mark-match{
+  background-color:rgba(128, 128, 128, 0.568)
+}
