@@ -21,6 +21,7 @@ export class CounterComponent  implements OnInit {
   public counter: number = 0;
   public showAnimation: boolean = false;
   public showVisible: boolean = false;
+  public action: string = '';
 
   incrementDecrement(value: number) {
       if (this.hp + value >= -999 && this.hp + value <= 999) {
@@ -28,7 +29,7 @@ export class CounterComponent  implements OnInit {
       this.valueChange.emit(this.hp);
       this.triggerAnimationDelay();
       this.counterNumber(value);
-
+      this.action = this.counter > 0 ? 'increment' : 'decrement';
     }
     return;
   }
@@ -54,6 +55,7 @@ export class CounterComponent  implements OnInit {
 
 onAnimationEnd(){
   this.counter = 0;
+  this.action = '';
 }
 counterNumber(value: number) {
   this.counter += value;

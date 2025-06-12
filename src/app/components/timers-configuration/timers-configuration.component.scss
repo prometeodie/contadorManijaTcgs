@@ -1,0 +1,47 @@
+.timers-time__label,
+.timers-configuration,
+.sliders,
+.sliders__title{
+  width: 100%;
+}
+
+.timers-time,
+.sliders{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timers-time__label,
+.sliders__title{
+    padding: 1rem;
+}
+
+.timers-configuration{
+  position: absolute;
+  top: 0;
+  height: 100vh;
+  background: #1e1e1e;
+}
+
+.timers-title{
+  text-align: center;
+}
+
+.timers-time__item{
+  width: 11rem;
+}
+
+.close-Mark{
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 1.5rem;
+  color: #fff;
+  cursor: pointer;
+
+  &:hover{
+    transform: scale(1.1);
+    color: #f00;
+  }
+}

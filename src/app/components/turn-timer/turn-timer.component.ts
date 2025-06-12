@@ -1,82 +1,114 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { TimerCommand, TimerServicesService } from 'src/app/services/timer-services.service';
 
 @Component({
   selector: 'turn-timer',
   templateUrl: './turn-timer.component.html',
   styleUrls: ['./turn-timer.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule ],
+  imports: [CommonModule, IonicModule],
 })
-export class TurnTimerComponent  implements OnInit, OnDestroy {
+export class TurnTimerComponent implements OnInit, OnDestroy {
   @Input() initialTime = '02:00';
-@Output() finished = new EventEmitter<void>();
-@Output() clicked = new EventEmitter<void>();
+  @Output() finished = new EventEmitter<void>();
+  @Output() clicked = new EventEmitter<void>();
 
-private intervalId: any;
-totalSeconds = signal(0);
-running = false;
+  private intervalId: any;
+  totalSeconds = 0;
+  running = false;
+  private wasRunningBeforePause = false;
 
-ngOnInit() {
-  this.totalSeconds.set(this.parseTimeToSeconds(this.initialTime));
-}
+  private controlService = inject(TimerServicesService);
+  private commandSub!: Subscription;
 
-ngOnDestroy() {
-  this.clearTimer();
-}
+  ngOnInit() {
+    this.totalSeconds = this.parseTimeToSeconds(this.initialTime);
 
-parseTimeToSeconds(timeStr: string): number {
-  const [mm, ss] = timeStr.split(':').map(Number);
-  return (mm || 0) * 60 + (ss || 0);
-}
+    // Escuchar comandos globales
+    this.commandSub = this.controlService.commands$.subscribe((cmd: TimerCommand) => this.handleCommand(cmd));
+  }
 
-formattedTime(): string {
-  const total = this.totalSeconds();
-  const mm = Math.floor(total / 60);
-  const ss = total % 60;
-  return `${mm.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')}`;
-}
+  ngOnDestroy() {
+    this.clearTimer();
+    this.commandSub?.unsubscribe();
+  }
 
-start() {
-  if (this.running) return;
-  this.running = true;
-  this.intervalId = setInterval(() => {
-    if (this.totalSeconds() > 0) {
-      this.totalSeconds.update(s => s - 1);
-    } else {
-      this.clearTimer();
-      this.finished.emit();
+  parseTimeToSeconds(timeStr: string): number {
+    const [mm, ss] = timeStr.split(':').map(Number);
+    return (mm || 0) * 60 + (ss || 0);
+  }
+
+  formattedTime(): string {
+    const mm = Math.floor(this.totalSeconds / 60);
+    const ss = this.totalSeconds % 60;
+    return `${mm.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')}`;
+  }
+
+  start() {
+    if (this.running) return;
+    this.running = true;
+    this.intervalId = setInterval(() => {
+      if (this.totalSeconds > 0) {
+        this.totalSeconds -= 1;
+      } else {
+        this.clearTimer();
+        this.finished.emit();
+        this.wasRunningBeforePause = false;
+      }
+    }, 1000);
+  }
+
+  pause() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
     }
-  }, 1000);
-}
-
-pause() {
-  if (this.intervalId) {
-    clearInterval(this.intervalId);
-    this.intervalId = null;
+    this.running = false;
   }
-  this.running = false;
-}
 
-reset() {
-  this.totalSeconds.set(this.parseTimeToSeconds(this.initialTime));
-}
-
-stopAndReset() {
-  this.pause();
-  this.reset();
-}
-
-onUserClick() {
-  this.clicked.emit();
-}
-
-clearTimer() {
-  if (this.intervalId) {
-    clearInterval(this.intervalId);
-    this.intervalId = null;
+  reset() {
+    this.totalSeconds = this.parseTimeToSeconds(this.initialTime);
+    this.wasRunningBeforePause = false;
   }
-  this.running = false;
-}
+
+  stopAndReset() {
+    this.pause();
+    this.reset();
+  }
+
+  clearTimer() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
+    this.running = false;
+  }
+
+  onUserClick() {
+    this.clicked.emit();
+  }
+
+  private handleCommand(cmd: TimerCommand) {
+    switch (cmd) {
+      case 'start':
+        if (this.wasRunningBeforePause) {
+          this.start();
+        }
+        break;
+      case 'pause':
+        this.wasRunningBeforePause = this.running;
+        this.pause();
+        break;
+      case 'reset':
+        this.reset();
+        break;
+      case 'stop':
+        this.wasRunningBeforePause = false;
+        this.stopAndReset();
+        break;
+    }
+  }
 }

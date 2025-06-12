@@ -2,33 +2,46 @@
   <div class="player-1">
     <section class="matchs" *ngIf="configuration.threeMatches">
       <span class="match-text">PARTIDAS</span>
-      <match-counter class="match-counter" [matchesCount]="matchesCoutn"/>
-      <next-match (nextMatchEvent)="nextMatch()" class="next-match"/>
+      <match-counter class="match-counter" [matchesCount]="matchesCoutn"></match-counter>
+      <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" class="next-match"></next-match>
     </section>
-      <round-timer  #round1 class="player-1__round-timer" *ngIf="configuration?.roundTimerEnabled" [time]="configuration.roundTimerDuration"/>
-  <counter  #counter1 [backgroundColor]="configuration.player1Color" [hp]="configuration.hpValue" [turnsCounter]="fullTurnsCounter" class="player-1__counter"/>
-  <turn-timer class="player-1__turn-timer"
-  *ngIf="configuration.turnTimerEnabled"
-  #timer1
-  [initialTime]="configuration.turnTimerDuration"
-  (finished)="onTimerFinished(1)"/>
-  <timeout class="player-1__time-out" *ngIf="configuration?.roundTimerEnabled"/>
-</div>
-<menu class="menu"
- (resetTimers)="resetGame()"></menu>
-<div class="player-2">
-  <section class="matchs" *ngIf="configuration.threeMatches">
-       <span class="match-text">PARTIDAS</span>
-      <match-counter class="match-counter" [matchesCount]="matchesCoutn"/>
-      <next-match (nextMatchEvent)="nextMatch()" class="next-match"/>
-  </section>
-  <round-timer  #round2 class="player-2__round-timer" *ngIf="configuration?.roundTimerEnabled"/>
-  <counter #counter2 [backgroundColor]="configuration.player2Color" [hp]="configuration.hpValue" [turnsCounter]="fullTurnsCounter"/>
-  <turn-timer class="player-2__turn-timer"
-  *ngIf="configuration.turnTimerEnabled"
-  #timer2
-  [initialTime]="configuration.turnTimerDuration"
-  (finished)="onTimerFinished(2)"/>
-  <timeout class="player-2__time-out" *ngIf="configuration?.roundTimerEnabled"/>
-</div>
+    <round-timer #round1 class="player-1__round-timer" *ngIf="configuration?.roundTimerEnabled" [time]="configuration.roundTimerDuration" />
+    <counter #counter1  [backgroundColor]="configuration.player1Color" [hp]="configuration.hpValue" [turnsCounter]="fullTurnsCounter" class="player-1__counter" />
+    <turn-timer
+      class="player-1__turn-timer"
+      *ngIf="configuration.turnTimerEnabled"
+      #timer1
+      [initialTime]="configuration.turnTimerDuration"
+      (finished)="onTimerFinished(1)" />
+    <timeout class="player-1__time-out" *ngIf="configuration?.roundTimerEnabled" />
+  </div>
+
+  <menu class="menu" (resetTimers)="resetGame()"
+  (openTimersWindow)="openCloseTimersWindow()"
+  (openLifeWindow)="openCloseLifeWindow()"
+  (openCloseGameModeConfigWindow)="openClosegameModeConfigWindow()"></menu>
+  <game-modes class="life-config" *ngIf="openCloseGameModeConfig" (closeGameModeConfigWindow)="openClosegameModeConfigWindow()" [ngClass]="{'component-visibility':openCloseGameModeConfig}"/>
+  <life-configuration class="life-config" (closeLifeConfigWindow)="openCloseLifeWindow()" [ngClass]="{'component-visibility':openCloseLifeConfig}" *ngIf="openCloseLifeConfig" />
+
+  <div class="player-2">
+    <section class="matchs" *ngIf="configuration.threeMatches">
+      <span class="match-text">PARTIDAS</span>
+      <match-counter class="match-counter" [matchesCount]="matchesCoutn" />
+      <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" class="next-match" />
+    </section>
+    <round-timer #round2 class="player-2__round-timer" *ngIf="configuration?.roundTimerEnabled" />
+    <counter #counter2  [backgroundColor]="configuration.player2Color" [hp]="configuration.hpValue" [turnsCounter]="fullTurnsCounter" />
+    <turn-timer
+      class="player-2__turn-timer"
+      *ngIf="configuration.turnTimerEnabled"
+      #timer2
+      [initialTime]="configuration.turnTimerDuration"
+      (finished)="onTimerFinished(2)" />
+    <timeout class="player-2__time-out" *ngIf="configuration?.roundTimerEnabled" />
+  </div>
+
+  <timers-configuration
+    (closeConfigWindow)="openCloseTimersWindow()"
+    *ngIf="openCloseTimersConfig"
+    class="Timers-configuration" />
 </main>

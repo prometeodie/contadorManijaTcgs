@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output, inject, computed } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { TimerServicesService } from 'src/app/services/timer-services.service';
 
 @Component({
   selector: 'menu',
@@ -9,11 +10,16 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [IonicModule, CommonModule]
 })
-export class MenuComponent  implements OnInit {
+export class MenuComponent implements OnInit {
   @Output() resetTimers = new EventEmitter<void>();
+  @Output() openTimersWindow = new EventEmitter<void>();
+  @Output() openLifeWindow = new EventEmitter<void>();
+  @Output() openCloseGameModeConfigWindow = new EventEmitter<void>();
 
   public menuOpen: boolean = false;
-  public playPauseTimers: boolean = false;
+
+  private timerService = inject(TimerServicesService);
+  public isTimerRunning = computed(() => this.timerService.isRunning());
 
   ngOnInit() {}
 
@@ -27,7 +33,13 @@ export class MenuComponent  implements OnInit {
   }
 
   playPause() {
-    this.playPauseTimers = !this.playPauseTimers;
+    if (this.timerService.isRunning()) {
+      this.timerService.pause();
+      this.pauseAll();
+    } else {
+      this.timerService.resume();
+      this.startAll();
+    }
   }
 
   @HostListener('document:click')
@@ -35,4 +47,23 @@ export class MenuComponent  implements OnInit {
     this.menuOpen = false;
   }
 
+  openTimersConfiguration() {
+    this.openTimersWindow.emit();
+  }
+
+  openlifeConfiguration() {
+    this.openLifeWindow.emit();
+  }
+
+  openGameConfigMode() {
+    this.openCloseGameModeConfigWindow.emit();
+  }
+
+  pauseAll() {
+    this.timerService.sendCommand('pause');
+  }
+
+  startAll() {
+    this.timerService.sendCommand('start');
+  }
 }

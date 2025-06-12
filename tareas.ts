@@ -1,7 +1,6 @@
 
-// TODO: armar cada parte del menu
-// TODO: contador de rondas
-// TODO: poner contador de match y un biri para pasar de match y que se reinicien los cotadores de turno y marque por cual match van
+// TODO: centrar numeros de vida copn sigos
+// TODO: acomodar el menu q cuiando cambio a otro item  no se cierra el anterior
 // TODO: cambiar colores
 // TODO: el  jugador q no es su turno opacar la pantalla hasta q sea su turno
 // TODO: pantalla de carga

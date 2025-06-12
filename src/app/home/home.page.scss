@@ -27,12 +27,14 @@
 .player-2__time-out,
 .match-counter,
 .next-match,
-.match-text{
+.match-text,
+.Timers-configuration{
   position: absolute;
 }
 
 .player-1__time-out,
-.player-2__time-out{
+.player-2__time-out,
+.Timers-configuration{
   top: 0;
 }
 
@@ -43,14 +45,19 @@
   height: 100vh;
 }
 
+.Timers-configuration,
+.life-config{
+  width: 100%;
+}
+
 .menu{
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgb(56, 54, 54);
   height: 0.2rem;
   position: fixed;
+  background: rgb(56, 54, 54);
   z-index: 1000;
 }
 
@@ -98,4 +105,22 @@
   top: 8px;
   font-size: smaller;
   font-weight: lighter;
+}
+
+
+.Timers-configuration{
+  height: 100vh;
+  width: 100%;
+  z-index: 9999;
+}
+
+.life-config{
+  position: absolute;
+  top: calc(50% - 7rem);
+  background-color: #302525;
+  opacity: 0;
+}
+
+.component-visibility {
+  opacity: 1;
 }

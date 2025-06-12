@@ -5,7 +5,7 @@
     [ngClass]="{ 'animate': showAnimation, 'visible': showVisible }"
      (animationend)="onAnimationEnd()"
     >
-    <span *ngIf="counter > 0">+</span>{{counter}}</span>
+    <span *ngIf="action === 'increment'">+</span>{{counter}}</span>
     <div>
     <ion-label class="counter-section__value" [ngClass]="{
     'small-font': hp < -99,

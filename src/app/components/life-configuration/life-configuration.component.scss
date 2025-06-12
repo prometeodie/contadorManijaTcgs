@@ -1,0 +1,22 @@
+.life {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.life-item {
+  font-size: x-large;
+  padding: 0.5rem;
+  transition: all 0.5s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
