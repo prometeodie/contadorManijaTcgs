@@ -96,5 +96,47 @@
         <ion-select-option *ngFor="let s of secondOptions" [value]="s">{{ s }}</ion-select-option>
       </ion-select>
     </ion-item>
+    <!-- chess -->
+
+    <label class="timers-time__label">Contador Modo Ajedrez</label>
+    <ion-item class="timers-time__item">
+      <ion-label>Horas</ion-label>
+      <ion-select
+        [(ngModel)]="roundHours"
+        (ionFocus)="focusSafeElement()"
+        (ionChange)="saveConfigToLocalStorage()"
+        interface="popover"
+      >
+        <ion-select-option *ngFor="let h of hourOptions" [value]="h">{{ h }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item class="timers-time__item">
+      <ion-label>Minutos</ion-label>
+      <ion-select
+        [(ngModel)]="turnMinutes"
+        (ionFocus)="focusSafeElement()"
+        (ionChange)="saveConfigToLocalStorage()"
+        interface="popover"
+      >
+        <ion-select-option *ngFor="let m of minuteOptions" [value]="m">{{ m }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item class="timers-time__item">
+      <ion-label>Segundos</ion-label>
+      <ion-select
+        [(ngModel)]="turnSeconds"
+        (ionFocus)="focusSafeElement()"
+        (ionChange)="saveConfigToLocalStorage()"
+        interface="popover"
+      >
+        <ion-select-option *ngFor="let s of secondOptions" [value]="s">{{ s }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+  </section>
+  <section class="timers-btn">
+    <ion-button (click)="resetConfiguration()" >Restablecer configuración</ion-button>
   </section>
 </main>

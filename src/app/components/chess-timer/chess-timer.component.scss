@@ -1,0 +1,19 @@
+.timer{
+  height: 13vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: xxx-large;
+}
+
+.active-timer {
+  background-color: green;
+}
+
+.inactive-timer {
+  background-color: red;
+}
+
+.time-display {
+  pointer-events: none;
+}

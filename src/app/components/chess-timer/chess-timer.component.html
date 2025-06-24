@@ -1,0 +1,9 @@
+<div class="timer"
+     (click)="onClick()"
+     [ngClass]="{
+       'timer-black': isNoActiveAndNoActiveTimer(),
+       'active-timer': isActive(),
+       'inactive-timer': isNoActiveAndHasActive()
+     }">
+  <span>{{ timeDisplay() }}</span>
+</div>

@@ -15,6 +15,7 @@ export class CounterComponent  implements OnInit {
   @Input() turnsCounter: number = 0;
   @Input() max: number = Infinity;
   @Input() backgroundColor!: string;
+  @Input() isChessTimerActive!: boolean;
   @Output() valueChange = new EventEmitter<number>();
 
   private animationTimeout: any;

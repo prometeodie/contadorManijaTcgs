@@ -14,6 +14,7 @@ import { DataServicesService } from 'src/app/services/data-services.service';
 })
 export class TimersConfigurationComponent implements OnInit {
   @Output() closeConfigWindow = new EventEmitter<void>();
+  @Output() isConfigChange = new EventEmitter<void>();
   private dataService = inject(DataServicesService);
   public timerConfig!: ConfigurationData;
 
@@ -73,6 +74,7 @@ export class TimersConfigurationComponent implements OnInit {
 
     this.timerConfig = updatedConfig;
     await this.dataService.set('configuration', updatedConfig);
+    this.isConfigChange.emit();
   }
 
   pad(value: number): string {
@@ -82,5 +84,14 @@ export class TimersConfigurationComponent implements OnInit {
   focusSafeElement() {
     const safe = document.getElementById('safe-focus-element');
     safe?.focus();
+  }
+
+  resetConfiguration(){
+    if(confirm('Estassegudro que deseas reinicar la configuración por defecto?') ){
+      this.dataService.set('configuration', this.dataService.defaultConfig).then(() => {
+        this.getData();
+        this.isConfigChange.emit();
+      });
+    }
   }
 }

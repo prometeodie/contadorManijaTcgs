@@ -1,12 +1,16 @@
 <main class="home-page" *ngIf="configuration as config">
-  <div class="player-1">
+  <div class="player-1" [ngClass]="{'chest-timer-enabled': configuration.chessTimerConfig.chessTimerEnabled}">
     <section class="matchs" *ngIf="configuration.threeMatches">
       <span class="match-text">PARTIDAS</span>
       <match-counter class="match-counter" [matchesCount]="matchesCoutn"></match-counter>
       <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" class="next-match"></next-match>
     </section>
     <round-timer #round1 class="player-1__round-timer" *ngIf="configuration?.roundTimerEnabled" [time]="configuration.roundTimerDuration" />
-    <counter #counter1  [backgroundColor]="configuration.player1Color" [hp]="configuration.hpValue" [turnsCounter]="fullTurnsCounter" class="player-1__counter" />
+    <counter #counter1  [backgroundColor]="configuration.player1Color"
+                        [hp]="configuration.hpValue"
+                        [turnsCounter]="fullTurnsCounter"
+                        [isChessTimerActive]=" configuration.chessTimerConfig.chessTimerEnabled"
+                        class="player-1__counter" />
     <turn-timer
       class="player-1__turn-timer"
       *ngIf="configuration.turnTimerEnabled"
@@ -14,23 +18,32 @@
       [initialTime]="configuration.turnTimerDuration"
       (finished)="onTimerFinished(1)" />
     <timeout class="player-1__time-out" *ngIf="configuration?.roundTimerEnabled" />
+    <chess-timer [playerNumber]="1" #chessTimer1 class="chest-timer" *ngIf="configuration.chessTimerConfig.chessTimerEnabled"/>
   </div>
 
   <menu class="menu" (resetTimers)="resetGame()"
   (openTimersWindow)="openCloseTimersWindow()"
   (openLifeWindow)="openCloseLifeWindow()"
   (openCloseGameModeConfigWindow)="openClosegameModeConfigWindow()"></menu>
-  <game-modes class="life-config" *ngIf="openCloseGameModeConfig" (closeGameModeConfigWindow)="openClosegameModeConfigWindow()" [ngClass]="{'component-visibility':openCloseGameModeConfig}"/>
+  <game-modes class="life-config"
+  *ngIf="openCloseGameModeConfig"
+  (closeGameModeConfigWindow)="openClosegameModeConfigWindow()"
+  (openCloseChessMode)="openCloseChessModeWindow()"
+  [ngClass]="{'component-visibility':openCloseGameModeConfig}"/>
   <life-configuration class="life-config" (closeLifeConfigWindow)="openCloseLifeWindow()" [ngClass]="{'component-visibility':openCloseLifeConfig}" *ngIf="openCloseLifeConfig" />
 
-  <div class="player-2">
+  <div class="player-2" [ngClass]="{'chest-timer-enabled': configuration.chessTimerConfig.chessTimerEnabled}">
     <section class="matchs" *ngIf="configuration.threeMatches">
       <span class="match-text">PARTIDAS</span>
       <match-counter class="match-counter" [matchesCount]="matchesCoutn" />
       <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" class="next-match" />
     </section>
     <round-timer #round2 class="player-2__round-timer" *ngIf="configuration?.roundTimerEnabled" />
-    <counter #counter2  [backgroundColor]="configuration.player2Color" [hp]="configuration.hpValue" [turnsCounter]="fullTurnsCounter" />
+    <counter #counter2
+        [backgroundColor]="configuration.player2Color"
+        [hp]="configuration.hpValue"
+        [turnsCounter]="fullTurnsCounter"
+        [isChessTimerActive]=" configuration.chessTimerConfig.chessTimerEnabled" />
     <turn-timer
       class="player-2__turn-timer"
       *ngIf="configuration.turnTimerEnabled"
@@ -38,10 +51,18 @@
       [initialTime]="configuration.turnTimerDuration"
       (finished)="onTimerFinished(2)" />
     <timeout class="player-2__time-out" *ngIf="configuration?.roundTimerEnabled" />
+    <chess-timer [playerNumber]="2" #chessTimer2 class="chest-timer" *ngIf="configuration.chessTimerConfig.chessTimerEnabled"/>
   </div>
 
   <timers-configuration
     (closeConfigWindow)="openCloseTimersWindow()"
+    (isConfigChange)="isTimerConfigChange()"
     *ngIf="openCloseTimersConfig"
-    class="Timers-configuration" />
+    class="windows-configuration" />
+  <chess-timer-mode
+  *ngIf="openCloseChessMode"
+   class="windows-configuration"
+  (closeChessModeWindow)="openCloseChessModeWindow()"
+  (configChanged)="resetLoadConfiguration()"
+   />
 </main>

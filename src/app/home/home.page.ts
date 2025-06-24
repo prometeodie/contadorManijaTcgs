@@ -14,6 +14,9 @@ import { Subscription } from 'rxjs';
 import { TimersConfigurationComponent } from '../components/timers-configuration/timers-configuration.component';
 import { LifeConfigurationComponent } from '../components/life-configuration/life-configuration.component';
 import { GameModesComponent } from '../components/game-modes/game-modes.component';
+import { ChessTimerModeComponent } from '../components/chess-timer-mode/chess-timer-mode.component';
+import { ChessTimerComponent } from '../components/chess-timer/chess-timer.component';
+import { ChessTimerService } from '../services/chess-timer.service';
 
 
 
@@ -23,11 +26,14 @@ import { GameModesComponent } from '../components/game-modes/game-modes.componen
   styleUrls: ['home.page.scss'],
   standalone: true,
   imports: [CounterComponent, RoundTimerComponent, TurnTimerComponent, TimeoutComponent, MenuComponent, CommonModule,
-    MatchCounterComponent, NextMatchComponent,TimersConfigurationComponent, LifeConfigurationComponent, GameModesComponent],
+    MatchCounterComponent, NextMatchComponent,TimersConfigurationComponent, LifeConfigurationComponent, GameModesComponent,
+    ChessTimerModeComponent, ChessTimerComponent],
 })
 export class HomePage implements OnInit, OnDestroy {
 @ViewChild('timer1') timer1!: TurnTimerComponent;
 @ViewChild('timer2') timer2!: TurnTimerComponent;
+@ViewChild('chessTimer1') chessTimer1!: ChessTimerComponent;
+@ViewChild('chessTimer2') chessTimer2!: ChessTimerComponent;
 @ViewChild('counter1') counter1!: CounterComponent;
 @ViewChild('counter2') counter2!: CounterComponent;
 @ViewChild('round1') round1!: RoundTimerComponent;
@@ -35,6 +41,7 @@ export class HomePage implements OnInit, OnDestroy {
 
 private timerService = inject(TimerServicesService);
 private dataServicesService = inject(DataServicesService);
+private chessTimerService = inject(ChessTimerService);
 private cd = inject(ChangeDetectorRef);
 private subscriptions: Subscription[] = [];
 public configuration!: ConfigurationData;
@@ -45,6 +52,7 @@ public fullTurnsCounter: number = 0;
 public openCloseTimersConfig: boolean = false;
 public openCloseLifeConfig: boolean = false;
 public openCloseGameModeConfig: boolean = false;
+public openCloseChessMode: boolean = false;
 
 activeTimer: 1 | 2 | null = null;
 
@@ -155,7 +163,7 @@ onTimerClicked(timerNumber: number) {
   }
 }
 
-  resetGame() {
+  async resetGame() {
   this.prepareNextMatch();
 
   if(this.round1?.resetTimer) {
@@ -173,6 +181,8 @@ onTimerClicked(timerNumber: number) {
   this.timerService.setInitialTime(this.timerService.totalSeconds());
   this.matchesCoutn = 1;
   this.activeTimer = null;
+  await this.chessTimerService.resetAllTimersFromStorage();
+
 }
 
 prepareNextMatch() {
@@ -196,6 +206,7 @@ prepareNextMatch() {
 
   this.turnsCounter = 0;
   this.fullTurnsCounter = 0;
+  this.activeTimer = null;
 }
 
 nextMatch(){
@@ -204,19 +215,17 @@ nextMatch(){
 }
 
 async openCloseTimersWindow() {
-  const wasOpen = this.openCloseTimersConfig;
+    this.openCloseTimersConfig = !this.openCloseTimersConfig;
 
-  if (wasOpen) {
-    this.openCloseTimersConfig = false;
-    await this.resetLoadConfiguration(); // ya lo hacías al cerrar
-  } else {
-    await this.resetLoadConfiguration(); // asegurate de que la config esté lista antes de abrir
-    this.openCloseTimersConfig = true;
-  }
+}
+
+async isTimerConfigChange(){
+ await this.resetLoadConfiguration();
 }
 
 openCloseLifeWindow() {
   this.openCloseLifeConfig = !this.openCloseLifeConfig;
+  this.openCloseGameModeConfig = false;
   this.resetLoadConfiguration();
 }
 
@@ -227,6 +236,13 @@ async resetLoadConfiguration() {
 
 openClosegameModeConfigWindow() {
   this.openCloseGameModeConfig = !this.openCloseGameModeConfig;
+  this.openCloseLifeConfig = false;
+  this.resetLoadConfiguration();
 }
 
+openCloseChessModeWindow() {
+  this.openCloseChessMode = !this.openCloseChessMode;
+  this.openCloseGameModeConfig = false;
+  this.resetLoadConfiguration()
+  }
 }

@@ -12,6 +12,7 @@ export class DataServicesService {
     hpValue: 20,
     roundTimerDuration: '00:01:00',
     turnTimerDuration: '00:10',
+    chessTimerConfig:{duration: '00:01:00', increment: '00:10', chessTimerEnabled: false, mode:'bullet'},
     roundTimerEnabled: true,
     turnTimerEnabled: true,
     player1Color: '#ff004a',
@@ -38,4 +39,27 @@ export class DataServicesService {
   async clear(): Promise<void> {
     await Storage.clear();
   }
+
+
+  async updateChessTimerConfig(newConfig: {
+  duration: string;
+  increment: string;
+  chessTimerEnabled: boolean;
+}): Promise<void> {
+  const key = 'configuration';
+  const currentConfig = await this.get<typeof this.defaultConfig>(key);
+
+  const updatedConfig = {
+    ...this.defaultConfig,
+    ...currentConfig,
+    roundTimerEnabled:false,
+    turnTimerEnabled:false,
+    chessTimerConfig: {
+      ...(currentConfig?.chessTimerConfig || this.defaultConfig.chessTimerConfig),
+      ...newConfig,
+    },
+  };
+
+  await this.set(key, updatedConfig);
+}
 }

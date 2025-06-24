@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, OnInit, Output, inject, computed } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { TimerServicesService } from 'src/app/services/timer-services.service';
+import { ChessTimerService } from '../../services/chess-timer.service';
 
 @Component({
   selector: 'menu',
@@ -16,10 +17,13 @@ export class MenuComponent implements OnInit {
   @Output() openLifeWindow = new EventEmitter<void>();
   @Output() openCloseGameModeConfigWindow = new EventEmitter<void>();
 
-  public menuOpen: boolean = false;
+  public menuOpen: boolean = false
+
 
   private timerService = inject(TimerServicesService);
+  private chessTimerService = inject(ChessTimerService);
   public isTimerRunning = computed(() => this.timerService.isRunning());
+  public ischessTimerRunning = computed(() => this.chessTimerService.isAnyTimerRunning());
 
   ngOnInit() {}
 
@@ -39,6 +43,12 @@ export class MenuComponent implements OnInit {
     } else {
       this.timerService.resume();
       this.startAll();
+    }
+    if(this.chessTimerService.isAnyTimerRunning()) {
+      this.chessTimerService.stop(1);
+      this.chessTimerService.stop(2);
+    }else{
+      this.chessTimerService.resumeActiveTimer()
     }
   }
 

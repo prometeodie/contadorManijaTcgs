@@ -1,4 +1,4 @@
-<div lines="none" class="counter-container" [ngStyle]="{ 'background-color': backgroundColor }">
+<div lines="none" class="counter-container" [ngClass]="{'chess-timer-active':isChessTimerActive}" [ngStyle]="{ 'background-color': backgroundColor }">
   <div class="counter-btn" (click)="incrementDecrement(-1)">−</div>
   <section class="counter-section">
     <span  class="counter-section__number"

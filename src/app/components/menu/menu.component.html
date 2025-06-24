@@ -8,10 +8,20 @@
         <li (click)="openTimersConfiguration()"><ion-icon class="icon" name="timer-outline"></ion-icon></li>
         <li (click)="openlifeConfiguration()"><ion-icon class="icon" name="heart-half"></ion-icon></li>
         <li (click)="openGameConfigMode()"><ion-icon class="icon" name="game-controller-outline"></ion-icon></li>
-        <li><ion-icon class="icon" name="play-outline" *ngIf="!isTimerRunning(); else stop" (click)="playPause()"></ion-icon></li>
-        <ng-template #stop>
-          <li (click)="playPause()"><ion-icon class="icon" name="pause"></ion-icon></li>
-        </ng-template>
+      <li>
+  <ion-icon
+    class="icon"
+    name="play-outline"
+    *ngIf="!isTimerRunning() && !ischessTimerRunning(); else stop"
+    (click)="playPause()"
+  ></ion-icon>
+</li>
+
+<ng-template #stop>
+  <li (click)="playPause()">
+    <ion-icon class="icon" name="pause"></ion-icon>
+  </li>
+</ng-template>
       </ul>
     </div>
   </div>
