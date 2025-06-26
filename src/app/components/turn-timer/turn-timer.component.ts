@@ -17,17 +17,16 @@ export class TurnTimerComponent implements OnInit, OnDestroy {
   @Output() clicked = new EventEmitter<void>();
 
   private intervalId: any;
-  totalSeconds = 0;
-  running = false;
   private wasRunningBeforePause = false;
-
-  private controlService = inject(TimerServicesService);
   private commandSub!: Subscription;
+  private controlService = inject(TimerServicesService);
+
+  totalSeconds: number = 0;
+  running: boolean = false;
+  showBubble = this.controlService.showBubble;
 
   ngOnInit() {
     this.totalSeconds = this.parseTimeToSeconds(this.initialTime);
-
-    // Escuchar comandos globales
     this.commandSub = this.controlService.commands$.subscribe((cmd: TimerCommand) => this.handleCommand(cmd));
   }
 
@@ -45,6 +44,10 @@ export class TurnTimerComponent implements OnInit, OnDestroy {
     const mm = Math.floor(this.totalSeconds / 60);
     const ss = this.totalSeconds % 60;
     return `${mm.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')}`;
+  }
+
+  startGame() {
+    this.controlService.showBubblePopUp(false); // Oculta la burbuja desde el servicio central
   }
 
   start() {
@@ -88,6 +91,7 @@ export class TurnTimerComponent implements OnInit, OnDestroy {
   }
 
   onUserClick() {
+    this.startGame();
     this.clicked.emit();
   }
 

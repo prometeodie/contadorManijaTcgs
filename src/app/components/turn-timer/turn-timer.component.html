@@ -1,6 +1,16 @@
- <main class="turn-timer">
-   <div class="turn-timer__time" [ngClass]="{'hurry-up': totalSeconds <= 10,'time-out': totalSeconds === 0}">{{ formattedTime() }}</div>
-      <button  class="turn-timer__btn" (click)="onUserClick()">
-        <ion-icon name="hourglass-outline" class="turn-timer__btn__icon"></ion-icon>
-      </button>
- </main>
+<main class="turn-timer">
+  <div class="popup-container" *ngIf="showBubble()">
+    <div class="popup-bubble">
+      Click para comenzar
+      <div class="popup-arrow"></div>
+    </div>
+  </div>
+
+  <div class="turn-timer__time" [ngClass]="{ 'hurry-up': totalSeconds <= 10, 'time-out': totalSeconds === 0 }">
+    {{ formattedTime() }}
+  </div>
+
+  <button class="turn-timer__btn" (click)="onUserClick()">
+    <ion-icon name="hourglass-outline" class="turn-timer__btn__icon"></ion-icon>
+  </button>
+</main>

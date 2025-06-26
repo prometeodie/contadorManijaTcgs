@@ -30,6 +30,13 @@
       [(ngModel)]="threeMatches"
       (ionChange)="saveConfigToLocalStorage()"
     ></ion-toggle>
+
+    <span class="sliders__title">Activar Sonido</span>
+    <ion-toggle
+      class="sliders__checkbox"
+      [(ngModel)]="sound"
+      (ionChange)="saveSoundConfigToLocalStorage()"
+    ></ion-toggle>
   </section>
 
   <section class="timers-time">

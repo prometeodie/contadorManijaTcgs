@@ -10,4 +10,5 @@ export interface ConfigurationData {
   player1Color: string;
   player2Color: string;
   threeMatches: boolean;
+  soundEnabled: boolean;
 }

@@ -11,6 +11,7 @@
                         [hp]="configuration.hpValue"
                         [isTurnsTimerActive]="isTurnTimerEnable"
                         [turnsCounter]="fullTurnsCounter"
+                        [isSoundEnable]="isSoundEnable"
                         [isChessTimerActive]=" configuration.chessTimerConfig.chessTimerEnabled"
                         class="player-1__counter" />
     <turn-timer
@@ -52,6 +53,7 @@
         [hp]="configuration.hpValue"
         [turnsCounter]="fullTurnsCounter"
         [isTurnsTimerActive]="isTurnTimerEnable"
+        [isSoundEnable]="isSoundEnable"
         [isChessTimerActive]=" configuration.chessTimerConfig.chessTimerEnabled" />
     <turn-timer
       class="player-2__turn-timer"

@@ -52,6 +52,7 @@ public isTurnTimerEnable: boolean = false;
 public matchesCoutn:number = 1;
 public turnsCounter: number = 0;
 public fullTurnsCounter: number = 0;
+public isSoundEnable!: boolean;
 public openCloseTimersConfig: boolean = false;
 public openCloseLifeConfig: boolean = false;
 public openCloseGameModeConfig: boolean = false;
@@ -124,6 +125,7 @@ onTimerClicked(timerNumber: number) {
   const config = await this.dataServicesService.get<ConfigurationData>('configuration');
   this.configuration = config ?? this.dataServicesService.defaultConfig;
   this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
+  this.isSoundEnable = this.configuration.soundEnabled;
 
   if (!config) {
     await this.dataServicesService.set('configuration', this.configuration);
@@ -194,6 +196,7 @@ onTimerClicked(timerNumber: number) {
   this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
   this.matchesCoutn = 1;
   this.activeTimer = null;
+  this.timerService.showBubblePopUp(true);
   await this.chessTimerService.resetAllTimersFromStorage();
 
 }

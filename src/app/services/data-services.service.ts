@@ -18,6 +18,7 @@ export class DataServicesService {
     player1Color: '#ff004a',
     player2Color: '#4250fe',
     threeMatches: true,
+    soundEnabled: true
   };
 
   async set(key: string, value: any): Promise<void> {

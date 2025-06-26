@@ -25,6 +25,7 @@ export class TimersConfigurationComponent implements OnInit {
   roundTimerEnabled = false;
   turnTimerEnabled = false;
   threeMatches = false;
+  sound = false;
 
   roundHours = 0;
   roundMinutes = 0;
@@ -51,6 +52,7 @@ export class TimersConfigurationComponent implements OnInit {
     this.roundTimerEnabled = data.roundTimerEnabled;
     this.turnTimerEnabled = data.turnTimerEnabled;
     this.threeMatches = data.threeMatches;
+    this.sound = data.soundEnabled;
 
     const [rh, rm, rs] = data.roundTimerDuration.split(':').map(Number);
     this.roundHours = rh || 0;
@@ -68,6 +70,7 @@ export class TimersConfigurationComponent implements OnInit {
       roundTimerEnabled: this.roundTimerEnabled,
       turnTimerEnabled: this.turnTimerEnabled,
       threeMatches: this.threeMatches,
+      soundEnabled: this.sound,
       roundTimerDuration: `${this.pad(this.roundHours)}:${this.pad(this.roundMinutes)}:${this.pad(this.roundSeconds)}`,
       turnTimerDuration: `${this.pad(this.turnMinutes)}:${this.pad(this.turnSeconds)}`,
     };
@@ -76,6 +79,12 @@ export class TimersConfigurationComponent implements OnInit {
     await this.dataService.set('configuration', updatedConfig);
     this.isConfigChange.emit();
   }
+
+  async saveSoundConfigToLocalStorage() {
+  const config = await this.dataService.get<any>('configuration') ?? {};
+  config.soundEnabled = this.sound;
+  await this.dataService.set('configuration', config);
+}
 
   pad(value: number): string {
     return value.toString().padStart(2, '0');

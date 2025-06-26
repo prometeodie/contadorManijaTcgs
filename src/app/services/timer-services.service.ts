@@ -1,5 +1,7 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, Injectable, inject, signal } from '@angular/core';
 import { Subject } from 'rxjs';
+import { DataServicesService } from 'src/app/services/data-services.service';
+import { ConfigurationData } from '../interfaces/configuration-data.interface';
 
 export type TimerCommand = 'start' | 'pause' | 'reset' | 'stop';
 
@@ -7,30 +9,41 @@ export type TimerCommand = 'start' | 'pause' | 'reset' | 'stop';
   providedIn: 'root'
 })
 export class TimerServicesService {
+  private dataServices = inject(DataServicesService);
+
   private _totalSeconds = signal(0);
-  totalSeconds = computed(() => this._totalSeconds());
+  public totalSeconds = computed(() => this._totalSeconds());
 
   private _isRunning = signal(false);
-  isRunning = computed(() => this._isRunning());
+  public isRunning = computed(() => this._isRunning());
+
+  private _showBubble = signal(true);
+  public showBubble = computed(() => this._showBubble());
 
   private intervalId: any;
   private finishedCallback: (() => void) | null = null;
 
   private commandSubject = new Subject<TimerCommand>();
-  commands$ = this.commandSubject.asObservable();
+  public commands$ = this.commandSubject.asObservable();
+
+  private roundEndSound = new Audio('assets/sounds/time-out.ogg');
+
+  constructor() {
+    this.roundEndSound.load();
+  }
 
   sendCommand(cmd: TimerCommand) {
     this.commandSubject.next(cmd);
-    if(cmd === 'start') {
+    if (cmd === 'start') {
       this._isRunning.set(true);
     }
-    if(cmd === 'pause'){
+    if (cmd === 'pause') {
       this._isRunning.set(false);
     }
   }
 
-  setIsRunningFalse(): void {
-  this._isRunning.set(false);
+  showBubblePopUp(show: boolean): void {
+    this._showBubble.set(show);
   }
 
   setInitialTime(seconds: number) {
@@ -39,25 +52,42 @@ export class TimerServicesService {
 
   startCountdown(onFinish?: () => void) {
     this.stopCountdown();
-
     this.finishedCallback = onFinish ?? null;
     this._isRunning.set(true);
 
     this.intervalId = setInterval(() => {
       const current = this._totalSeconds();
+
       if (current > 0) {
         this._totalSeconds.set(current - 1);
       } else {
         this.stopCountdown();
+        this.playEndSound();
         if (this.finishedCallback) this.finishedCallback();
       }
     }, 1000);
   }
 
+  private async playEndSound() {
+    try {
+      const soundEnabled = await this.dataServices.get<ConfigurationData>('configuration');
+      if (!soundEnabled?.soundEnabled) return;
+
+      this.roundEndSound.currentTime = 0;
+      await this.roundEndSound.play();
+    } catch (e) {
+      console.warn('No se pudo reproducir el sonido de fin de ronda:', e);
+    }
+  }
+
+  setIsRunningFalse(): void {
+    this._isRunning.set(false);
+  }
+
   stopCountdown() {
     clearInterval(this.intervalId);
     this.intervalId = null;
-    this._isRunning.set(false); // <- CAMBIO
+    this._isRunning.set(false);
   }
 
   resetCountdown() {
@@ -66,11 +96,11 @@ export class TimerServicesService {
   }
 
   pause() {
-    this.stopCountdown(); // <- usa stop pero deja el tiempo intacto
+    this.stopCountdown();
   }
 
   resume() {
-    this.startCountdown(this.finishedCallback ?? undefined); // <- reinicia desde donde estaba
+    this.startCountdown(this.finishedCallback ?? undefined);
   }
 
   formattedTime() {
