@@ -17,6 +17,8 @@ import { GameModesComponent } from '../components/game-modes/game-modes.componen
 import { ChessTimerModeComponent } from '../components/chess-timer-mode/chess-timer-mode.component';
 import { ChessTimerComponent } from '../components/chess-timer/chess-timer.component';
 import { ChessTimerService } from '../services/chess-timer.service';
+import { StartBtnComponent } from '../components/start-btn/start-btn.component';
+import { PlayerColorChangerComponent } from '../components/player-color-changer/player-color-changer.component';
 
 
 
@@ -27,7 +29,7 @@ import { ChessTimerService } from '../services/chess-timer.service';
   standalone: true,
   imports: [CounterComponent, RoundTimerComponent, TurnTimerComponent, TimeoutComponent, MenuComponent, CommonModule,
     MatchCounterComponent, NextMatchComponent,TimersConfigurationComponent, LifeConfigurationComponent, GameModesComponent,
-    ChessTimerModeComponent, ChessTimerComponent],
+    ChessTimerModeComponent, ChessTimerComponent, StartBtnComponent, PlayerColorChangerComponent],
 })
 export class HomePage implements OnInit, OnDestroy {
 @ViewChild('timer1') timer1!: TurnTimerComponent;
@@ -46,6 +48,7 @@ private cd = inject(ChangeDetectorRef);
 private subscriptions: Subscription[] = [];
 public configuration!: ConfigurationData;
 public isConfigurationLoaded: boolean = false;
+public isTurnTimerEnable: boolean = false;
 public matchesCoutn:number = 1;
 public turnsCounter: number = 0;
 public fullTurnsCounter: number = 0;
@@ -53,15 +56,22 @@ public openCloseTimersConfig: boolean = false;
 public openCloseLifeConfig: boolean = false;
 public openCloseGameModeConfig: boolean = false;
 public openCloseChessMode: boolean = false;
+public roundTimerIsRunning: boolean = false;
 
 activeTimer: 1 | 2 | null = null;
 
  ngOnInit() {
   this.loadConfiguration();
-    this.timerService.startCountdown(() => {});
   }
+
     ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+
+  stratRoundTimer(){
+    this.timerService.startCountdown(() => {});
+    this.roundTimerIsRunning = this.timerService.isRunning();
   }
 
 onTimerFinished(timerNumber: number) {
@@ -113,6 +123,7 @@ onTimerClicked(timerNumber: number) {
  async loadConfiguration(): Promise<void> {
   const config = await this.dataServicesService.get<ConfigurationData>('configuration');
   this.configuration = config ?? this.dataServicesService.defaultConfig;
+  this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
 
   if (!config) {
     await this.dataServicesService.set('configuration', this.configuration);
@@ -177,8 +188,10 @@ onTimerClicked(timerNumber: number) {
   } else {
     console.warn('round2 no está listo');
   }
-
   this.timerService.setInitialTime(this.timerService.totalSeconds());
+  this.timerService.setIsRunningFalse();
+  this.roundTimerIsRunning = this.timerService.isRunning();
+  this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
   this.matchesCoutn = 1;
   this.activeTimer = null;
   await this.chessTimerService.resetAllTimersFromStorage();
@@ -209,9 +222,25 @@ prepareNextMatch() {
   this.activeTimer = null;
 }
 
+   async changePlayerColor(event: { player: 1 | 2; color: string }) {
+    const config = await this.dataServicesService.get<ConfigurationData>('configuration');
+    if (!config) return;
+
+    if (event.player === 1) {
+      config.player1Color = event.color;
+    } else {
+      config.player2Color = event.color;
+    }
+
+    this.configuration = { ...config }; // Esto actualiza el binding en Angular
+    await this.dataServicesService.set('configuration', this.configuration);
+  }
+
+
 nextMatch(){
     this.matchesCountIncrement();
     this.prepareNextMatch();
+    this.chessTimerService.resetAllTimersFromStorage();
 }
 
 async openCloseTimersWindow() {
@@ -226,7 +255,6 @@ async isTimerConfigChange(){
 openCloseLifeWindow() {
   this.openCloseLifeConfig = !this.openCloseLifeConfig;
   this.openCloseGameModeConfig = false;
-  this.resetLoadConfiguration();
 }
 
 async resetLoadConfiguration() {
@@ -237,7 +265,6 @@ async resetLoadConfiguration() {
 openClosegameModeConfigWindow() {
   this.openCloseGameModeConfig = !this.openCloseGameModeConfig;
   this.openCloseLifeConfig = false;
-  this.resetLoadConfiguration();
 }
 
 openCloseChessModeWindow() {

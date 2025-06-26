@@ -1,0 +1,24 @@
+.start-btn {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%; /* redondo */
+  background: rgba(0, 0, 0, 0.3); /* negro translúcido */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+
+  color: white;
+  font-size: x-small;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.start-btn:hover {
+  transform: scale(1.05);
+}

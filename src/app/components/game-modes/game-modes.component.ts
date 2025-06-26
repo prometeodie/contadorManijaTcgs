@@ -15,6 +15,7 @@ export class GameModesComponent  implements OnInit {
 
   @Output() closeGameModeConfigWindow = new EventEmitter<void>();
   @Output() openCloseChessMode = new EventEmitter<void>();
+  @Output() timersChanged = new EventEmitter<void>();
   private dataService = inject(DataServicesService);
 
   ngOnInit() {}
@@ -55,13 +56,13 @@ async showTimers(show: boolean) {
         chessTimerConfig: {
           duration: "00:10:00",
           increment: "00:05",
-          chessTimerEnabled: show ? false : true, // si show true entonces false
+          chessTimerEnabled: false
         }
       };
       await this.dataService.set('configuration', newConfig);
     }
 
-    // Cerrar la ventana de configuración
+    this.timersChanged.emit();
     this.closeGameModeConfigWindow.emit();
   }
 }

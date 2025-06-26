@@ -2,7 +2,7 @@
   <div class="counter-btn" (click)="incrementDecrement(-1)">−</div>
   <section class="counter-section">
     <span  class="counter-section__number"
-    [ngClass]="{ 'animate': showAnimation, 'visible': showVisible }"
+    [ngClass]="{ 'animate': showAnimation, 'visible': showVisible, 'chess-active-change-position':isChessTimerActive }"
      (animationend)="onAnimationEnd()"
     >
     <span *ngIf="action === 'increment'">+</span>{{counter}}</span>
@@ -11,7 +11,7 @@
     'small-font': hp < -99,
     'defeat-color': hp <= 0,
   }">{{ hp }}</ion-label>
-  <div class="counter-container__turns"><span>Turno</span> <strong>{{turnsCounter}}</strong></div>
+  <div class="counter-container__turns" *ngIf="isTurnsTimerActive || isChessTimerActive"><span>Turno</span> <strong>{{turnsCounter}}</strong></div>
   </div>
   </section>
   <div class="counter-btn" (click)="incrementDecrement(1)">+</div>

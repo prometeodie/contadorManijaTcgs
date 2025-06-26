@@ -12,6 +12,7 @@ import { DataServicesService } from 'src/app/services/data-services.service';
 export class LifeConfigurationComponent implements OnInit {
   @Output() closeLifeConfigWindow = new EventEmitter<void>();
   @Output() closeGameModeConfigWindow = new EventEmitter<void>();
+  @Output() lifeChange = new EventEmitter<void>();
 
   private dataService = inject(DataServicesService);
 
@@ -32,7 +33,7 @@ export class LifeConfigurationComponent implements OnInit {
     config.hpValue = newHpValue;
 
     await this.dataService.set('configuration', config);
-
+    this.lifeChange.emit();
     this.closeGameModeConfigWindow.emit();
   }
 

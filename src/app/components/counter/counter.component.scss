@@ -81,6 +81,10 @@ animation: riseAndFade 1.5s ease forwards;
 .visible {
   opacity: 1;
 }
+
+.chess-active-change-position{
+  top: 4rem;
+}
 // ANIMATION
 
 @keyframes riseAndFade {

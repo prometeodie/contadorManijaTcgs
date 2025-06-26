@@ -13,7 +13,7 @@ import { DataServicesService } from 'src/app/services/data-services.service';
 })
 export class ChessTimerModeComponent  implements OnInit {
   @Output() closeChessModeWindow = new EventEmitter<void>();
-  @Output() configChanged = new EventEmitter<void>();
+  @Output() chessConfigChanged = new EventEmitter<void>();
 
   private dataService = inject(DataServicesService);
 
@@ -27,6 +27,6 @@ export class ChessTimerModeComponent  implements OnInit {
 
   changeChessTimerConfig(duration: string, increment: string,chessTimerEnabled: boolean) {
     this.dataService.updateChessTimerConfig({duration, increment, chessTimerEnabled});
-    this.configChanged.emit();
+    this.chessConfigChanged.emit();
   }
 }

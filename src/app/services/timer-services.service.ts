@@ -29,6 +29,10 @@ export class TimerServicesService {
     }
   }
 
+  setIsRunningFalse(): void {
+  this._isRunning.set(false);
+  }
+
   setInitialTime(seconds: number) {
     this._totalSeconds.set(seconds);
   }

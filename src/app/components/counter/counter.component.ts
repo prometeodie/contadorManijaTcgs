@@ -9,10 +9,10 @@ import { IonicModule } from '@ionic/angular';
   imports: [CommonModule, IonicModule],
 })
 export class CounterComponent  implements OnInit {
-  ngOnInit() {}
   @Input() hp: number = 0;
   @Input() min: number = 0;
   @Input() turnsCounter: number = 0;
+  @Input() isTurnsTimerActive!: boolean;
   @Input() max: number = Infinity;
   @Input() backgroundColor!: string;
   @Input() isChessTimerActive!: boolean;
@@ -23,6 +23,8 @@ export class CounterComponent  implements OnInit {
   public showAnimation: boolean = false;
   public showVisible: boolean = false;
   public action: string = '';
+
+  ngOnInit() {}
 
   incrementDecrement(value: number) {
       if (this.hp + value >= -999 && this.hp + value <= 999) {

@@ -1,0 +1,14 @@
+<ion-icon name="color-palette-outline" class="palette" (click)="openColorSelection()"></ion-icon>
+
+<section class="color-selection" *ngIf="isColorSelectionOpen">
+  <ul class="color-list">
+    <li
+      class="color-item"
+      *ngFor="let color of colors; index as i"
+      [ngStyle]="getCircleItemStyle(i, colors.length)"
+      [style.background-color]="color"
+      [class.selected]="color === currentColor"
+      (click)="selectColor(color)"
+    ></li>
+  </ul>
+</section>

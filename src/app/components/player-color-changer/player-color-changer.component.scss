@@ -1,0 +1,45 @@
+.color-changer {
+  position: absolute;
+  bottom: 5rem;
+  left: 1rem;
+}
+
+.palette {
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+}
+
+.color-selection {
+  position: absolute;
+  left: 3rem;
+  bottom: 0;
+}
+
+.color-list {
+  position: relative;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  list-style: none;
+  margin: 0;
+  margin-bottom: 0.6rem;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.color-item {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  position: absolute;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.color-item.selected {
+  border: 2px solid white;
+}
