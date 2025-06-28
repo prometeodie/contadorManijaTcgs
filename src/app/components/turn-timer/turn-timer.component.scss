@@ -11,13 +11,14 @@
 
       &__icon{
         font-size: xxx-large;
+        color: #ffffffc2;
       }
     }
 }
 
 .hurry-up{
   display: inline-block;
-  color: #FFD700;
+  color: #fad852;
   font-weight: bold;
   animation: pulseFontSize 2s ease-in-out infinite;
 }
@@ -38,7 +39,7 @@
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(6px);
   color: white;
-  padding: 0.4rem 0.8rem;
+  padding: 0.15rem 0.6rem;
   border-radius: 0.6rem;
   font-size: xx-small;
   text-align: center;

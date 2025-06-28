@@ -7,7 +7,7 @@
     >
     <span *ngIf="action === 'increment'">+</span>{{counter}}</span>
     <div>
-    <ion-label class="counter-section__value" [ngClass]="{
+    <ion-label class="counter-section__value number-changed" [ngClass]="{
     'small-font': hp < -99,
     'defeat-color': hp <= 0,
   }">{{ hp }}</ion-label>

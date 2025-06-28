@@ -35,6 +35,7 @@ export class LifeConfigurationComponent implements OnInit {
     await this.dataService.set('configuration', config);
     this.lifeChange.emit();
     this.closeGameModeConfigWindow.emit();
+    this.dataService.setConfigChanged(true);
   }
 
   @HostListener('document:click')

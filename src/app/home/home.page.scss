@@ -13,13 +13,13 @@
 .player-1__round-timer,
 .player-2__round-timer{
   left: 0.6rem;
-  padding-top: 0.2rem;
+  padding-top: 1rem;
   z-index: 1;
 }
 .player-1__turn-timer,
 .player-2__turn-timer{
-  bottom: 1rem;
-  right: 0.5rem;
+  bottom: 0.5rem;
+  right: 0;
 }
 
 .player-1,
@@ -61,7 +61,6 @@
   align-items: center;
   height: 0.2rem;
   position: fixed;
-  background: rgb(56, 54, 54);
   z-index: 1000;
 }
 
@@ -95,18 +94,18 @@
 
 .match-counter{
   right: 0.5rem;
-  top: 0.7rem;
+  top: 1.3rem;
 }
 
 .next-match{
     right: 0.5rem;
-    top: 1.9rem
+    top: 2.5rem
 }
 
 .match-text{
-  color: rgba(255, 255, 255, 0.6352941176);
+  color: #ffffffcc;
   right: 0.4rem;
-  top: 8px;
+  top: 1.3rem;
   font-size: smaller;
   font-weight: lighter;
 }
@@ -141,6 +140,6 @@
 
 .color-changer {
   position: absolute;
-  bottom: 0rem;
+  bottom: 1rem;
   left: 1rem;
 }

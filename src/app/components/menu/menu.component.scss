@@ -7,27 +7,41 @@
 }
 
 .vs-button {
- position: relative;
-    display: inline-block;
-    padding: 0.5rem 0.5rem;
-    background: linear-gradient(135deg, #ff004a, #4250fe);
-    color: #fff;
-    font-family: "Cinzel", serif;
-    font-size: 1.6rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.05em 1.28px;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-    overflow: hidden;
+  position: relative;
+  display: inline-block;
+  width: 5rem;
+  height: 5rem;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.4); /* negro translúcido */
+  color: white;
+  font-family: "Cinzel", serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 1rem;
+  cursor: pointer;
+  overflow: hidden;
 
-    &:active{
-      transform: scale(0.9);
-    }
-  }
+  /* Efecto glass */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  /* Centrado con flex */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Sombra suave */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vs-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+}
+
 
 .vs-button:hover {
   transform: scale(1.05);
@@ -36,9 +50,9 @@
 .vs-submenu {
   position: absolute;
   font-size: xx-large;
-  top: -1rem;
   left: 0;
-  height: 4rem;
+  bottom: 0;
+  height: 5rem;
   width: 100%;
   background-color: #302525;
   display: flex;

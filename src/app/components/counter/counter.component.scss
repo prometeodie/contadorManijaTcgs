@@ -8,7 +8,7 @@
 .counter-container,
 .counter-section{
   align-items: center;
-  height: 50vh;
+  height: calc( 50vh - 0.75rem );
 }
 
 .counter-container {
@@ -18,8 +18,10 @@
   font-size: 6rem;
   font-weight: lighter;
   text-align: center;
-  color: rgb(0, 0, 0);
+  color: #fff;
   border: none;
+  margin-top: 0.75rem;
+  border-radius: 20px 20px 0 0;
 
   &__turns{
     position: absolute;
@@ -32,19 +34,30 @@
 }
 
 .counter-btn {
-  font-size: 4rem;
-  color: #000;
-  --padding-start: 0;
-  --padding-end: 0;
-  --background: transparent;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background-color: #ffffff1a; /* o transparente */
+  color: white;
+  font-size: 2rem;
+  font-family: 'Nunito', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+  &:active{
+    background-color: #ffffff60 ;
+  }
 }
 
-.counter-btn::part(native) {
-  background: transparent;
-  border-radius: 50%;
-  height: 3rem;
-  width: 3rem;
-}
+
 
 .small-font{
   font-size: smaller;
@@ -99,4 +112,14 @@ animation: riseAndFade 1.5s ease forwards;
     transform: translateY(-8px);
     opacity: 0;
   }
+}
+
+@keyframes flash {
+  0%   { opacity: 1; transform: scale(1); }
+  50%  { opacity: 0.2; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.number-changed {
+  animation: flash 0.7s ease;
 }

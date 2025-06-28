@@ -1,17 +1,24 @@
 .timer{
-  height: 13vh;
+    height: 13vh;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: xxx-large;
+  color: white;
+
+  background: transparent;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .active-timer {
-  background-color: green;
+   background-color: #2dc379;
 }
 
 .inactive-timer {
-  background-color: red;
+  background-color: #e64545;
 }
 
 .time-display {
