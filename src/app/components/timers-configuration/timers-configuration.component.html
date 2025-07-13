@@ -6,106 +6,117 @@
 ></button>
 
 <main class="timers-configuration">
-  <ion-icon name="close-outline" class="close-Mark" (click)="closeWindow()"></ion-icon>
+  <button class="close-Mark" (click)="closeWindow()" aria-label="Cerrar configuración">&times;</button>
+
   <h2 class="timers-title">Configuración de timers</h2>
 
   <section class="sliders">
-    <span class="sliders__title">Activar Timer de Ronda</span>
-    <ion-toggle
-      class="sliders__checkbox"
-      [(ngModel)]="roundTimerEnabled"
-      (ionChange)="saveConfigToLocalStorage()"
-    ></ion-toggle>
+    <label class="sliders__title">
+      <input
+        type="checkbox"
+        [checked]="roundTimerEnabled"
+        (change)="onToggleRoundTimer($event)"
+      />
+      Activar Timer de Ronda
+    </label>
 
-    <span class="sliders__title">Activar Timer de turnos</span>
-    <ion-toggle
-      class="sliders__checkbox"
-      [(ngModel)]="turnTimerEnabled"
-      (ionChange)="saveConfigToLocalStorage()"
-    ></ion-toggle>
+    <label class="sliders__title">
+      <input
+        type="checkbox"
+        [checked]="turnTimerEnabled"
+        (change)="onToggleTurnTimer($event)"
+      />
+      Activar Timer de turnos
+    </label>
 
-    <span class="sliders__title">Activar contador de partidas</span>
-    <ion-toggle
-      class="sliders__checkbox"
-      [(ngModel)]="threeMatches"
-      (ionChange)="saveConfigToLocalStorage()"
-    ></ion-toggle>
+    <label class="sliders__title">
+      <input
+        type="checkbox"
+        [(ngModel)]="threeMatches"
+        (change)="saveConfigToLocalStorage()"
+      />
+      Activar contador de partidas
+    </label>
 
-    <span class="sliders__title">Activar Sonido</span>
-    <ion-toggle
-      class="sliders__checkbox"
-      [(ngModel)]="sound"
-      (ionChange)="saveSoundConfigToLocalStorage()"
-    ></ion-toggle>
+    <label class="sliders__title">
+      <input
+        type="checkbox"
+        [(ngModel)]="sound"
+        (change)="saveSoundConfigToLocalStorage()"
+      />
+      Activar Sonido
+    </label>
   </section>
 
   <section class="timers-time">
     <!-- RONDA -->
     <label class="timers-time__label">Contador de Ronda</label>
-    <ion-item class="timers-time__item">
-      <ion-label>Horas</ion-label>
-      <ion-select
+
+    <div class="timers-time__item">
+      <label for="roundHours">Horas</label>
+      <select
+        id="roundHours"
         [(ngModel)]="roundHours"
-        (ionFocus)="focusSafeElement()"
-        (ionChange)="saveConfigToLocalStorage()"
-        interface="popover"
+        (focus)="focusSafeElement()"
+        (change)="saveConfigToLocalStorage()"
       >
-        <ion-select-option *ngFor="let h of hourOptions" [value]="h">{{ h }}</ion-select-option>
-      </ion-select>
-    </ion-item>
+        <option *ngFor="let h of hourOptions" [value]="h">{{ h }}</option>
+      </select>
+    </div>
 
-    <ion-item class="timers-time__item">
-      <ion-label>Minutos</ion-label>
-      <ion-select
+    <div class="timers-time__item">
+      <label for="roundMinutes">Minutos</label>
+      <select
+        id="roundMinutes"
         [(ngModel)]="roundMinutes"
-        (ionFocus)="focusSafeElement()"
-        (ionChange)="saveConfigToLocalStorage()"
-        interface="popover"
+        (focus)="focusSafeElement()"
+        (change)="saveConfigToLocalStorage()"
       >
-        <ion-select-option *ngFor="let m of minuteOptions" [value]="m">{{ m }}</ion-select-option>
-      </ion-select>
-    </ion-item>
+        <option *ngFor="let m of minuteOptions" [value]="m">{{ m }}</option>
+      </select>
+    </div>
 
-    <ion-item class="timers-time__item">
-      <ion-label>Segundos</ion-label>
-      <ion-select
+    <div class="timers-time__item">
+      <label for="roundSeconds">Segundos</label>
+      <select
+        id="roundSeconds"
         [(ngModel)]="roundSeconds"
-        (ionFocus)="focusSafeElement()"
-        (ionChange)="saveConfigToLocalStorage()"
-        interface="popover"
+        (focus)="focusSafeElement()"
+        (change)="saveConfigToLocalStorage()"
       >
-        <ion-select-option *ngFor="let s of secondOptions" [value]="s">{{ s }}</ion-select-option>
-      </ion-select>
-    </ion-item>
+        <option *ngFor="let s of secondOptions" [value]="s">{{ s }}</option>
+      </select>
+    </div>
 
     <!-- TURNOS -->
     <label class="timers-time__label">Contador de turno</label>
-    <ion-item class="timers-time__item">
-      <ion-label>Minutos</ion-label>
-      <ion-select
+
+    <div class="timers-time__item">
+      <label for="turnMinutes">Minutos</label>
+      <select
+        id="turnMinutes"
         [(ngModel)]="turnMinutes"
-        (ionFocus)="focusSafeElement()"
-        (ionChange)="saveConfigToLocalStorage()"
-        interface="popover"
+        (focus)="focusSafeElement()"
+        (change)="saveConfigToLocalStorage()"
       >
-        <ion-select-option *ngFor="let m of minuteOptions" [value]="m">{{ m }}</ion-select-option>
-      </ion-select>
-    </ion-item>
+        <option *ngFor="let m of minuteOptions" [value]="m">{{ m }}</option>
+      </select>
+    </div>
 
-    <ion-item class="timers-time__item">
-      <ion-label>Segundos</ion-label>
-      <ion-select
+    <div class="timers-time__item">
+      <label for="turnSeconds">Segundos</label>
+      <select
+        id="turnSeconds"
         [(ngModel)]="turnSeconds"
-        (ionFocus)="focusSafeElement()"
-        (ionChange)="saveConfigToLocalStorage()"
-        interface="popover"
+        (focus)="focusSafeElement()"
+        (change)="saveConfigToLocalStorage()"
       >
-        <ion-select-option *ngFor="let s of secondOptions" [value]="s">{{ s }}</ion-select-option>
-      </ion-select>
-    </ion-item>
-
+        <option *ngFor="let s of secondOptions" [value]="s">{{ s }}</option>
+      </select>
+    </div>
   </section>
+
   <section class="timers-btn">
-    <ion-button (click)="resetConfiguration()" >Restablecer configuración</ion-button>
+    <button class="btn-reset" (click)="resetConfiguration()">Restablecer configuración</button>
   </section>
 </main>

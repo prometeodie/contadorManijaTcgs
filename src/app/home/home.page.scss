@@ -12,27 +12,27 @@
 
 .player-1__round-timer,
 .player-2__round-timer{
-  left: 0.6rem;
   padding-top: 1rem;
   z-index: 1;
 }
 .player-1__turn-timer,
 .player-2__turn-timer{
   bottom: 0.5rem;
-  right: 0;
 }
 
 .player-1,
-.player-2{
+.player-2,
+.matchs-container{
   position: relative;
 }
 
 #container,
 .player-1__time-out,
 .player-2__time-out,
+.matchs,
+.match-text,
 .match-counter,
 .next-match,
-.match-text,
 .windows-configuration{
   position: absolute;
 }
@@ -51,7 +51,7 @@
 }
 
 .windows-configuration,
-.life-config{
+.menu-popup{
   width: 100%;
 }
 
@@ -93,23 +93,25 @@
 }
 
 .match-counter{
-  right: 0.5rem;
   top: 1.3rem;
 }
 
+   .matchs {
+  position: absolute;
+  margin: 0.6rem;
+  width: fit-content;
+  max-width: 100%; // Esto evita que se “escape”
+}
 .next-match{
-    right: 0.5rem;
     top: 2.5rem
 }
 
 .match-text{
-  color: #ffffffcc;
-  right: 0.4rem;
+  color: #ffffff;
   top: 1.3rem;
   font-size: smaller;
   font-weight: lighter;
 }
-
 
 .windows-configuration{
   height: 100vh;
@@ -117,15 +119,10 @@
   z-index: 9999;
 }
 
-.life-config{
+.menu-popup{
   position: absolute;
   top: calc(50% - 7rem);
   background-color: #302525;
-  opacity: 0;
-}
-
-.component-visibility {
-  opacity: 1;
 }
 
 .chest-timer-enabled{
@@ -140,6 +137,34 @@
 
 .color-changer {
   position: absolute;
-  bottom: 1rem;
-  left: 1rem;
+  bottom: 0.5rem;
+}
+
+.color-changer-right{
+  right:0.5rem;
+}
+
+.color-changer-left{
+  left: 0.5rem;
+}
+
+.round-timer-left{
+  left: 0.6rem;
+}
+
+.round-timer-right{
+  right: 0.6rem;
+}
+
+.turn-timer-right{
+  right: 0;
+}
+
+.turn-timer-left,
+.matchs-left{
+  left: 0;
+}
+
+.matchs-right{
+  right: 3.75rem;
 }

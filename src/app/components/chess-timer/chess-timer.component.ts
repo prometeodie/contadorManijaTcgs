@@ -3,6 +3,8 @@ import {
   Component,
   Input,
   Signal,
+  Output,
+  EventEmitter,
   computed,
   inject,
   OnInit,
@@ -21,6 +23,7 @@ import { DataServicesService } from 'src/app/services/data-services.service';
 })
 export class ChessTimerComponent implements OnInit {
   @Input() playerNumber!: 1 | 2;
+  @Output() validClick = new EventEmitter<void>(); // 🚀 NUEVO OUTPUT
 
   private dataService = inject(DataServicesService);
   public chessTimerService = inject(ChessTimerService);
@@ -71,8 +74,10 @@ export class ChessTimerComponent implements OnInit {
     const current = this.chessTimerService.activeTimer();
     if (current === null) {
       this.chessTimerService.setActiveTimer(this.playerNumber);
+      this.validClick.emit(); // 🟢 Emitir el click válido
     } else if (current === this.playerNumber) {
       this.chessTimerService.switchTurn();
+      this.validClick.emit(); // 🟢 Emitir el click válido
     }
   }
 

@@ -1,9 +1,18 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'nombre-de-tu-app',
-  webDir: 'www'
+  appId: 'com.franco.contador',
+  appName: 'Contador Tcgs',
+  webDir: 'www',
+   plugins: {
+    SplashScreen: {
+      launchShowDuration: 3000,
+      launchAutoHide: true,
+      backgroundColor: "#ffffff",
+      androidScaleType: "CENTER_CROP",
+      showSpinner: false
+    }
+  }
 };
 
 export default config;

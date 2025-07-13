@@ -1,3 +1,4 @@
+import { IonicModule } from '@ionic/angular';
 import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CounterComponent } from '../components/counter/counter.component';
 import { RoundTimerComponent } from '../components/round-timer/round-timer.component';
@@ -27,7 +28,7 @@ import { PlayerColorChangerComponent } from '../components/player-color-changer/
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [CounterComponent, RoundTimerComponent, TurnTimerComponent, TimeoutComponent, MenuComponent, CommonModule,
+  imports: [IonicModule, CounterComponent, RoundTimerComponent, TurnTimerComponent, TimeoutComponent, MenuComponent, CommonModule,
     MatchCounterComponent, NextMatchComponent,TimersConfigurationComponent, LifeConfigurationComponent, GameModesComponent,
     ChessTimerModeComponent, ChessTimerComponent, StartBtnComponent, PlayerColorChangerComponent],
 })
@@ -158,10 +159,19 @@ onTimerClicked(timerNumber: number) {
 
   matchesCountIncrement() {
     if (this.matchesCoutn < 3){
-    confirm('¿Desea pasar a la siguiente partida?')
-      this.matchesCoutn++;
+    if (confirm('¿Desea pasar a la siguiente partida?')){
+       this.matchesCoutn++
+       return true;
+      } else{
+        return false;
+      }
     }else{
-      confirm('¿Desea reiniciar el contador de combates?') && this.resetGame();
+      if (confirm('¿Desea reiniciar el contador de combates?')){
+        this.resetGame()
+        return true;
+      }else{
+        return false;
+      }
     }
   }
 
@@ -198,7 +208,7 @@ onTimerClicked(timerNumber: number) {
   this.activeTimer = null;
   this.timerService.showBubblePopUp(true);
   await this.chessTimerService.resetAllTimersFromStorage();
-
+   this.dataServicesService.setConfiglifeAnimation(true);
 }
 
 prepareNextMatch() {
@@ -241,9 +251,10 @@ prepareNextMatch() {
 
 
 nextMatch(){
-    this.matchesCountIncrement();
-    this.prepareNextMatch();
-    this.chessTimerService.resetAllTimersFromStorage();
+    if(this.matchesCountIncrement()){
+      this.prepareNextMatch();
+      this.chessTimerService.resetAllTimersFromStorage();
+    }
 }
 
 async openCloseTimersWindow() {
@@ -258,16 +269,40 @@ async isTimerConfigChange(){
 openCloseLifeWindow() {
   this.openCloseLifeConfig = !this.openCloseLifeConfig;
   this.openCloseGameModeConfig = false;
+   this.cd.detectChanges();
 }
 
 async resetLoadConfiguration() {
-  await this.loadConfiguration();
+  const newConfig = await this.dataServicesService.get<ConfigurationData>('configuration');
+  this.configuration = { ...(newConfig ?? this.dataServicesService.defaultConfig) };
+  this.counter1?.resetHp(this.configuration.hpValue);
+  this.counter2?.resetHp(this.configuration.hpValue);
+
+  this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
+  this.isSoundEnable = this.configuration.soundEnabled;
+
+
+  // 🔁 Resetear lógica del juego
   this.resetGame();
+
+  // 🔁 Para actualizar componentes hijos
+  this.cd.detectChanges();
+
+  // 🚨 Activa la animación de vida
+  this.dataServicesService.setConfiglifeAnimation(true);
 }
+
 
 openClosegameModeConfigWindow() {
   this.openCloseGameModeConfig = !this.openCloseGameModeConfig;
   this.openCloseLifeConfig = false;
+   this.cd.detectChanges();
+}
+
+changePosition() {
+  this.configuration.positionRight = !this.configuration.positionRight;
+  this.dataServicesService.set('configuration', this.configuration);
+  this.cd.detectChanges();
 }
 
 openCloseChessModeWindow() {

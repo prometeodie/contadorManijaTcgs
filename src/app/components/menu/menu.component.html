@@ -8,6 +8,10 @@
         <li (click)="openTimersConfiguration()"><ion-icon class="icon" name="timer-outline"></ion-icon></li>
         <li (click)="openlifeConfiguration()"><ion-icon class="icon" name="heart-half"></ion-icon></li>
         <li (click)="openGameConfigMode()"><ion-icon class="icon" name="game-controller-outline"></ion-icon></li>
+        <li (click)="positionChanged()" class="icon-size"><ion-icon *ngIf="positionRight" name="chevron-back-outline"></ion-icon>
+            <ion-icon name="phone-portrait-outline"></ion-icon>
+            <ion-icon *ngIf="!positionRight" name="chevron-forward-outline"></ion-icon>
+          </li>
         <li>
           <ion-icon
             class="icon"

@@ -1,8 +1,9 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, HostListener, OnInit, Output, inject, computed } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output, computed, inject } from '@angular/core';
 import { TimerServicesService } from 'src/app/services/timer-services.service';
 import { ChessTimerService } from '../../services/chess-timer.service';
+import { IonicModule } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { DataServicesService } from 'src/app/services/data-services.service';
 
 @Component({
   selector: 'menu',
@@ -16,14 +17,20 @@ export class MenuComponent implements OnInit {
   @Output() openTimersWindow = new EventEmitter<void>();
   @Output() openLifeWindow = new EventEmitter<void>();
   @Output() openCloseGameModeConfigWindow = new EventEmitter<void>();
+  @Output() positionHasChanged = new EventEmitter<void>();
+  @Input() positionRight!: boolean;
 
-  public menuOpen: boolean = false
-
+  public menuOpen: boolean = false;
 
   private timerService = inject(TimerServicesService);
   private chessTimerService = inject(ChessTimerService);
+  private cd = inject(ChangeDetectorRef);
+
   public isTimerRunning = computed(() => this.timerService.isRunning());
   public ischessTimerRunning = computed(() => this.chessTimerService.isAnyTimerRunning());
+  public isAnyTimerRunning = computed(() => this.chessTimerService.isAnyTimerRunning());
+
+  private ignoreNextClick: boolean = false;
 
   ngOnInit() {}
 
@@ -34,6 +41,14 @@ export class MenuComponent implements OnInit {
   toggleMenu(event: MouseEvent) {
     event.stopPropagation();
     this.menuOpen = !this.menuOpen;
+
+    if (this.menuOpen) {
+      this.ignoreNextClick = true;
+      // Ignorar clicks solo 300ms después de abrir menú
+      setTimeout(() => {
+        this.ignoreNextClick = false;
+      }, 300);
+    }
   }
 
   playPause() {
@@ -44,17 +59,23 @@ export class MenuComponent implements OnInit {
       this.timerService.resume();
       this.startAll();
     }
-    if(this.chessTimerService.isAnyTimerRunning()) {
+    if (this.chessTimerService.isAnyTimerRunning()) {
       this.chessTimerService.stop(1);
       this.chessTimerService.stop(2);
-    }else{
-      this.chessTimerService.resumeActiveTimer()
+    } else {
+      this.chessTimerService.resumeActiveTimer();
     }
   }
 
   @HostListener('document:click')
   closeMenu() {
-    this.menuOpen = false;
+    if (this.ignoreNextClick) {
+      return; // Ignoramos clicks breves tras abrir menú
+    }
+    if (this.menuOpen) {
+      this.menuOpen = false;
+      this.cd.detectChanges(); // Forzamos actualizar la vista
+    }
   }
 
   openTimersConfiguration() {
@@ -67,6 +88,10 @@ export class MenuComponent implements OnInit {
 
   openGameConfigMode() {
     this.openCloseGameModeConfigWindow.emit();
+  }
+
+  positionChanged() {
+    this.positionHasChanged.emit();
   }
 
   pauseAll() {

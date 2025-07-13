@@ -1,18 +1,45 @@
-<div lines="none" class="counter-container" [ngClass]="{'chess-timer-active':isChessTimerActive}" [ngStyle]="{ 'background-color': backgroundColor }">
-  <div class="counter-btn" (click)="incrementDecrement(-1)">−</div>
-  <section class="counter-section">
-    <span  class="counter-section__number"
-    [ngClass]="{ 'animate': showAnimation, 'visible': showVisible, 'chess-active-change-position':isChessTimerActive }"
-     (animationend)="onAnimationEnd()"
-    >
-    <span *ngIf="action === 'increment'">+</span>{{counter}}</span>
-    <div>
-    <ion-label class="counter-section__value number-changed" [ngClass]="{
-    'small-font': hp < -99,
-    'defeat-color': hp <= 0,
-  }">{{ hp }}</ion-label>
-  <div class="counter-container__turns" *ngIf="isTurnsTimerActive || isChessTimerActive"><span>Turno</span> <strong>{{turnsCounter}}</strong></div>
+<div
+  class="counter-container"
+  [ngClass]="{ 'chess-timer-active': isChessTimerActive }"
+  [ngStyle]="{ 'background-color': backgroundColor }"
+>
+  <div class="counter-btn-click" (click)="incrementDecrement(-1)">
+    <div class="counter-btn" [ngClass]="{ active: isActiveMinus }">-</div>
   </div>
+
+  <section class="counter-section">
+    <span
+      class="counter-section__number"
+      [ngClass]="{
+        animate: showAnimation,
+        visible: showVisible,
+        'chess-active-change-position': isChessTimerActive
+      }"
+      (animationend)="onAnimationEnd()"
+    >
+      <span *ngIf="action === 'increment'">+</span>{{ counter }}
+    </span>
+
+    <div>
+      <label
+        class="counter-section__value"
+        [ngClass]="{
+          'small-font': hp < -99,
+          'defeat-color': hp <= 0,
+          'life-animation': isLifeAnimationActive
+        }"
+        (animationend)="onchangeLifeAnimationEnd()"
+        >{{ hp }}</label>
+      <div
+        class="counter-container__turns"
+        *ngIf="isTurnsTimerActive || isChessTimerActive"
+      >
+        <span>Turno</span> <strong>{{ turnsCounter }}</strong>
+      </div>
+    </div>
   </section>
-  <div class="counter-btn" (click)="incrementDecrement(1)">+</div>
+
+  <div class="counter-btn-click" (click)="incrementDecrement(1)">
+    <div class="counter-btn" [ngClass]="{ active: isActivePlus }">+</div>
+  </div>
 </div>

@@ -33,9 +33,8 @@ export class LifeConfigurationComponent implements OnInit {
     config.hpValue = newHpValue;
 
     await this.dataService.set('configuration', config);
-    this.lifeChange.emit();
-    this.closeGameModeConfigWindow.emit();
     this.dataService.setConfigChanged(true);
+    this.lifeChange.emit();
   }
 
   @HostListener('document:click')

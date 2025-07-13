@@ -12,19 +12,23 @@ export class DataServicesService {
 
   defaultConfig = {
     hpValue: 20,
-    roundTimerDuration: '00:01:00',
-    turnTimerDuration: '00:10',
-    chessTimerConfig:{duration: '00:01:00', increment: '00:10', chessTimerEnabled: false, mode:'bullet'},
+    roundTimerDuration: '00:45:00',
+    turnTimerDuration: '01:00',
+    chessTimerConfig:{duration: '00:30:00', increment: '00:00', chessTimerEnabled: false, mode:'bullet'},
     roundTimerEnabled: true,
     turnTimerEnabled: true,
     player1Color: '#ff004a',
     player2Color: '#4250fe',
     threeMatches: true,
-    soundEnabled: true
+    soundEnabled: true,
+    positionRight: true
   };
 
   private _configChangedSignal = signal<boolean>(false);
   public configChangedSignal = this._configChangedSignal.asReadonly();
+
+  private _lifeAnimation = signal<boolean>(false);
+  public lifeAnimation = this._lifeAnimation.asReadonly();
 
   private async loadInitialConfig() {
     const savedConfig = await this.get<typeof this.defaultConfig>('configuration');
@@ -55,6 +59,10 @@ export class DataServicesService {
   // Método para setear la signal boolean por parámetro
   public setConfigChanged(value: boolean) {
     this._configChangedSignal.set(value);
+  }
+
+  public setConfiglifeAnimation(value: boolean) {
+    this._lifeAnimation.set(value);
   }
 
   async updateChessTimerConfig(newConfig: {

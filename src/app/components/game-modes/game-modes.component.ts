@@ -1,5 +1,16 @@
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Output,
+  Renderer2,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  inject,
+  OnInit
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, HostListener, inject, OnInit, Output } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { ConfigurationData } from 'src/app/interfaces/configuration-data.interface';
 import { DataServicesService } from 'src/app/services/data-services.service';
@@ -8,67 +19,73 @@ import { DataServicesService } from 'src/app/services/data-services.service';
   selector: 'game-modes',
   templateUrl: './game-modes.component.html',
   styleUrls: ['./game-modes.component.scss'],
-  standalone  : true,
-  imports: [CommonModule, IonicModule]
+  standalone: true,
+  imports: [CommonModule, IonicModule],
 })
-export class GameModesComponent  implements OnInit {
-
+export class GameModesComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() closeGameModeConfigWindow = new EventEmitter<void>();
   @Output() openCloseChessMode = new EventEmitter<void>();
   @Output() timersChanged = new EventEmitter<void>();
+
   private dataService = inject(DataServicesService);
+  private renderer = inject(Renderer2);
+  private elRef = inject(ElementRef);
+  private removeClickListener!: () => void;
+  private removeTouchListener!: () => void;
 
   ngOnInit() {}
 
-  @HostListener('document:click')
-  closeMenu() {
-    this.closeGameModeConfigWindow.emit();
+  ngAfterViewInit(): void {
+    this.removeClickListener = this.renderer.listen('document', 'mousedown', this.onOutsideClick.bind(this));
+    this.removeTouchListener = this.renderer.listen('document', 'touchstart', this.onOutsideClick.bind(this));
   }
 
-async showTimers(show: boolean) {
-  let text = '';
-  text = show
-    ? '¿Estás seguro de que querés activar los timers? '
-    : '¿Estás seguro de que querés desactivar los timers?';
+  ngOnDestroy(): void {
+    this.removeClickListener?.();
+    this.removeTouchListener?.();
+  }
 
-  if (confirm(text)) {
-    // Obtener la configuración actual
-    const config = await this.dataService.get<ConfigurationData>('configuration');
+  private onOutsideClick(event: Event): void {
+    const clickedInside = this.elRef.nativeElement.contains(event.target);
+    if (!clickedInside) {
+      this.closeGameModeConfigWindow.emit();
+    }
+  }
 
-    if (config) {
-      // Modificar los timers generales
-      config.roundTimerEnabled = show;
-      config.turnTimerEnabled = show;
+  async showTimers(show: boolean) {
+    const text = show
+      ? '¿Estás seguro de que querés activar los timers? '
+      : '¿Estás seguro de que querés desactivar los timers?';
 
-      // Si show es true, poner chessTimerEnabled en false dentro de chessTimerConfig
-      if (config.chessTimerConfig) {
-        config.chessTimerConfig.chessTimerEnabled = false;
+    if (confirm(text)) {
+      const config = await this.dataService.get<ConfigurationData>('configuration');
+      if (config) {
+        config.roundTimerEnabled = show;
+        config.turnTimerEnabled = show;
+        if (config.chessTimerConfig) {
+          config.chessTimerConfig.chessTimerEnabled = false;
+        }
+        await this.dataService.set('configuration', config);
+      } else {
+        const newConfig = {
+          ...this.dataService.defaultConfig,
+          roundTimerEnabled: show,
+          turnTimerEnabled: show,
+          chessTimerConfig: {
+            duration: '00:10:00',
+            increment: '00:05',
+            chessTimerEnabled: false,
+          },
+        };
+        await this.dataService.set('configuration', newConfig);
       }
 
-      // Guardar la configuración modificada
-      await this.dataService.set('configuration', config);
-    } else {
-      // Si no hay configuración previa, usar la default sin timers
-      const newConfig = {
-        ...this.dataService.defaultConfig,
-        roundTimerEnabled: show,
-        turnTimerEnabled: show,
-        chessTimerConfig: {
-          duration: "00:10:00",
-          increment: "00:05",
-          chessTimerEnabled: false
-        }
-      };
-      await this.dataService.set('configuration', newConfig);
+      this.timersChanged.emit();
     }
-
-    this.timersChanged.emit();
     this.closeGameModeConfigWindow.emit();
   }
-}
 
-
-  chessMode(){
+  chessMode() {
     this.openCloseChessMode.emit();
   }
 }

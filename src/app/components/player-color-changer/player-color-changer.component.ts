@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, inject, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { DataServicesService } from 'src/app/services/data-services.service'; // Ajustá el path según tu proyecto
@@ -12,11 +12,13 @@ import { DataServicesService } from 'src/app/services/data-services.service'; //
 })
 export class PlayerColorChangerComponent implements OnInit {
   @Input() playerNumber: 1 | 2 = 1;
-    @Output() colorChanged = new EventEmitter<{ player: 1 | 2; color: string }>();
+  @Input() position!: boolean;
+  @Output() colorChanged = new EventEmitter<{ player: 1 | 2; color: string }>();
 
   public isColorSelectionOpen: boolean = false;
-  public colors = ['#f8605d','#ffae72', '#66d19e', '#4a7dcc', '#a27ac4' , '#ff5ca3', '#57c1eb', '#9b72d4'];
+  public colors = ['#ff004a','#4250fe','#f8605d','#ffae72', '#66d19e', '#4a7dcc', '#a27ac4' , '#ff5ca3', '#57c1eb', '#9b72d4'];
   public currentColor: string = '';
+  private cd = inject(ChangeDetectorRef);
 
   constructor(private dataService: DataServicesService, private elRef: ElementRef) {}
 
@@ -68,6 +70,7 @@ onDocumentClick(event: MouseEvent): void {
   const clickedInside = this.elRef.nativeElement.contains(event.target);
   if (!clickedInside) {
     this.isColorSelectionOpen = false;
+    this.cd.detectChanges();
   }
 }
 }

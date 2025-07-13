@@ -20,6 +20,10 @@ export class TimerServicesService {
   private _showBubble = signal(true);
   public showBubble = computed(() => this._showBubble());
 
+  // NUEVA signal que indica si el contador de ronda está activo
+  private _isRoundTimerRunning = signal(false);
+  public isRoundTimerRunning = computed(() => this._isRoundTimerRunning());
+
   private intervalId: any;
   private finishedCallback: (() => void) | null = null;
 
@@ -36,9 +40,11 @@ export class TimerServicesService {
     this.commandSubject.next(cmd);
     if (cmd === 'start') {
       this._isRunning.set(true);
+      this._isRoundTimerRunning.set(true);  // Se activa la señal al iniciar
     }
     if (cmd === 'pause') {
       this._isRunning.set(false);
+      this._isRoundTimerRunning.set(false); // Se desactiva la señal al pausar
     }
   }
 
@@ -54,6 +60,7 @@ export class TimerServicesService {
     this.stopCountdown();
     this.finishedCallback = onFinish ?? null;
     this._isRunning.set(true);
+    this._isRoundTimerRunning.set(true); // Indico que está corriendo
 
     this.intervalId = setInterval(() => {
       const current = this._totalSeconds();
@@ -82,17 +89,20 @@ export class TimerServicesService {
 
   setIsRunningFalse(): void {
     this._isRunning.set(false);
+    this._isRoundTimerRunning.set(false); // Parar también la señal
   }
 
   stopCountdown() {
     clearInterval(this.intervalId);
     this.intervalId = null;
     this._isRunning.set(false);
+    this._isRoundTimerRunning.set(false); // Actualizo señal
   }
 
   resetCountdown() {
     this.stopCountdown();
     this._totalSeconds.set(0);
+    this._isRoundTimerRunning.set(false); // Por las dudas la pongo en false
   }
 
   pause() {

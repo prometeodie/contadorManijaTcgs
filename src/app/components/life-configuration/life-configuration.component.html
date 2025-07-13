@@ -1,4 +1,4 @@
-<ul class="life" >
+<ul class="life" (click)="$event.stopPropagation()" >
   <li (click)="changeLifeConfiguration(20)" class="life-item">20</li>
   <li (click)="changeLifeConfiguration(30)" class="life-item">30</li>
   <li (click)="changeLifeConfiguration(40)" class="life-item">40</li>

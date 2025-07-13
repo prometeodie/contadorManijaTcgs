@@ -1,12 +1,17 @@
-<main class="home-page" *ngIf="configuration as config">
+<ion-app class="home-page" *ngIf="configuration as config">
   <!-- PLAYER 1 -->
   <div class="player-1" [ngClass]="{'chest-timer-enabled': configuration.chessTimerConfig.chessTimerEnabled}">
-    <section class="matchs" *ngIf="configuration.threeMatches">
-      <span class="match-text">PARTIDAS</span>
-      <match-counter class="match-counter" [matchesCount]="matchesCoutn"></match-counter>
-      <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" class="next-match"></next-match>
+    <section class="matchs" [ngClass]="{'matchs-left': !configuration.positionRight, 'matchs-right': configuration.positionRight}" *ngIf="configuration.threeMatches">
+      <div class="matchs-container">
+        <span class="match-text">PARTIDAS</span>
+        <match-counter class="match-counter" [matchesCount]="matchesCoutn" ></match-counter>
+        <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" class="next-match"></next-match>
+      </div>
     </section>
-    <round-timer #round1 class="player-1__round-timer" *ngIf="configuration?.roundTimerEnabled" [time]="configuration.roundTimerDuration" />
+    <round-timer #round1 class="player-1__round-timer round-timer-right"
+    [ngClass]="{'round-timer-left': configuration.positionRight, 'round-timer-right': !configuration.positionRight}" *ngIf="configuration?.roundTimerEnabled"
+    [time]="configuration.roundTimerDuration" />
+
     <counter #counter1  [backgroundColor]="configuration.player1Color"
                         [hp]="configuration.hpValue"
                         [isTurnsTimerActive]="isTurnTimerEnable"
@@ -16,38 +21,49 @@
                         class="player-1__counter" />
     <turn-timer
       class="player-1__turn-timer"
+      [ngClass]="{'turn-timer-left': !configuration.positionRight, 'turn-timer-right': configuration.positionRight}"
       *ngIf="configuration.turnTimerEnabled"
       #timer1
       [initialTime]="configuration.turnTimerDuration"
       (finished)="onTimerFinished(1)" />
     <timeout class="player-1__time-out" *ngIf="configuration?.roundTimerEnabled" />
-    <chess-timer [playerNumber]="1" #chessTimer1 class="chest-timer" *ngIf="configuration.chessTimerConfig.chessTimerEnabled" (click)="turnsCount()"/>
+
+    <chess-timer [playerNumber]="1" #chessTimer1 class="chest-timer" *ngIf="configuration.chessTimerConfig.chessTimerEnabled" (validClick)="turnsCount()"/>
     <start-btn class="start-btn" *ngIf="configuration.roundTimerEnabled && !configuration.turnTimerEnabled && !roundTimerIsRunning" (click)="stratRoundTimer()"/>
-    <player-color-changer   [playerNumber]="1" (colorChanged)="changePlayerColor($event)" class="color-changer"/>
+    <player-color-changer   [playerNumber]="1" [position]="!configuration.positionRight"
+    (colorChanged)="changePlayerColor($event)" class="color-changer"
+     [ngClass]="{'color-changer-right': !configuration.positionRight, 'color-changer-left': configuration.positionRight}"/>
   </div>
 <!-- END PLAYER 1 -->
+
   <menu class="menu" (resetTimers)="resetGame()"
   (openTimersWindow)="openCloseTimersWindow()"
   (openLifeWindow)="openCloseLifeWindow()"
-  (openCloseGameModeConfigWindow)="openClosegameModeConfigWindow()"></menu>
+  (openCloseGameModeConfigWindow)="openClosegameModeConfigWindow()"
+  (positionHasChanged)="changePosition()"
+  [positionRight]="configuration.positionRight"></menu>
 
-  <game-modes class="life-config"
+  <game-modes class="menu-popup"
   *ngIf="openCloseGameModeConfig"
   (closeGameModeConfigWindow)="openClosegameModeConfigWindow()"
   (timersChanged)="resetLoadConfiguration()"
   (openCloseChessMode)="openCloseChessModeWindow()"
-  [ngClass]="{'component-visibility':openCloseGameModeConfig}"/>
+/>
 
-  <life-configuration class="life-config" (closeLifeConfigWindow)="openCloseLifeWindow()" (lifeChange)="resetLoadConfiguration()" [ngClass]="{'component-visibility':openCloseLifeConfig}" *ngIf="openCloseLifeConfig" />
+  <life-configuration class="menu-popup" (closeLifeConfigWindow)="openCloseLifeWindow()" (lifeChange)="resetLoadConfiguration()" *ngIf="openCloseLifeConfig" />
 
   <!-- PLAYER 2 -->
   <div class="player-2" [ngClass]="{'chest-timer-enabled': configuration.chessTimerConfig.chessTimerEnabled}">
-    <section class="matchs" *ngIf="configuration.threeMatches">
-      <span class="match-text">PARTIDAS</span>
-      <match-counter class="match-counter" [matchesCount]="matchesCoutn" />
-      <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" class="next-match" />
+    <section class="matchs" [ngClass]="{'matchs-left': configuration.positionRight, 'matchs-right': !configuration.positionRight}" *ngIf="configuration.threeMatches">
+      <div class="matchs-container">
+        <span class="match-text">PARTIDAS</span>
+        <match-counter class="match-counter" [matchesCount]="matchesCoutn" />
+        <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" class="next-match" />
+      </div>
     </section>
-    <round-timer #round2 class="player-2__round-timer" *ngIf="configuration?.roundTimerEnabled" />
+    <round-timer #round2 class="player-2__round-timer round-timer-left"
+    [ngClass]="{'round-timer-left': !configuration.positionRight, 'round-timer-right': configuration.positionRight}"
+    *ngIf="configuration?.roundTimerEnabled" />
     <counter #counter2
         [backgroundColor]="configuration.player2Color"
         [hp]="configuration.hpValue"
@@ -57,16 +73,21 @@
         [isChessTimerActive]=" configuration.chessTimerConfig.chessTimerEnabled" />
     <turn-timer
       class="player-2__turn-timer"
+      [ngClass]="{'turn-timer-left': configuration.positionRight, 'turn-timer-right': !configuration.positionRight}"
       *ngIf="configuration.turnTimerEnabled"
       #timer2
       [initialTime]="configuration.turnTimerDuration"
       (finished)="onTimerFinished(2)" />
     <timeout class="player-2__time-out" *ngIf="configuration?.roundTimerEnabled" />
-    <chess-timer [playerNumber]="2" #chessTimer2 class="chest-timer" *ngIf="configuration.chessTimerConfig.chessTimerEnabled" (click)="turnsCount()"/>
+    <chess-timer [playerNumber]="2" #chessTimer2 class="chest-timer" *ngIf="configuration.chessTimerConfig.chessTimerEnabled" (validClick)="turnsCount()"/>
     <start-btn class="start-btn" *ngIf="configuration.roundTimerEnabled && !configuration.turnTimerEnabled && !roundTimerIsRunning" (click)="stratRoundTimer()"/>
-    <player-color-changer   [playerNumber]="2" (colorChanged)="changePlayerColor($event)" class="color-changer"/>
+    <player-color-changer   [playerNumber]="2" [position]="configuration.positionRight"
+    (colorChanged)="changePlayerColor($event)"
+    class="color-changer"
+    [ngClass]="{'color-changer-right': configuration.positionRight, 'color-changer-left': !configuration.positionRight}"/>
   </div>
 <!-- END PLAYER 2 -->
+
   <timers-configuration
     (closeConfigWindow)="openCloseTimersWindow()"
     (isConfigChange)="isTimerConfigChange()"
@@ -79,4 +100,4 @@
   (closeChessModeWindow)="openCloseChessModeWindow()"
   (configChanged)="resetLoadConfiguration()"
    />
-</main>
+</ion-app>

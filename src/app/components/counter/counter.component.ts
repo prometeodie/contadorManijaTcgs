@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { Component, effect, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { DataServicesService } from 'src/app/services/data-services.service';
 
 @Component({
   selector: 'counter',
   templateUrl: './counter.component.html',
   styleUrls: ['./counter.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule],
+  imports: [CommonModule],
 })
 export class CounterComponent implements OnInit {
   @Input() hp: number = 0;
@@ -20,16 +20,26 @@ export class CounterComponent implements OnInit {
   @Input() isSoundEnable!: boolean;
   @Output() valueChange = new EventEmitter<number>();
 
+  private dataService = inject(DataServicesService);
+
   public counter: number = 0;
   public showAnimation: boolean = false;
   public showVisible: boolean = false;
   public action: string = '';
+  public isActiveMinus = false;
+  public isActivePlus = false;
   private animationTimeout: any;
-
   private clickSound = new Audio('assets/sounds/tap.ogg');
 
+  private dataServicesService = inject(DataServicesService)
+
+
   ngOnInit() {
-    this.clickSound.load(); // Precargar
+    this.clickSound.load();
+  }
+
+  get isLifeAnimationActive() {
+  return this.dataService.lifeAnimation();
   }
 
   incrementDecrement(value: number) {
@@ -40,11 +50,20 @@ export class CounterComponent implements OnInit {
       this.counterNumber(value);
       this.action = this.counter > 0 ? 'increment' : 'decrement';
       this.playClickSound();
+
+      // Activar clase 'active' según botón presionado
+      if (value === -1) {
+        this.isActiveMinus = true;
+        setTimeout(() => (this.isActiveMinus = false), 150);
+      } else if (value === 1) {
+        this.isActivePlus = true;
+        setTimeout(() => (this.isActivePlus = false), 150);
+      }
     }
   }
 
   private playClickSound() {
-    if(!this.isSoundEnable) return;
+    if (!this.isSoundEnable) return;
     try {
       this.clickSound.currentTime = 0;
       this.clickSound.play();
@@ -74,6 +93,11 @@ export class CounterComponent implements OnInit {
   onAnimationEnd() {
     this.counter = 0;
     this.action = '';
+  }
+
+
+  onchangeLifeAnimationEnd() {
+     this.dataServicesService.setConfiglifeAnimation(false);
   }
 
   counterNumber(value: number) {

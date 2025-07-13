@@ -1,6 +1,6 @@
 <ion-icon name="color-palette-outline" class="palette" (click)="openColorSelection()"></ion-icon>
 
-<section class="color-selection" *ngIf="isColorSelectionOpen">
+<section class="color-selection" [ngClass]="{ 'right': position, 'left': !position }" *ngIf="isColorSelectionOpen">
   <ul class="color-list">
     <li
       class="color-item"
