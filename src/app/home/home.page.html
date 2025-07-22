@@ -23,9 +23,10 @@
       class="player-1__turn-timer"
       [ngClass]="{'turn-timer-left': !configuration.positionRight, 'turn-timer-right': configuration.positionRight}"
       *ngIf="configuration.turnTimerEnabled"
+      (validClick)="turnsCount()"
+      [playerNumber]="1"
       #timer1
-      [initialTime]="configuration.turnTimerDuration"
-      (finished)="onTimerFinished(1)" />
+      />
     <timeout class="player-1__time-out" *ngIf="configuration?.roundTimerEnabled" />
 
     <chess-timer [playerNumber]="1" #chessTimer1 class="chest-timer" *ngIf="configuration.chessTimerConfig.chessTimerEnabled" (validClick)="turnsCount()"/>
@@ -75,9 +76,9 @@
       class="player-2__turn-timer"
       [ngClass]="{'turn-timer-left': configuration.positionRight, 'turn-timer-right': !configuration.positionRight}"
       *ngIf="configuration.turnTimerEnabled"
-      #timer2
-      [initialTime]="configuration.turnTimerDuration"
-      (finished)="onTimerFinished(2)" />
+      (validClick)="turnsCount()"
+      [playerNumber]="2"
+      #timer2/>
     <timeout class="player-2__time-out" *ngIf="configuration?.roundTimerEnabled" />
     <chess-timer [playerNumber]="2" #chessTimer2 class="chest-timer" *ngIf="configuration.chessTimerConfig.chessTimerEnabled" (validClick)="turnsCount()"/>
     <start-btn class="start-btn" *ngIf="configuration.roundTimerEnabled && !configuration.turnTimerEnabled && !roundTimerIsRunning" (click)="stratRoundTimer()"/>
@@ -98,6 +99,6 @@
   *ngIf="openCloseChessMode"
    class="windows-configuration"
   (closeChessModeWindow)="openCloseChessModeWindow()"
-  (configChanged)="resetLoadConfiguration()"
+  (chessConfigChanged)="resetLoadConfiguration()"
    />
 </ion-app>

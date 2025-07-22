@@ -67,7 +67,6 @@ export class ChessTimerComponent implements OnInit {
 
     if (this.chessTimerService.isFinished(this.playerNumber)) return;
     if (this.chessTimerService.isGameOver()) {
-      console.log('El juego ya terminó. No se puede continuar.');
       return;
     }
 

@@ -4,6 +4,7 @@ import { ChessTimerService } from '../../services/chess-timer.service';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { DataServicesService } from 'src/app/services/data-services.service';
+import { TurnTimerService } from 'src/app/services/turn-timer.service';
 
 @Component({
   selector: 'menu',
@@ -25,6 +26,7 @@ export class MenuComponent implements OnInit {
   private timerService = inject(TimerServicesService);
   private chessTimerService = inject(ChessTimerService);
   private cd = inject(ChangeDetectorRef);
+  private turnTimerService = inject(TurnTimerService);
 
   public isTimerRunning = computed(() => this.timerService.isRunning());
   public ischessTimerRunning = computed(() => this.chessTimerService.isAnyTimerRunning());
@@ -51,21 +53,41 @@ export class MenuComponent implements OnInit {
     }
   }
 
-  playPause() {
-    if (this.timerService.isRunning()) {
-      this.timerService.pause();
-      this.pauseAll();
-    } else {
-      this.timerService.resume();
-      this.startAll();
+ playPause() {
+  if (this.timerService.isRunning()) {
+    this.timerService.pause();
+    this.pauseAll();
+
+    // Pausar o reanudar turn timer del jugador activo según estado actual
+    const current = this.turnTimerService.activePlayer();
+    if (current) {
+      if (this.turnTimerService.isRunning(current)) {
+        this.turnTimerService.pauseTurnTimer(current);
+      } else {
+        this.turnTimerService.resumeTurnTimer(current);
+      }
     }
-    if (this.chessTimerService.isAnyTimerRunning()) {
-      this.chessTimerService.stop(1);
-      this.chessTimerService.stop(2);
-    } else {
-      this.chessTimerService.resumeActiveTimer();
+  } else {
+    this.timerService.resume();
+    this.startAll();
+
+    // Reanudar turn timer del jugador activo
+    const current = this.turnTimerService.activePlayer();
+    if (current) {
+      this.turnTimerService.resumeTurnTimer(current);
     }
   }
+
+  // Control de los timers de ajedrez también
+  if (this.chessTimerService.isAnyTimerRunning()) {
+    this.chessTimerService.stop(1);
+    this.chessTimerService.stop(2);
+  } else {
+    this.chessTimerService.resumeActiveTimer();
+  }
+}
+
+
 
   @HostListener('document:click')
   closeMenu() {

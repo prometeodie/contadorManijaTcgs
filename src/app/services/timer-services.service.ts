@@ -56,24 +56,29 @@ export class TimerServicesService {
     this._totalSeconds.set(seconds);
   }
 
-  startCountdown(onFinish?: () => void) {
-    this.stopCountdown();
-    this.finishedCallback = onFinish ?? null;
-    this._isRunning.set(true);
-    this._isRoundTimerRunning.set(true); // Indico que está corriendo
-
-    this.intervalId = setInterval(() => {
-      const current = this._totalSeconds();
-
-      if (current > 0) {
-        this._totalSeconds.set(current - 1);
-      } else {
-        this.stopCountdown();
-        this.playEndSound();
-        if (this.finishedCallback) this.finishedCallback();
-      }
-    }, 1000);
+ startCountdown(onFinish?: () => void) {
+  if (this._totalSeconds() <= 0) {
+    console.warn('⏳ No se inició el contador porque el tiempo es cero');
+    return;
   }
+
+  this.stopCountdown();
+  this.finishedCallback = onFinish ?? null;
+  this._isRunning.set(true);
+  this._isRoundTimerRunning.set(true);
+
+  this.intervalId = setInterval(() => {
+    const current = this._totalSeconds();
+
+    if (current > 0) {
+      this._totalSeconds.set(current - 1);
+    } else {
+      this.stopCountdown();
+      this.playEndSound();
+      if (this.finishedCallback) this.finishedCallback();
+    }
+  }, 1000);
+}
 
   private async playEndSound() {
     try {

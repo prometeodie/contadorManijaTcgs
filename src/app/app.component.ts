@@ -6,6 +6,7 @@ import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { SplashScreen } from '@capacitor/splash-screen';
 
 declare var window: any;
+declare var AndroidFullScreen: any;
 
 @Component({
   selector: 'app-root',
@@ -22,19 +23,26 @@ export class AppComponent {
     await this.platform.ready();
 
     try {
-      // Ocultar splash después de que la plataforma esté lista
-      console.log('✅ Splash screen oculto');
+
+      // Ocultar SplashScreen
+      await SplashScreen.hide();
 
       // Configurar StatusBar
-      await StatusBar.setOverlaysWebView({ overlay: false });
+      await StatusBar.setOverlaysWebView({ overlay: true });
       await StatusBar.setStyle({ style: Style.Dark });
 
-      // Bloquear orientación
+      // Bloquear orientación vertical
       await this.lockOrientation();
 
       // Mantener pantalla encendida
       this.keepScreenAwake();
-      await SplashScreen.hide();
+
+      // Activar modo inmersivo en Android
+      this.activateImmersiveMode();
+
+      // Precargar sonido sin latencia
+      this.preloadTimeoutSound();
+
     } catch (err) {
       console.log('❌ Error configurando la app', err);
     }
@@ -43,7 +51,6 @@ export class AppComponent {
   private async lockOrientation() {
     try {
       await ScreenOrientation.lock({ orientation: 'portrait' });
-      console.log('✅ Orientación bloqueada a portrait');
     } catch (error) {
       console.warn('❌ No se pudo bloquear la orientación:', error);
     }
@@ -52,9 +59,30 @@ export class AppComponent {
   private keepScreenAwake() {
     if (window.plugins && window.plugins.insomnia) {
       window.plugins.insomnia.keepAwake();
-      console.log('✅ Pantalla bloqueada para que no se apague');
     } else {
       console.warn('❌ Plugin Insomnia no disponible');
+    }
+  }
+
+  private activateImmersiveMode() {
+    if (window.AndroidFullScreen) {
+      AndroidFullScreen.immersiveMode(
+        (error: any) => console.error('❌ Error al activar modo inmersivo', error)
+      );
+    } else {
+      console.warn('❌ AndroidFullScreen plugin no disponible');
+    }
+  }
+
+  private preloadTimeoutSound() {
+    if (window.plugins && window.plugins.NativeAudio) {
+      window.plugins.NativeAudio.preloadSimple(
+        'timeout',
+        'assets/sounds/time-out.ogg',
+        (err: any) => console.error('❌ Error al precargar sonido', err)
+      );
+    } else {
+      console.warn('❌ NativeAudio plugin no disponible');
     }
   }
 }

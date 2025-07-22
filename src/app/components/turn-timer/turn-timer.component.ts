@@ -1,118 +1,96 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  Signal,
+  signal,
+  computed,
+  inject,
+  effect,
+  OnInit,
+} from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { Subscription } from 'rxjs';
-import { TimerCommand, TimerServicesService } from 'src/app/services/timer-services.service';
+import { TurnTimerService } from 'src/app/services/turn-timer.service';
+import { DataServicesService } from 'src/app/services/data-services.service';
+import { TimerServicesService } from 'src/app/services/timer-services.service';
 
 @Component({
   selector: 'turn-timer',
-  templateUrl: './turn-timer.component.html',
-  styleUrls: ['./turn-timer.component.scss'],
   standalone: true,
   imports: [CommonModule, IonicModule],
+  templateUrl: './turn-timer.component.html',
+  styleUrls: ['./turn-timer.component.scss'],
 })
-export class TurnTimerComponent implements OnInit, OnDestroy {
-  @Input() initialTime = '02:00';
-  @Output() finished = new EventEmitter<void>();
+export class TurnTimerComponent implements OnInit {
+  @Input() playerNumber!: 1 | 2;
   @Output() clicked = new EventEmitter<void>();
+  @Output() validClick = new EventEmitter<void>();
 
-  private intervalId: any;
-  private wasRunningBeforePause = false;
-  private commandSub!: Subscription;
-  private controlService = inject(TimerServicesService);
+  private dataService = inject(DataServicesService);
+  private timerService = inject(TurnTimerService);
+  private timerServicesService = inject(TimerServicesService);
 
-  totalSeconds: number = 0;
-  running: boolean = false;
-  showBubble = this.controlService.showBubble;
+  private durationMs = 0;
 
-  ngOnInit() {
-    this.totalSeconds = this.parseTimeToSeconds(this.initialTime);
-    this.commandSub = this.controlService.commands$.subscribe((cmd: TimerCommand) => this.handleCommand(cmd));
-  }
+  public isActive = computed(() => this.timerService.activePlayer() === this.playerNumber);
 
-  ngOnDestroy() {
-    this.clearTimer();
-    this.commandSub?.unsubscribe();
-  }
+  public timeLeft = computed(() =>
+    this.playerNumber === 1 ? this.timerService.timeLeft1() : this.timerService.timeLeft2()
+  );
 
-  parseTimeToSeconds(timeStr: string): number {
-    const [mm, ss] = timeStr.split(':').map(Number);
-    return (mm || 0) * 60 + (ss || 0);
-  }
+  public timeDisplay: Signal<string> = computed(() => {
+    const ms = this.timeLeft();
+    const min = Math.floor(ms / 60000);
+    const sec = Math.floor((ms % 60000) / 1000);
+    return `${this.pad(min)}:${this.pad(sec)}`;
+  });
 
-  formattedTime(): string {
-    const mm = Math.floor(this.totalSeconds / 60);
-    const ss = this.totalSeconds % 60;
-    return `${mm.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')}`;
-  }
-
-  startGame() {
-    this.controlService.showBubblePopUp(false); // Oculta la burbuja desde el servicio central
-  }
-
-  start() {
-    if (this.running) return;
-    this.running = true;
-    this.intervalId = setInterval(() => {
-      if (this.totalSeconds > 0) {
-        this.totalSeconds -= 1;
-      } else {
-        this.clearTimer();
-        this.finished.emit();
-        this.wasRunningBeforePause = false;
+  constructor() {
+    effect(() => {
+      if (this.dataService.configChangedSignal()) {
+        this.loadTimerConfig();
       }
-    }, 1000);
+    });
   }
 
-  pause() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
+  async ngOnInit() {
+    await this.loadTimerConfig();
+  }
+
+  async loadTimerConfig() {
+    const config = await this.dataService.get<any>('configuration');
+    const durationStr = config?.turnTimerDuration ?? this.dataService.defaultConfig.turnTimerDuration;
+    this.durationMs = this.timerService.parseDurationToMs(durationStr);
+    this.timerService.initTimers(this.durationMs);
+  }
+
+  public resetTimer() {
+  this.timerService.initTimers(this.durationMs);
+}
+
+  onClick() {
+    const current = this.timerService.activePlayer();
+
+    if (current === null) {
+      this.timerService.startTurn(this.playerNumber);
+      this.validClick.emit();
+    } else if (current === this.playerNumber) {
+      this.timerService.switchTurn(this.playerNumber);
+      this.validClick.emit();
     }
-    this.running = false;
-  }
+    this.timerServicesService.startCountdown();
 
-  reset() {
-    this.totalSeconds = this.parseTimeToSeconds(this.initialTime);
-    this.wasRunningBeforePause = false;
-  }
-
-  stopAndReset() {
-    this.pause();
-    this.reset();
-  }
-
-  clearTimer() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-    }
-    this.running = false;
-  }
-
-  onUserClick() {
-    this.startGame();
     this.clicked.emit();
   }
 
-  private handleCommand(cmd: TimerCommand) {
-    switch (cmd) {
-      case 'start':
-        if (this.wasRunningBeforePause) {
-          this.start();
-        }
-        break;
-      case 'pause':
-        this.wasRunningBeforePause = this.running;
-        this.pause();
-        break;
-      case 'reset':
-        this.reset();
-        break;
-      case 'stop':
-        this.wasRunningBeforePause = false;
-        this.stopAndReset();
-        break;
-    }
+  private pad(n: number): string {
+    return n.toString().padStart(2, '0');
+  }
+  get activePlayer() {
+    return this.timerService.activePlayer();
   }
 }
+
+

@@ -82,35 +82,25 @@ export class TimersConfigurationComponent implements OnInit {
 
     this.timerConfig = updatedConfig;
     await this.dataService.set('configuration', updatedConfig);
+    this.loadConfiguration(updatedConfig)
     this.isConfigChange.emit();
   }
 
-  async saveSoundConfigToLocalStorage() {
-    const currentConfig = await this.dataService.get<typeof this.dataService.defaultConfig>('configuration') ?? this.dataService.defaultConfig;
+  saveSoundConfigToLocalStorage() {
+  this.timerConfig.soundEnabled = this.sound;
 
-    const updatedConfig = {
-      ...currentConfig,
-      soundEnabled: this.sound,
-    };
-
-    await this.dataService.set('configuration', updatedConfig);
-
-    this.dataService.setConfigChanged(true);
-    setTimeout(() => {
-      this.dataService.setConfigChanged(false);
-    }, 200);
-
+  this.dataService.set('configuration', this.timerConfig).then(() => {
     this.updateSoundState();
-    this.isConfigChange.emit();
-  }
+  });
+}
 
-  private updateSoundState() {
-    if (this.sound) {
-      this.soundService.enableSound();
-    } else {
-      this.soundService.disableSound();
-    }
+private updateSoundState() {
+  if (this.sound) {
+    this.soundService.enableSound();
+  } else {
+    this.soundService.disableSound();
   }
+}
 
   pad(value: number): string {
     return value.toString().padStart(2, '0');

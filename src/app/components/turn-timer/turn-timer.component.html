@@ -1,16 +1,22 @@
 <main class="turn-timer">
-  <div class="popup-container" *ngIf="showBubble()">
+  <div class="popup-container" *ngIf="activePlayer === null">
     <div class="popup-bubble">
       Click para comenzar
       <div class="popup-arrow"></div>
     </div>
   </div>
 
-  <div class="turn-timer__time" [ngClass]="{ 'hurry-up': totalSeconds <= 10, 'time-out': totalSeconds === 0 }">
-    {{ formattedTime() }}
+  <div
+    class="turn-timer__time"
+    [ngClass]="{
+      'hurry-up': timeLeft() <= 10000,
+      'time-out': timeLeft() === 0
+    }"
+  >
+    {{ timeDisplay() }}
   </div>
 
-  <button class="turn-timer__btn" (click)="onUserClick()">
+  <button class="turn-timer__btn" (click)="onClick()">
     <ion-icon name="hourglass-outline" class="turn-timer__btn__icon"></ion-icon>
   </button>
 </main>
