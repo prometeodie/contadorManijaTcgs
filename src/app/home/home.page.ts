@@ -171,7 +171,7 @@ export class HomePage implements OnInit, OnDestroy {
       this.counter2.resetHp(this.configuration.hpValue);
     }
 
-    this.turnsCounter = 0;
+    this.turnsCounter = 1;
     this.fullTurnsCounter = 1;
     this.activeTimer = null;
   }

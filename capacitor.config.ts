@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.franco.contador',
-  appName: 'Contador Tcgs',
+  appName: 'Time to Duel - Tcgs',
   webDir: 'www',
    plugins: {
     SplashScreen: {
