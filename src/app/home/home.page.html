@@ -30,7 +30,9 @@
     <timeout class="player-1__time-out" *ngIf="configuration?.roundTimerEnabled" />
 
     <chess-timer [playerNumber]="1" #chessTimer1 class="chest-timer" *ngIf="configuration.chessTimerConfig.chessTimerEnabled" (validClick)="turnsCount()"/>
-    <start-btn class="start-btn" *ngIf="configuration.roundTimerEnabled && !configuration.turnTimerEnabled && !roundTimerIsRunning" (click)="stratRoundTimer()"/>
+    <start-btn class="start-btn"
+      [ngClass]="{'start-btn-left': !configuration.positionRight, 'start-btn-right': configuration.positionRight}"
+    *ngIf="configuration.roundTimerEnabled && !configuration.turnTimerEnabled && !roundTimerIsRunning" (click)="stratRoundTimer()"/>
     <player-color-changer   [playerNumber]="1" [position]="!configuration.positionRight"
     (colorChanged)="changePlayerColor($event)" class="color-changer"
      [ngClass]="{'color-changer-right': !configuration.positionRight, 'color-changer-left': configuration.positionRight}"/>
@@ -79,9 +81,12 @@
       (validClick)="turnsCount()"
       [playerNumber]="2"
       #timer2/>
-    <timeout class="player-2__time-out" *ngIf="configuration?.roundTimerEnabled" />
-    <chess-timer [playerNumber]="2" #chessTimer2 class="chest-timer" *ngIf="configuration.chessTimerConfig.chessTimerEnabled" (validClick)="turnsCount()"/>
-    <start-btn class="start-btn" *ngIf="configuration.roundTimerEnabled && !configuration.turnTimerEnabled && !roundTimerIsRunning" (click)="stratRoundTimer()"/>
+      <timeout class="player-2__time-out" *ngIf="configuration?.roundTimerEnabled" />
+      <chess-timer [playerNumber]="2" #chessTimer2 class="chest-timer" *ngIf="configuration.chessTimerConfig.chessTimerEnabled" (validClick)="turnsCount()"/>
+
+    <start-btn class="start-btn"
+      [ngClass]="{'start-btn-right': !configuration.positionRight, 'start-btn-left': configuration.positionRight}"
+    *ngIf="configuration.roundTimerEnabled && !configuration.turnTimerEnabled && !roundTimerIsRunning" (click)="stratRoundTimer()"/>
     <player-color-changer   [playerNumber]="2" [position]="configuration.positionRight"
     (colorChanged)="changePlayerColor($event)"
     class="color-changer"

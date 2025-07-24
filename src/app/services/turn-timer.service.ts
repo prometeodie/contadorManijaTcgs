@@ -20,7 +20,10 @@ export class TurnTimerService {
   private _timeLeft1 = signal(0);
   private _timeLeft2 = signal(0);
   private _activePlayer = signal<1 | 2 | null>(null);
+  private _turnTimerWasModified = signal<boolean>(false);
   public activePlayer = computed(() => this._activePlayer());
+  public turnTimerWasModified = computed(() => this._turnTimerWasModified());
+
 
   get timeLeft1() {
     return this._timeLeft1.asReadonly();
@@ -33,6 +36,10 @@ export class TurnTimerService {
   parseDurationToMs(duration: string): number {
     const [mm, ss] = duration.split(':').map(Number);
     return (mm || 0) * 60000 + (ss || 0) * 1000;
+  }
+
+   markTurnTimerAsModified(value:boolean) {
+    this._turnTimerWasModified.set(value);
   }
 
   initTimers(ms: number) {

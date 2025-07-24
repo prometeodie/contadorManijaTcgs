@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, OnChanges, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { NgClass } from '@angular/common';
 import { TimerServicesService } from 'src/app/services/timer-services.service';
@@ -10,14 +10,24 @@ import { TimerServicesService } from 'src/app/services/timer-services.service';
   standalone: true,
   imports: [IonicModule, NgClass],
 })
-export class RoundTimerComponent implements OnInit {
+export class RoundTimerComponent implements OnInit, OnChanges {
   @Input() time: string | undefined;
+
   private timerService = inject(TimerServicesService);
   public totalSeconds = this.timerService.totalSeconds;
 
   ngOnInit() {
     if (this.time) {
       const total = this.parseTimeToSeconds(this.time);
+      this.timerService.setInitialTime(total);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['time'] && !changes['time'].firstChange) {
+      const newTime = changes['time'].currentValue;
+      const total = this.parseTimeToSeconds(newTime);
+      this.timerService.stopCountdown();
       this.timerService.setInitialTime(total);
     }
   }
@@ -37,10 +47,10 @@ export class RoundTimerComponent implements OnInit {
   }
 
   resetTimer() {
-  if (this.time) {
-    const total = this.parseTimeToSeconds(this.time);
-    this.timerService.stopCountdown();
-    this.timerService.setInitialTime(total);
+    if (this.time) {
+      const total = this.parseTimeToSeconds(this.time);
+      this.timerService.stopCountdown();
+      this.timerService.setInitialTime(total);
+    }
   }
-}
 }

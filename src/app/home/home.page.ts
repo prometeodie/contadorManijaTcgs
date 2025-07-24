@@ -21,6 +21,7 @@ import { ChessTimerService } from '../services/chess-timer.service';
 import { StartBtnComponent } from '../components/start-btn/start-btn.component';
 import { PlayerColorChangerComponent } from '../components/player-color-changer/player-color-changer.component';
 import { SoundService } from '../services/sound.service';
+import { TurnTimerService } from '../services/turn-timer.service';
 
 @Component({
   selector: 'app-home',
@@ -44,6 +45,7 @@ export class HomePage implements OnInit, OnDestroy {
   private chessTimerService = inject(ChessTimerService);
   private cd = inject(ChangeDetectorRef);
   private soundService = inject(SoundService);
+  private turnTimerService = inject(TurnTimerService);
 
   private subscriptions: Subscription[] = [];
 
@@ -51,8 +53,8 @@ export class HomePage implements OnInit, OnDestroy {
   public isConfigurationLoaded: boolean = false;
   public isTurnTimerEnable: boolean = false;
   public matchesCoutn:number = 1;
-  public turnsCounter: number = 0;
-  public fullTurnsCounter: number = 0;
+  public turnsCounter: number = 1;
+  public fullTurnsCounter: number = 1;
   public isSoundEnable!: boolean;
   public openCloseTimersConfig: boolean = false;
   public openCloseLifeConfig: boolean = false;
@@ -91,15 +93,13 @@ export class HomePage implements OnInit, OnDestroy {
     }
     this.cd.detectChanges();
 
-    this.turnTimers(); // mantengo este llamado aunque ahora manejamos con ViewChildren
+    this.turnTimers();
   }
 
   turnTimers() {
-    // Ya manejamos con ViewChildren, esta función queda sólo para compatibilidad o limpieza
     this.subscriptions.forEach(sub => sub.unsubscribe());
     this.subscriptions = [];
 
-    // Si querés podés quitar este método sin problema
   }
 
   matchesCountIncrement() {
@@ -135,6 +135,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.prepareNextMatch();
 
     this.resetTimers();
+    this.turnTimerService.markTurnTimerAsModified(true);
     this.timerService.setInitialTime(this.timerService.totalSeconds());
     this.timerService.setIsRunningFalse();
     this.roundTimerIsRunning = this.timerService.isRunning();
@@ -171,7 +172,7 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
     this.turnsCounter = 0;
-    this.fullTurnsCounter = 0;
+    this.fullTurnsCounter = 1;
     this.activeTimer = null;
   }
 
@@ -211,25 +212,18 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   async resetLoadConfiguration() {
-    const newConfig = await this.dataServicesService.get<ConfigurationData>('configuration');
-    this.configuration = { ...(newConfig ?? this.dataServicesService.defaultConfig) };
+  const newConfig = await this.dataServicesService.get<ConfigurationData>('configuration');
+  this.configuration = { ...(newConfig ?? this.dataServicesService.defaultConfig) };
+  this.counter1?.resetHp(this.configuration.hpValue);
+  this.counter2?.resetHp(this.configuration.hpValue);
 
-    // Resetear counters
-    this.counter1?.resetHp(this.configuration.hpValue);
-    this.counter2?.resetHp(this.configuration.hpValue);
+  this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
+  this.isSoundEnable = this.configuration.soundEnabled;
+  await this.resetGame();
+  this.cd.detectChanges();
 
-    this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
-    this.isSoundEnable = this.configuration.soundEnabled;
-
-    // Reiniciar lógica de juego
-    await this.resetGame();
-
-    // Actualizar la vista
-    this.cd.detectChanges();
-
-    // Activar animación de vida
-    this.dataServicesService.setConfiglifeAnimation(true);
-  }
+  this.dataServicesService.setConfiglifeAnimation(true);
+}
 
   openClosegameModeConfigWindow() {
     this.openCloseGameModeConfig = !this.openCloseGameModeConfig;

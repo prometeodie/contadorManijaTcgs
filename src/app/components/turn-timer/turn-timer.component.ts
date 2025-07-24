@@ -5,11 +5,11 @@ import {
   Output,
   EventEmitter,
   Signal,
-  signal,
   computed,
   inject,
   effect,
   OnInit,
+  DestroyRef,
 } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { TurnTimerService } from 'src/app/services/turn-timer.service';
@@ -25,7 +25,6 @@ import { TimerServicesService } from 'src/app/services/timer-services.service';
 })
 export class TurnTimerComponent implements OnInit {
   @Input() playerNumber!: 1 | 2;
-  @Output() clicked = new EventEmitter<void>();
   @Output() validClick = new EventEmitter<void>();
 
   private dataService = inject(DataServicesService);
@@ -47,14 +46,21 @@ export class TurnTimerComponent implements OnInit {
     return `${this.pad(min)}:${this.pad(sec)}`;
   });
 
-  constructor() {
-    effect(() => {
-      if (this.dataService.configChangedSignal()) {
-        this.loadTimerConfig();
-      }
-    });
-  }
 
+  constructor() {
+  effect(() => {
+    if (this.timerService.turnTimerWasModified()) {
+      this.loadTimerConfig().catch(console.error);
+      this.timerService.markTurnTimerAsModified(false);
+    }
+  });
+
+  effect(() => {
+    if (this.dataService.configChangedSignal()) {
+      this.loadTimerConfig().catch(console.error);
+    }
+  });
+}
   async ngOnInit() {
     await this.loadTimerConfig();
   }
@@ -66,12 +72,15 @@ export class TurnTimerComponent implements OnInit {
     this.timerService.initTimers(this.durationMs);
   }
 
-  public resetTimer() {
-  this.timerService.initTimers(this.durationMs);
+  public async resetTimer() {
+  await this.loadTimerConfig();
 }
 
   onClick() {
     const current = this.timerService.activePlayer();
+    if(!this.timerServicesService.isRunning()){
+      this.timerServicesService.startCountdown();
+    }
 
     if (current === null) {
       this.timerService.startTurn(this.playerNumber);
@@ -80,9 +89,6 @@ export class TurnTimerComponent implements OnInit {
       this.timerService.switchTurn(this.playerNumber);
       this.validClick.emit();
     }
-    this.timerServicesService.startCountdown();
-
-    this.clicked.emit();
   }
 
   private pad(n: number): string {

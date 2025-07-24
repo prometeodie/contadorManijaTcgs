@@ -48,6 +48,7 @@
   flex-direction: column;
   justify-content: center;
   height: 100vh;
+  background-color: #0D0D0D;
 }
 
 .windows-configuration,
@@ -132,7 +133,6 @@
 .start-btn{
   position: absolute;
   bottom: 3rem;
-  left: 0.7rem;
 }
 
 .color-changer {
@@ -167,4 +167,12 @@
 
 .matchs-right{
   right: 3.75rem;
+}
+
+.start-btn-left{
+    left: 0.7rem;
+}
+
+.start-btn-right{
+    right: 0.7rem;
 }

@@ -36,6 +36,28 @@ export class TimerServicesService {
     this.roundEndSound.load();
   }
 
+  resetWithNewTime(seconds: number) {
+  this.stopCountdown();
+  this.setInitialTime(seconds);
+  this._isRunning.set(false);
+  this._isRoundTimerRunning.set(false);
+  console.log(this._totalSeconds())
+}
+
+parseDurationToSeconds(duration: string): number {
+  if (!duration) return 0;
+  const parts = duration.split(':').map(Number);
+  if (parts.length === 3) {
+    const [hh, mm, ss] = parts;
+    return hh * 3600 + mm * 60 + ss;
+  }
+  if (parts.length === 2) {
+    const [mm, ss] = parts;
+    return mm * 60 + ss;
+  }
+  return Number(duration);
+}
+
   sendCommand(cmd: TimerCommand) {
     this.commandSubject.next(cmd);
     if (cmd === 'start') {
@@ -56,7 +78,7 @@ export class TimerServicesService {
     this._totalSeconds.set(seconds);
   }
 
- startCountdown(onFinish?: () => void) {
+startCountdown(onFinish?: () => void) {
   if (this._totalSeconds() <= 0) {
     console.warn('⏳ No se inició el contador porque el tiempo es cero');
     return;
@@ -66,6 +88,14 @@ export class TimerServicesService {
   this.finishedCallback = onFinish ?? null;
   this._isRunning.set(true);
   this._isRoundTimerRunning.set(true);
+  this._totalSeconds.update((s) => s - 1);
+
+  if (this._totalSeconds() <= 0) {
+    this.stopCountdown();
+    this.playEndSound();
+    if (this.finishedCallback) this.finishedCallback();
+    return;
+  }
 
   this.intervalId = setInterval(() => {
     const current = this._totalSeconds();
@@ -94,20 +124,20 @@ export class TimerServicesService {
 
   setIsRunningFalse(): void {
     this._isRunning.set(false);
-    this._isRoundTimerRunning.set(false); // Parar también la señal
+    this._isRoundTimerRunning.set(false);
   }
 
   stopCountdown() {
     clearInterval(this.intervalId);
     this.intervalId = null;
     this._isRunning.set(false);
-    this._isRoundTimerRunning.set(false); // Actualizo señal
+    this._isRoundTimerRunning.set(false);
   }
 
   resetCountdown() {
     this.stopCountdown();
     this._totalSeconds.set(0);
-    this._isRoundTimerRunning.set(false); // Por las dudas la pongo en false
+    this._isRoundTimerRunning.set(false);
   }
 
   pause() {
