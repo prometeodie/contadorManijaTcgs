@@ -54,8 +54,8 @@ export class GameModesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async showTimers(show: boolean) {
     const text = show
-      ? '¿Estás seguro de que querés activar los timers? '
-      : '¿Estás seguro de que querés desactivar los timers?';
+      ? '¿Activar todos los timers? '
+      : '¿Desactivar todos los timers?';
 
     if (confirm(text)) {
       const config = await this.dataService.get<ConfigurationData>('configuration');

@@ -16,7 +16,7 @@ export class PlayerColorChangerComponent implements OnInit {
   @Output() colorChanged = new EventEmitter<{ player: 1 | 2; color: string }>();
 
   public isColorSelectionOpen: boolean = false;
-  public colors = ['#ff004a','#4250fe','#f8605d','#ffae72', '#66d19e', '#4a7dcc', '#a27ac4' , '#ff5ca3', '#57c1eb', '#9b72d4'];
+  public colors = ['#ff004a','#4250fe','#f8605d','#ffae72', '#66d19e', '#4a7dcc', '#a27ac4' , '#ff5ca3', '#57c1eb', '#7e3f98'];
   public currentColor: string = '';
   private cd = inject(ChangeDetectorRef);
 

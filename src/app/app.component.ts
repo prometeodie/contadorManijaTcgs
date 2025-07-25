@@ -4,7 +4,7 @@ import { StatusBar, Style } from '@capacitor/status-bar';
 import { Platform } from '@ionic/angular';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { App as CapacitorApp } from '@capacitor/app'; // 👈 Importar App
+import { App as CapacitorApp } from '@capacitor/app';
 
 declare var window: any;
 declare var AndroidFullScreen: any;
@@ -16,7 +16,7 @@ declare var AndroidFullScreen: any;
   imports: [IonApp, IonRouterOutlet],
 })
 export class AppComponent {
-  private expirationDate = new Date('2025-07-23'); // 🔒 Cambiá esta fecha cuando quieras
+  private expirationDate = new Date('2025-12-23');
 
   constructor(
     private platform: Platform,
@@ -65,7 +65,7 @@ export class AppComponent {
               'https://drive.google.com/drive/folders/1XfpjvcxcbtDYjjF0XED5Je0ewab8vUIZ?usp=sharing',
               '_system'
             );
-            await CapacitorApp.exitApp(); // 👈 Cerrar la app después de abrir el link
+            await CapacitorApp.exitApp();
           }
         }
       ],

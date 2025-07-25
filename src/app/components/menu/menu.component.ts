@@ -3,7 +3,6 @@ import { TimerServicesService } from 'src/app/services/timer-services.service';
 import { ChessTimerService } from '../../services/chess-timer.service';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { DataServicesService } from 'src/app/services/data-services.service';
 import { TurnTimerService } from 'src/app/services/turn-timer.service';
 
 @Component({
