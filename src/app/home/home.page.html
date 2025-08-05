@@ -12,7 +12,7 @@
     [ngClass]="{'round-timer-left': configuration.positionRight, 'round-timer-right': !configuration.positionRight}" *ngIf="configuration?.roundTimerEnabled"
     [time]="configuration.roundTimerDuration" />
 
-    <counter #counter1  [backgroundColor]="configuration.player1Color"
+    <counter #counter1  [background]="backgroundP1"
                         [hp]="configuration.hpValue"
                         [isTurnsTimerActive]="isTurnTimerEnable"
                         [turnsCounter]="fullTurnsCounter"
@@ -33,8 +33,8 @@
     <start-btn class="start-btn"
       [ngClass]="{'start-btn-left': !configuration.positionRight, 'start-btn-right': configuration.positionRight}"
     *ngIf="configuration.roundTimerEnabled && !configuration.turnTimerEnabled && !roundTimerIsRunning" (click)="stratRoundTimer()"/>
-    <player-color-changer   [playerNumber]="1" [position]="!configuration.positionRight"
-    (colorChanged)="changePlayerColor($event)" class="color-changer"
+    <player-color-changer   [playerNumber]="1" player="imgplayer1" [position]="!configuration.positionRight"
+    (colorChanged)="changePlayerColor($event)" (imgChanged)="imgPlayerChange($event)" class="color-changer"
      [ngClass]="{'color-changer-right': !configuration.positionRight, 'color-changer-left': configuration.positionRight}"/>
   </div>
 <!-- END PLAYER 1 -->
@@ -68,7 +68,7 @@
     [ngClass]="{'round-timer-left': !configuration.positionRight, 'round-timer-right': configuration.positionRight}"
     *ngIf="configuration?.roundTimerEnabled" />
     <counter #counter2
-        [backgroundColor]="configuration.player2Color"
+        [background]="backgroundP2"
         [hp]="configuration.hpValue"
         [turnsCounter]="fullTurnsCounter"
         [isTurnsTimerActive]="isTurnTimerEnable"
@@ -87,8 +87,8 @@
     <start-btn class="start-btn"
       [ngClass]="{'start-btn-right': !configuration.positionRight, 'start-btn-left': configuration.positionRight}"
     *ngIf="configuration.roundTimerEnabled && !configuration.turnTimerEnabled && !roundTimerIsRunning" (click)="stratRoundTimer()"/>
-    <player-color-changer   [playerNumber]="2" [position]="configuration.positionRight"
-    (colorChanged)="changePlayerColor($event)"
+    <player-color-changer   [playerNumber]="2" player="imgplayer2" [position]="configuration.positionRight"
+    (colorChanged)="changePlayerColor($event)" (imgChanged)="imgPlayerChange($event)"
     class="color-changer"
     [ngClass]="{'color-changer-right': configuration.positionRight, 'color-changer-left': !configuration.positionRight}"/>
   </div>

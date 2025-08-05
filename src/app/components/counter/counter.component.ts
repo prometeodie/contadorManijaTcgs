@@ -15,7 +15,7 @@ export class CounterComponent implements OnInit {
   @Input() turnsCounter: number = 0;
   @Input() isTurnsTimerActive!: boolean;
   @Input() max: number = Infinity;
-  @Input() backgroundColor!: string;
+  @Input() background!: string;
   @Input() isChessTimerActive!: boolean;
   @Input() isSoundEnable!: boolean;
   @Output() valueChange = new EventEmitter<number>();
@@ -95,7 +95,6 @@ export class CounterComponent implements OnInit {
     this.action = '';
   }
 
-
   onchangeLifeAnimationEnd() {
      this.dataServicesService.setConfiglifeAnimation(false);
   }
@@ -107,4 +106,21 @@ export class CounterComponent implements OnInit {
   resetHp(newHp: number) {
     this.hp = newHp;
   }
+
+  getBackgroundStyle(): { [key: string]: string } {
+  if (!this.background) return {};
+
+  const isImage = (
+    this.background.startsWith('http') ||
+    this.background.startsWith('assets/') ||
+    this.background.startsWith('data:image') || // <--- agregá esta línea
+    /\.(jpeg|jpg|gif|png|webp|svg)$/i.test(this.background)
+  );
+
+  if (isImage) {
+    return { 'background-image': `url(${this.background})` };
+  } else {
+    return { 'background-color': this.background };
+  }
+}
 }

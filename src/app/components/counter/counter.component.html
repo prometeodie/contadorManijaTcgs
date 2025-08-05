@@ -1,14 +1,18 @@
 <div
   class="counter-container"
   [ngClass]="{ 'chess-timer-active': isChessTimerActive }"
-  [ngStyle]="{ 'background-color': backgroundColor }"
->
-  <div class="counter-btn-click" (click)="incrementDecrement(-1)">
-    <div class="counter-btn" [ngClass]="{ active: isActiveMinus }">-</div>
-  </div>
+  [ngStyle]="getBackgroundStyle()"
+  >
+  <section>
+    <!-- TODO:verificar el section para ponerle una peliocula negra sobre la imagen  -->
 
-  <section class="counter-section">
-    <span
+    <!-- TODO: configurar para q sea color o imagen segun la config-->
+    <div class="counter-btn-click" (click)="incrementDecrement(-1)">
+      <div class="counter-btn" [ngClass]="{ active: isActiveMinus }">-</div>
+    </div>
+
+    <section class="counter-section">
+      <span
       class="counter-section__number"
       [ngClass]="{
         animate: showAnimation,
@@ -16,24 +20,24 @@
         'chess-active-change-position': isChessTimerActive
       }"
       (animationend)="onAnimationEnd()"
-    >
+      >
       <span *ngIf="action === 'increment'">+</span>{{ counter }}
     </span>
 
     <div>
       <label
-        class="counter-section__value"
-        [ngClass]="{
-          'small-font': hp < -99,
-          'defeat-color': hp <= 0,
-          'life-animation': isLifeAnimationActive
-        }"
+      class="counter-section__value"
+      [ngClass]="{
+        'small-font': hp < -99,
+        'defeat-color': hp <= 0,
+        'life-animation': isLifeAnimationActive
+      }"
         (animationend)="onchangeLifeAnimationEnd()"
         >{{ hp }}</label>
-      <div
+        <div
         class="counter-container__turns"
         *ngIf="isTurnsTimerActive || isChessTimerActive"
-      >
+        >
         <label class="turn-label">Turno</label> <strong>{{ turnsCounter }}</strong>
       </div>
     </div>
@@ -42,4 +46,5 @@
   <div class="counter-btn-click" (click)="incrementDecrement(1)">
     <div class="counter-btn" [ngClass]="{ active: isActivePlus }">+</div>
   </div>
+</section>
 </div>

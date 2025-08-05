@@ -1,5 +1,5 @@
 import { IonicModule } from '@ionic/angular';
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChildren, QueryList, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChildren, QueryList, ViewChild, NgZone } from '@angular/core';
 import { CounterComponent } from '../components/counter/counter.component';
 import { RoundTimerComponent } from '../components/round-timer/round-timer.component';
 import { TurnTimerComponent } from '../components/turn-timer/turn-timer.component';
@@ -44,6 +44,7 @@ export class HomePage implements OnInit, OnDestroy {
   private dataServicesService = inject(DataServicesService);
   private chessTimerService = inject(ChessTimerService);
   private cd = inject(ChangeDetectorRef);
+  private zone = inject(NgZone);
   private soundService = inject(SoundService);
   private turnTimerService = inject(TurnTimerService);
 
@@ -61,17 +62,24 @@ export class HomePage implements OnInit, OnDestroy {
   public openCloseGameModeConfig: boolean = false;
   public openCloseChessMode: boolean = false;
   public roundTimerIsRunning: boolean = false;
+  public backgroundP1!:string;
+  public backgroundP2!:string;
 
   activeTimer: 1 | 2 | null = null;
 
-  ngOnInit() {
-    this.loadConfiguration();
+ ngOnInit() {
+  this.loadConfiguration();
 
-    this.soundService.soundEnabled$.subscribe(enabled => {
-      this.isSoundEnable = enabled;
-      this.cd.detectChanges();
-    });
-  }
+  this.soundService.soundEnabled$.subscribe(enabled => {
+    this.isSoundEnable = enabled;
+    this.cd.detectChanges();
+  });
+
+  this.turnTimerService.setAutoSwitchCallback(() => {
+    this.turnsCount();
+  });
+}
+
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
@@ -83,18 +91,23 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   async loadConfiguration(): Promise<void> {
-    const config = await this.dataServicesService.get<ConfigurationData>('configuration');
-    this.configuration = config ?? this.dataServicesService.defaultConfig;
-    this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
-    this.isSoundEnable = this.configuration.soundEnabled;
+  const config = await this.dataServicesService.get<ConfigurationData>('configuration');
+  this.configuration = config ?? this.dataServicesService.defaultConfig;
+  this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
+  this.isSoundEnable = this.configuration.soundEnabled;
 
-    if (!config) {
-      await this.dataServicesService.set('configuration', this.configuration);
-    }
-    this.cd.detectChanges();
-
-    this.turnTimers();
+  if (!config) {
+    await this.dataServicesService.set('configuration', this.configuration);
   }
+
+  const imgP1 = localStorage.getItem('imgplayer1_imgbg');
+  const imgP2 = localStorage.getItem('imgplayer2_imgbg');
+  this.backgroundP1 = (imgP1 === 'true') ? localStorage.getItem('imgplayer1')! : this.configuration.player1Color;
+  this.backgroundP2 = (imgP2 === 'true') ? localStorage.getItem('imgplayer2')! : this.configuration.player2Color;
+
+  this.cd.detectChanges();
+  this.turnTimers();
+}
 
   turnTimers() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
@@ -182,13 +195,22 @@ export class HomePage implements OnInit, OnDestroy {
 
     if (event.player === 1) {
       config.player1Color = event.color;
+      this.backgroundP1 = event.color;
     } else {
       config.player2Color = event.color;
+      this.backgroundP2 = event.color;
     }
 
     this.configuration = { ...config }; // Esto actualiza el binding en Angular
     await this.dataServicesService.set('configuration', this.configuration);
   }
+
+ imgPlayerChange(event: { player: 'imgplayer1' | 'imgplayer2'; img: string }) {
+  this.zone.run(() => {
+    (event.player === 'imgplayer1')? this.backgroundP1 = event.img: this.backgroundP2 = event.img;
+    this.cd.detectChanges();
+  });
+}
 
   nextMatch(){
     if(this.matchesCountIncrement()){

@@ -21,6 +21,10 @@
   border: none;
   margin-top: 0.75rem;
   border-radius: 20px 20px 0 0;
+  // TODO:chekear eso
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   &__turns {
     position: absolute;

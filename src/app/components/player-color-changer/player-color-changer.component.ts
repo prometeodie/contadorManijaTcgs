@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, i
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { DataServicesService } from 'src/app/services/data-services.service'; // Ajustá el path según tu proyecto
+import { BackgroundImagesService } from 'src/app/services/background-images.service';
 
 @Component({
   selector: 'player-color-changer',
@@ -13,12 +14,17 @@ import { DataServicesService } from 'src/app/services/data-services.service'; //
 export class PlayerColorChangerComponent implements OnInit {
   @Input() playerNumber: 1 | 2 = 1;
   @Input() position!: boolean;
+  @Input() player!: 'imgplayer1' | 'imgplayer2';
   @Output() colorChanged = new EventEmitter<{ player: 1 | 2; color: string }>();
+  @Output() imgChanged = new EventEmitter<{ player: 'imgplayer1' | 'imgplayer2'; img: string }>();
 
+  private cd = inject(ChangeDetectorRef);
+  private backgroundImagesService = inject(BackgroundImagesService);
   public isColorSelectionOpen: boolean = false;
   public colors = ['#ff004a','#4250fe','#f8605d','#ffae72', '#66d19e', '#4a7dcc', '#a27ac4' , '#ff5ca3', '#57c1eb', '#7e3f98'];
   public currentColor: string = '';
-  private cd = inject(ChangeDetectorRef);
+  public img1: string | null = null;
+  public img2: string | null = null;
 
   constructor(private dataService: DataServicesService, private elRef: ElementRef) {}
 
@@ -46,7 +52,12 @@ export class PlayerColorChangerComponent implements OnInit {
 
     await this.dataService.set('configuration', updatedConfig);
     this.currentColor = color;
+    (this.player === 'imgplayer1')? this.isplayerUsingColor('imgplayer1') : this.isplayerUsingColor('imgplayer2');
     this.colorChanged.emit({ player: this.playerNumber, color });
+  }
+
+  isplayerUsingColor(player:string){
+    localStorage.setItem(`${player}_imgbg`, 'false');
   }
 
   getCircleItemStyle(index: number, total: number): { [key: string]: string } {
@@ -73,4 +84,11 @@ onDocumentClick(event: MouseEvent): void {
     this.cd.detectChanges();
   }
 }
+
+// UPLOAD IMAGES
+ async selectImage(player: 'imgplayer1' | 'imgplayer2') {
+    await this.backgroundImagesService.selectImageFromGallery(player);
+    this.imgChanged.emit({ player: player, img: this.backgroundImagesService.getImage(player) || '' });
+  }
+
 }

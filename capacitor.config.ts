@@ -11,7 +11,10 @@ const config: CapacitorConfig = {
       backgroundColor: "#ffffff",
       androidScaleType: "CENTER_CROP",
       showSpinner: false
-    }
+    },
+    Camera: {
+      photoAlbumPermission: 'Allow access to photos to select an image',
+    },
   }
 };
 

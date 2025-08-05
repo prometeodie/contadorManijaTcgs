@@ -1,4 +1,4 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 
 interface TurnTimerState {
   timeLeft: number;
@@ -9,7 +9,6 @@ interface TurnTimerState {
 
 @Injectable({ providedIn: 'root' })
 export class TurnTimerService {
-
   private timers: Record<1 | 2, TurnTimerState> = {
     1: { timeLeft: 0, running: false, rafId: 0, lastTimestamp: 0 },
     2: { timeLeft: 0, running: false, rafId: 0, lastTimestamp: 0 },
@@ -21,9 +20,21 @@ export class TurnTimerService {
   private _timeLeft2 = signal(0);
   private _activePlayer = signal<1 | 2 | null>(null);
   private _turnTimerWasModified = signal<boolean>(false);
+
+  private onAutoSwitchCallback?: () => void; // ✅ Nuevo callback
+
   public activePlayer = computed(() => this._activePlayer());
   public turnTimerWasModified = computed(() => this._turnTimerWasModified());
 
+  private autoSwitchedTurn = signal(false);
+
+  public setAutoSwitchedTurn(value: boolean) {
+    this.autoSwitchedTurn.set(value);
+  }
+
+  public wasAutoSwitchedTurn() {
+    return this.autoSwitchedTurn();
+  }
 
   get timeLeft1() {
     return this._timeLeft1.asReadonly();
@@ -38,7 +49,7 @@ export class TurnTimerService {
     return (mm || 0) * 60000 + (ss || 0) * 1000;
   }
 
-   markTurnTimerAsModified(value:boolean) {
+  markTurnTimerAsModified(value: boolean) {
     this._turnTimerWasModified.set(value);
   }
 
@@ -53,7 +64,6 @@ export class TurnTimerService {
 
     this._activePlayer.set(null);
 
-    // Aseguramos que los timers estén detenidos
     this.stopAll();
   }
 
@@ -65,7 +75,6 @@ export class TurnTimerService {
 
     this.stopAll();
 
-    // Reinicia el timer al tiempo original para ese jugador
     this.timers[player].timeLeft = this.originalDurationMs;
     this.updateSignal(player, this.originalDurationMs);
 
@@ -80,6 +89,11 @@ export class TurnTimerService {
   switchTurn(currentPlayer: 1 | 2) {
     const nextPlayer = currentPlayer === 1 ? 2 : 1;
     this.startTurn(nextPlayer);
+
+    // ✅ Llamamos al callback cuando el turno cambia automáticamente
+    if (this.onAutoSwitchCallback) {
+      this.onAutoSwitchCallback();
+    }
   }
 
   private tick(player: 1 | 2) {
@@ -96,22 +110,22 @@ export class TurnTimerService {
       timer.timeLeft = 0;
       timer.running = false;
       this.updateSignal(player, 0);
-      // Al terminar, automáticamente cambia de turno y reinicia el siguiente
+
+      // ✅ Llamamos a switchTurn y disparamos el callback
       this.switchTurn(player);
       return;
     }
 
     this.updateSignal(player, timer.timeLeft);
-
     timer.rafId = requestAnimationFrame(() => this.tick(player));
   }
 
   public isRunning(player: 1 | 2): boolean {
-  return this.timers[player]?.running ?? false;
-}
+    return this.timers[player]?.running ?? false;
+  }
 
   private stopAll() {
-    [1, 2].forEach(p => {
+    [1, 2].forEach((p) => {
       const t = this.timers[p as 1 | 2];
       cancelAnimationFrame(t.rafId);
       t.running = false;
@@ -119,21 +133,21 @@ export class TurnTimerService {
   }
 
   pauseTurnTimer(player: 1 | 2) {
-  const timer = this.timers[player];
-  if (timer.running) {
-    cancelAnimationFrame(timer.rafId);
-    timer.running = false;
+    const timer = this.timers[player];
+    if (timer.running) {
+      cancelAnimationFrame(timer.rafId);
+      timer.running = false;
+    }
   }
-}
 
-resumeTurnTimer(player: 1 | 2) {
-  const timer = this.timers[player];
-  if (!timer.running && timer.timeLeft > 0) {
-    timer.running = true;
-    timer.lastTimestamp = performance.now();
-    this.tick(player);
+  resumeTurnTimer(player: 1 | 2) {
+    const timer = this.timers[player];
+    if (!timer.running && timer.timeLeft > 0) {
+      timer.running = true;
+      timer.lastTimestamp = performance.now();
+      this.tick(player);
+    }
   }
-}
 
   private updateSignal(player: 1 | 2, value: number) {
     if (player === 1) {
@@ -141,5 +155,10 @@ resumeTurnTimer(player: 1 | 2) {
     } else {
       this._timeLeft2.set(value);
     }
+  }
+
+  // ✅ Nuevo método público para setear el callback externo
+  setAutoSwitchCallback(callback: () => void) {
+    this.onAutoSwitchCallback = callback;
   }
 }

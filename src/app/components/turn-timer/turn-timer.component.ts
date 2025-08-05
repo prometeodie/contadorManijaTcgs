@@ -9,7 +9,6 @@ import {
   inject,
   effect,
   OnInit,
-  DestroyRef,
 } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { TurnTimerService } from 'src/app/services/turn-timer.service';
@@ -46,39 +45,46 @@ export class TurnTimerComponent implements OnInit {
     return `${this.pad(min)}:${this.pad(sec)}`;
   });
 
-
   constructor() {
-  effect(() => {
-    if (this.timerService.turnTimerWasModified()) {
-      this.loadTimerConfig().catch(console.error);
-      this.timerService.markTurnTimerAsModified(false);
-    }
-  });
+    // Se actualiza solo si el timer fue modificado manualmente desde el servicio
+    effect(() => {
+      if (this.timerService.turnTimerWasModified()) {
+        this.loadTimerConfig(true).catch(console.error);
+        this.timerService.markTurnTimerAsModified(false);
+      }
+    });
 
-  effect(() => {
-    if (this.dataService.configChangedSignal()) {
-      this.loadTimerConfig().catch(console.error);
-    }
-  });
-}
-  async ngOnInit() {
-    await this.loadTimerConfig();
+    // Reacciona a cambios de configuración general
+    effect(() => {
+      if (this.dataService.configChangedSignal()) {
+        this.loadTimerConfig(true).catch(console.error);
+      }
+    });
   }
 
-  async loadTimerConfig() {
+  async ngOnInit() {
+    await this.loadTimerConfig(false); // primera carga
+  }
+
+  async loadTimerConfig(forceReset: boolean = false) {
     const config = await this.dataService.get<any>('configuration');
     const durationStr = config?.turnTimerDuration ?? this.dataService.defaultConfig.turnTimerDuration;
-    this.durationMs = this.timerService.parseDurationToMs(durationStr);
-    this.timerService.initTimers(this.durationMs);
+    const newDuration = this.timerService.parseDurationToMs(durationStr);
+
+    if (forceReset || newDuration !== this.durationMs) {
+      this.durationMs = newDuration;
+      this.timerService.initTimers(this.durationMs);
+    }
   }
 
   public async resetTimer() {
-  await this.loadTimerConfig();
-}
+    await this.loadTimerConfig(true);
+  }
 
   onClick() {
     const current = this.timerService.activePlayer();
-    if(!this.timerServicesService.isRunning()){
+
+    if (!this.timerServicesService.isRunning()) {
       this.timerServicesService.startCountdown();
     }
 
@@ -87,16 +93,14 @@ export class TurnTimerComponent implements OnInit {
       this.validClick.emit();
     } else if (current === this.playerNumber) {
       this.timerService.switchTurn(this.playerNumber);
-      this.validClick.emit();
     }
   }
 
   private pad(n: number): string {
     return n.toString().padStart(2, '0');
   }
+
   get activePlayer() {
     return this.timerService.activePlayer();
   }
 }
-
-

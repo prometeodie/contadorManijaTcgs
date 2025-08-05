@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Time to Duel - Tcgs</string>
-    <string name="title_activity_main">Time to Duel - Tcgs</string>
+    <string name="app_name">Time to Duel</string>
+    <string name="title_activity_main">Time to Duel</string>
     <string name="package_name">com.franco.contador</string>
     <string name="custom_url_scheme">com.franco.contador</string>
 </resources>

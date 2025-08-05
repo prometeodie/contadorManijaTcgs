@@ -15,6 +15,9 @@
 .color-selection {
   position: absolute;
   bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .color-list {
@@ -45,6 +48,14 @@
   border: 2px solid white;
 }
 
+.image-upload{
+  position: absolute;
+  font-size: xxx-large;
+  color: #ffffffb5;
+  &:active{
+    transform: scale(0.9);
+  }
+}
 
 .right{
   right: 3rem;
