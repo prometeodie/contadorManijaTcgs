@@ -6,7 +6,7 @@
     padding: 0.5rem;
     position: relative;
 
-    .turn-timer__btn{
+    &__btn{
       background-color: transparent;
 
       &__icon{
@@ -14,7 +14,16 @@
         color: #ffffffc2;
       }
     }
-}
+  }
+
+  .shadow-txt{
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8),
+    0 0 8px rgba(0, 0, 0, 0.6);
+  }
+
+  .shadow-icon{
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.884));
+  }
 
 .hurry-up{
   display: inline-block;

@@ -1,5 +1,5 @@
 <ul class="match-counter">
-  <li class="match-counter__match" [ngClass]="{'mark-match': matchesCount >= 1}"></li>
-  <li class="match-counter__match" [ngClass]="{'mark-match': matchesCount >= 2}"></li>
-  <li class="match-counter__match" [ngClass]="{'mark-match': matchesCount === 3}"></li>
+  <li class="match-counter__match" [ngClass]="{'mark-match': matchesCount >= 1,'mark-match-img':BgImg && matchesCount >= 1}"></li>
+  <li class="match-counter__match" [ngClass]="{'mark-match': matchesCount >= 2,'mark-match-img':BgImg && matchesCount >= 2}"></li>
+  <li class="match-counter__match" [ngClass]="{'mark-match': matchesCount ===3,'mark-match-img':BgImg && matchesCount ===3}"></li>
 </ul>

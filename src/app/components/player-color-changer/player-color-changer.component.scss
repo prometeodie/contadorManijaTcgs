@@ -6,7 +6,7 @@
 
 .palette {
   font-size: 2rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.76);
   padding: 0.5rem;
   border-radius: 50%;
   cursor: pointer;
@@ -63,4 +63,49 @@
 
 .left{
   left: 3rem;
+}
+
+.custom-alert {
+ position: absolute;
+    background: rgb(0 0 0 / 95%);
+    border: 1px solid #cccccc61;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 0.5rem;
+    margin-bottom: 5rem;
+    text-align: center;
+    width: 16rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 20;
+
+  p {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+
+  .btns {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+
+    button {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 5px;
+    }
+  }
+}
+
+.shadow{
+  filter: drop-shadow(1px 1px 3px rgb(0, 0, 0.1));
+}
+
+.saved-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #cccccc93;
 }

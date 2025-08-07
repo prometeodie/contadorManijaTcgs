@@ -10,13 +10,14 @@
     class="turn-timer__time"
     [ngClass]="{
       'hurry-up': timeLeft() <= 10000,
-      'time-out': timeLeft() === 0
+      'time-out': timeLeft() === 0,
+      'shadow-txt':BgImg
     }"
   >
     {{ timeDisplay() }}
   </div>
 
   <button class="turn-timer__btn" (click)="onClick()">
-    <ion-icon name="hourglass-outline" class="turn-timer__btn__icon"></ion-icon>
+    <ion-icon name="hourglass-outline" class="turn-timer__btn__icon" [ngClass]="{'shadow-icon':BgImg }"></ion-icon>
   </button>
 </main>

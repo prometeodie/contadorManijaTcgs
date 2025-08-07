@@ -3,12 +3,8 @@
   [ngClass]="{ 'chess-timer-active': isChessTimerActive }"
   [ngStyle]="getBackgroundStyle()"
   >
-  <section>
-    <!-- TODO:verificar el section para ponerle una peliocula negra sobre la imagen  -->
-
-    <!-- TODO: configurar para q sea color o imagen segun la config-->
     <div class="counter-btn-click" (click)="incrementDecrement(-1)">
-      <div class="counter-btn" [ngClass]="{ active: isActiveMinus }">-</div>
+      <div class="counter-btn" [ngClass]="{ active: isActiveMinus, 'shadow':BgImg,'shadow-btn':BgImg }">-</div>
     </div>
 
     <section class="counter-section">
@@ -17,6 +13,7 @@
       [ngClass]="{
         animate: showAnimation,
         visible: showVisible,
+        'shadow': BgImg,
         'chess-active-change-position': isChessTimerActive
       }"
       (animationend)="onAnimationEnd()"
@@ -30,7 +27,8 @@
       [ngClass]="{
         'small-font': hp < -99,
         'defeat-color': hp <= 0,
-        'life-animation': isLifeAnimationActive
+        'life-animation': isLifeAnimationActive,
+        'shadow': BgImg
       }"
         (animationend)="onchangeLifeAnimationEnd()"
         >{{ hp }}</label>
@@ -38,13 +36,12 @@
         class="counter-container__turns"
         *ngIf="isTurnsTimerActive || isChessTimerActive"
         >
-        <label class="turn-label">Turno</label> <strong>{{ turnsCounter }}</strong>
+        <label class="turn-label" [ngClass]="{'shadow':BgImg }" >Turno</label> <strong class="turn-number" [ngClass]="{'shadow':BgImg }">{{ turnsCounter }}</strong>
       </div>
     </div>
   </section>
 
   <div class="counter-btn-click" (click)="incrementDecrement(1)">
-    <div class="counter-btn" [ngClass]="{ active: isActivePlus }">+</div>
+    <div class="counter-btn" [ngClass]="{ active: isActivePlus, 'shadow':BgImg,'shadow-btn':BgImg}">+</div>
   </div>
-</section>
 </div>

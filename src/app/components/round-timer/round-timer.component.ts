@@ -12,6 +12,7 @@ import { TimerServicesService } from 'src/app/services/timer-services.service';
 })
 export class RoundTimerComponent implements OnInit, OnChanges {
   @Input() time: string | undefined;
+  @Input() BgImg!: boolean;
 
   private timerService = inject(TimerServicesService);
   public totalSeconds = this.timerService.totalSeconds;

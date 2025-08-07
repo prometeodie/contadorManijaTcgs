@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DataServicesService } from 'src/app/services/data-services.service';
 
 @Component({
@@ -18,6 +18,7 @@ export class CounterComponent implements OnInit {
   @Input() background!: string;
   @Input() isChessTimerActive!: boolean;
   @Input() isSoundEnable!: boolean;
+  @Input() BgImg!: boolean;
   @Output() valueChange = new EventEmitter<number>();
 
   private dataService = inject(DataServicesService);
@@ -33,6 +34,7 @@ export class CounterComponent implements OnInit {
 
   private dataServicesService = inject(DataServicesService)
 
+  constructor() {}
 
   ngOnInit() {
     this.clickSound.load();

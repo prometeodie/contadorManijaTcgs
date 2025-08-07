@@ -1,1 +1,3 @@
- <ion-label class="timer-display" [ngClass]="{'time-out': totalSeconds() === 0, 'hurry-up': totalSeconds() <= 15 && totalSeconds() !== 0}">{{ formattedTime() }}</ion-label>
+ <ion-label class="timer-display" [ngClass]="{'time-out': totalSeconds() === 0, 'hurry-up': totalSeconds() <= 15 && totalSeconds() !== 0, 'shadow':BgImg}">
+  {{ formattedTime() }}
+</ion-label>

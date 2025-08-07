@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 
 @Component({
@@ -11,6 +11,7 @@ import { IonicModule } from '@ionic/angular';
 })
 export class NextMatchComponent  {
   @Output() nextMatchEvent = new EventEmitter<void>();
+  @Input()  BgImg!: boolean;
 
   nextMatch(){
     this.nextMatchEvent.emit();

@@ -64,6 +64,8 @@ export class HomePage implements OnInit, OnDestroy {
   public roundTimerIsRunning: boolean = false;
   public backgroundP1!:string;
   public backgroundP2!:string;
+  public bgImgP1!:boolean;
+  public bgImgP2!:boolean;
 
   activeTimer: 1 | 2 | null = null;
 
@@ -102,6 +104,8 @@ export class HomePage implements OnInit, OnDestroy {
 
   const imgP1 = localStorage.getItem('imgplayer1_imgbg');
   const imgP2 = localStorage.getItem('imgplayer2_imgbg');
+  (imgP1 === 'true')? this.bgImgP1 = true : this.bgImgP1 = false;
+  (imgP2 === 'true')? this.bgImgP2 = true : this.bgImgP2 = false;
   this.backgroundP1 = (imgP1 === 'true') ? localStorage.getItem('imgplayer1')! : this.configuration.player1Color;
   this.backgroundP2 = (imgP2 === 'true') ? localStorage.getItem('imgplayer2')! : this.configuration.player2Color;
 
@@ -201,13 +205,16 @@ export class HomePage implements OnInit, OnDestroy {
       this.backgroundP2 = event.color;
     }
 
-    this.configuration = { ...config }; // Esto actualiza el binding en Angular
+    this.configuration = { ...config };
+    (event.player === 1)? this.bgImgP1 = false : this.bgImgP2 = false;
+     this.cd.detectChanges();
     await this.dataServicesService.set('configuration', this.configuration);
   }
 
  imgPlayerChange(event: { player: 'imgplayer1' | 'imgplayer2'; img: string }) {
   this.zone.run(() => {
     (event.player === 'imgplayer1')? this.backgroundP1 = event.img: this.backgroundP2 = event.img;
+    (event.player === 'imgplayer1')? this.bgImgP1 = true : this.bgImgP2 = true;
     this.cd.detectChanges();
   });
 }

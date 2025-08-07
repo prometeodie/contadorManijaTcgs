@@ -1,4 +1,4 @@
-<ion-icon name="color-palette-outline" class="palette" (click)="openColorSelection()"></ion-icon>
+<ion-icon name="color-palette-outline" class="palette" [ngClass]="{'shadow':BgImg}" (click)="openColorSelection()"></ion-icon>
 
 <section class="color-selection" [ngClass]="{ 'right': position, 'left': !position }" *ngIf="isColorSelectionOpen">
   <ul class="color-list">
@@ -11,5 +11,18 @@
       (click)="selectColor(color)"
     ></li>
   </ul>
+
   <ion-icon class="image-upload" name="image-outline" (click)="selectImage(player)"></ion-icon>
+<div class="custom-alert" *ngIf="showImageWarning">
+  <div class="saved-image-container" *ngIf="savedImageUrl">
+    <img [src]="savedImageUrl" alt="Imagen guardada" class="saved-image" />
+  </div>
+
+  <p>Ya hay una imagen guardada para este jugador. ¿Qué deseás hacer?</p>
+
+  <div class="btns">
+    <button ion-button (click)="useSavedImage()">Usar imagen guardada</button>
+    <button ion-button color="primary" (click)="selectNewImage()">Seleccionar nueva</button>
+  </div>
+</div>
 </section>

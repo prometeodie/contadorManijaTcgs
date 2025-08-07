@@ -11,6 +11,7 @@ import { IonicModule } from '@ionic/angular';
 })
 export class MatchCounterComponent  implements OnInit {
   @Input()  matchesCount: number = 0;
+  @Input()  BgImg!: boolean;
 
   constructor() { }
 

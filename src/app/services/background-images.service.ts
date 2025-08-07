@@ -8,7 +8,7 @@ export class BackgroundImagesService {
 
   constructor() {}
 
-  async selectImageFromGallery(player: 'imgplayer1' | 'imgplayer2'): Promise<void> {
+  async selectImageFromGallery(player: 'imgplayer1' | 'imgplayer2'): Promise<boolean> {
     try {
       const image = await Camera.getPhoto({
         quality: 80,
@@ -17,22 +17,28 @@ export class BackgroundImagesService {
         source: CameraSource.Photos,
       });
 
-      const base64Data = `data:image/${image.format};base64,${image.base64String}`;
+      if (!image || !image.base64String || !image.format) {
+        return false;
+      }
 
+      const base64Data = `data:image/${image.format};base64,${image.base64String}`;
       const resizedImage = await this.resizeBase64Img(base64Data, 800, 800);
 
       localStorage.setItem(player, resizedImage);
       localStorage.setItem(`${player}_imgbg`, 'true');
+
+      return true;
     } catch (error) {
       const errMsg = (error as Error)?.message || '';
 
-  if (errMsg.includes('cancel') || errMsg.includes('User cancelled')) {
-    console.log('Selección cancelada por el usuario. No se modifica nada.');
-    return;
-  }
+      if (errMsg.includes('cancel') || errMsg.includes('User cancelled')) {
+        console.log('Selección cancelada por el usuario. No se modifica nada.');
+        return false;
+      }
 
-  console.error('Error seleccionando imagen:', error);
-  localStorage.setItem(`${player}_imgbg`, 'false');
+      console.error('Error seleccionando imagen:', error);
+      localStorage.setItem(`${player}_imgbg`, 'false');
+      return false;
     }
   }
 
@@ -44,6 +50,7 @@ export class BackgroundImagesService {
     localStorage.removeItem(player);
     localStorage.removeItem(`${player}_imgbg`);
   }
+
   private async resizeBase64Img(base64Str: string, maxWidth = 800, maxHeight = 600): Promise<string> {
     return new Promise((resolve) => {
       const img = new Image();

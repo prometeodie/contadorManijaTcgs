@@ -4,11 +4,11 @@ import {
   EventEmitter,
   Output,
   Renderer2,
-  ViewChild,
   AfterViewInit,
   OnDestroy,
   inject,
-  OnInit
+  OnInit,
+  Input
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';

@@ -24,6 +24,7 @@ import { TimerServicesService } from 'src/app/services/timer-services.service';
 })
 export class TurnTimerComponent implements OnInit {
   @Input() playerNumber!: 1 | 2;
+  @Input() BgImg!: boolean;
   @Output() validClick = new EventEmitter<void>();
 
   private dataService = inject(DataServicesService);

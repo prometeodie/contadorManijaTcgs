@@ -3,9 +3,9 @@
   <div class="player-1" [ngClass]="{'chest-timer-enabled': configuration.chessTimerConfig.chessTimerEnabled}">
     <section class="matchs" [ngClass]="{'matchs-left': !configuration.positionRight, 'matchs-right': configuration.positionRight}" *ngIf="configuration.threeMatches">
       <div class="matchs-container">
-        <span class="match-text">PARTIDAS</span>
-        <match-counter class="match-counter" [matchesCount]="matchesCoutn" ></match-counter>
-        <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" class="next-match"></next-match>
+        <span class="match-text" [ngClass]="{'shadow':bgImgP1}">PARTIDAS</span>
+        <match-counter class="match-counter" [matchesCount]="matchesCoutn" [BgImg]="bgImgP1" ></match-counter>
+        <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" [BgImg]="bgImgP1" class="next-match"></next-match>
       </div>
     </section>
     <round-timer #round1 class="player-1__round-timer round-timer-right"
@@ -17,6 +17,7 @@
                         [isTurnsTimerActive]="isTurnTimerEnable"
                         [turnsCounter]="fullTurnsCounter"
                         [isSoundEnable]="isSoundEnable"
+                        [BgImg]="bgImgP1"
                         [isChessTimerActive]=" configuration.chessTimerConfig.chessTimerEnabled"
                         class="player-1__counter" />
     <turn-timer
@@ -25,6 +26,7 @@
       *ngIf="configuration.turnTimerEnabled"
       (validClick)="turnsCount()"
       [playerNumber]="1"
+      [BgImg]="bgImgP1"
       #timer1
       />
     <timeout class="player-1__time-out" *ngIf="configuration?.roundTimerEnabled" />
@@ -33,7 +35,7 @@
     <start-btn class="start-btn"
       [ngClass]="{'start-btn-left': !configuration.positionRight, 'start-btn-right': configuration.positionRight}"
     *ngIf="configuration.roundTimerEnabled && !configuration.turnTimerEnabled && !roundTimerIsRunning" (click)="stratRoundTimer()"/>
-    <player-color-changer   [playerNumber]="1" player="imgplayer1" [position]="!configuration.positionRight"
+    <player-color-changer   [playerNumber]="1"  [BgImg]="bgImgP1" player="imgplayer1" [position]="!configuration.positionRight"
     (colorChanged)="changePlayerColor($event)" (imgChanged)="imgPlayerChange($event)" class="color-changer"
      [ngClass]="{'color-changer-right': !configuration.positionRight, 'color-changer-left': configuration.positionRight}"/>
   </div>
@@ -59,12 +61,13 @@
   <div class="player-2" [ngClass]="{'chest-timer-enabled': configuration.chessTimerConfig.chessTimerEnabled}">
     <section class="matchs" [ngClass]="{'matchs-left': configuration.positionRight, 'matchs-right': !configuration.positionRight}" *ngIf="configuration.threeMatches">
       <div class="matchs-container">
-        <span class="match-text">PARTIDAS</span>
-        <match-counter class="match-counter" [matchesCount]="matchesCoutn" />
-        <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" class="next-match" />
+        <span class="match-text" [ngClass]="{'shadow':bgImgP2}">PARTIDAS</span>
+        <match-counter class="match-counter" [matchesCount]="matchesCoutn" [BgImg]="bgImgP2"  />
+        <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" [BgImg]="bgImgP2" class="next-match" />
       </div>
     </section>
     <round-timer #round2 class="player-2__round-timer round-timer-left"
+    [BgImg]="bgImgP2"
     [ngClass]="{'round-timer-left': !configuration.positionRight, 'round-timer-right': configuration.positionRight}"
     *ngIf="configuration?.roundTimerEnabled" />
     <counter #counter2
@@ -73,6 +76,7 @@
         [turnsCounter]="fullTurnsCounter"
         [isTurnsTimerActive]="isTurnTimerEnable"
         [isSoundEnable]="isSoundEnable"
+        [BgImg]="bgImgP2"
         [isChessTimerActive]=" configuration.chessTimerConfig.chessTimerEnabled" />
     <turn-timer
       class="player-2__turn-timer"
@@ -80,6 +84,7 @@
       *ngIf="configuration.turnTimerEnabled"
       (validClick)="turnsCount()"
       [playerNumber]="2"
+      [BgImg]="bgImgP2"
       #timer2/>
       <timeout class="player-2__time-out" *ngIf="configuration?.roundTimerEnabled" />
       <chess-timer [playerNumber]="2" #chessTimer2 class="chest-timer" *ngIf="configuration.chessTimerConfig.chessTimerEnabled" (validClick)="turnsCount()"/>
@@ -87,7 +92,7 @@
     <start-btn class="start-btn"
       [ngClass]="{'start-btn-right': !configuration.positionRight, 'start-btn-left': configuration.positionRight}"
     *ngIf="configuration.roundTimerEnabled && !configuration.turnTimerEnabled && !roundTimerIsRunning" (click)="stratRoundTimer()"/>
-    <player-color-changer   [playerNumber]="2" player="imgplayer2" [position]="configuration.positionRight"
+    <player-color-changer [playerNumber]="2" [BgImg]="bgImgP2" player="imgplayer2" [position]="configuration.positionRight"
     (colorChanged)="changePlayerColor($event)" (imgChanged)="imgPlayerChange($event)"
     class="color-changer"
     [ngClass]="{'color-changer-right': configuration.positionRight, 'color-changer-left': !configuration.positionRight}"/>

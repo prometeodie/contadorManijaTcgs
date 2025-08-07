@@ -1,7 +1,17 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, inject, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+  inject
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { DataServicesService } from 'src/app/services/data-services.service'; // Ajustá el path según tu proyecto
+import { DataServicesService } from 'src/app/services/data-services.service';
 import { BackgroundImagesService } from 'src/app/services/background-images.service';
 
 @Component({
@@ -15,6 +25,7 @@ export class PlayerColorChangerComponent implements OnInit {
   @Input() playerNumber: 1 | 2 = 1;
   @Input() position!: boolean;
   @Input() player!: 'imgplayer1' | 'imgplayer2';
+   @Input() BgImg!: boolean;
   @Output() colorChanged = new EventEmitter<{ player: 1 | 2; color: string }>();
   @Output() imgChanged = new EventEmitter<{ player: 'imgplayer1' | 'imgplayer2'; img: string }>();
 
@@ -25,8 +36,15 @@ export class PlayerColorChangerComponent implements OnInit {
   public currentColor: string = '';
   public img1: string | null = null;
   public img2: string | null = null;
+  public savedImageUrl!: string;
+  public showImageWarning: boolean = false;
+  private pendingPlayer!: 'imgplayer1' | 'imgplayer2';
+  private pendingImage: string = '';
 
-  constructor(private dataService: DataServicesService, private elRef: ElementRef) {}
+  constructor(
+    private dataService: DataServicesService,
+    private elRef: ElementRef
+  ) {}
 
   async ngOnInit() {
     const config = await this.dataService.get<typeof this.dataService.defaultConfig>('configuration');
@@ -52,11 +70,11 @@ export class PlayerColorChangerComponent implements OnInit {
 
     await this.dataService.set('configuration', updatedConfig);
     this.currentColor = color;
-    (this.player === 'imgplayer1')? this.isplayerUsingColor('imgplayer1') : this.isplayerUsingColor('imgplayer2');
+    (this.player === 'imgplayer1') ? this.isplayerUsingColor('imgplayer1') : this.isplayerUsingColor('imgplayer2');
     this.colorChanged.emit({ player: this.playerNumber, color });
   }
 
-  isplayerUsingColor(player:string){
+  isplayerUsingColor(player: string) {
     localStorage.setItem(`${player}_imgbg`, 'false');
   }
 
@@ -77,18 +95,45 @@ export class PlayerColorChangerComponent implements OnInit {
   }
 
   @HostListener('document:click', ['$event'])
-onDocumentClick(event: MouseEvent): void {
-  const clickedInside = this.elRef.nativeElement.contains(event.target);
-  if (!clickedInside) {
-    this.isColorSelectionOpen = false;
-    this.cd.detectChanges();
+  onDocumentClick(event: MouseEvent): void {
+    const clickedInside = this.elRef.nativeElement.contains(event.target);
+    if (!clickedInside) {
+      this.isColorSelectionOpen = false;
+      this.showImageWarning = false;
+      this.cd.detectChanges();
+    }
+  }
+
+  async selectImage(player: 'imgplayer1' | 'imgplayer2') {
+    const existingImg = this.backgroundImagesService.getImage(player);
+    if (existingImg) {
+      this.savedImageUrl = existingImg;
+      this.pendingPlayer = player;
+      this.pendingImage = existingImg;
+      this.showImageWarning = true;
+    } else {
+      await this.handleNewImageSelection(player);
+    }
+  }
+
+  useSavedImage() {
+    localStorage.setItem(`${this.pendingPlayer}_imgbg`, 'true');
+    this.imgChanged.emit({ player: this.pendingPlayer, img: this.pendingImage });
+    this.showImageWarning = false;
+  }
+
+  async selectNewImage() {
+    await this.handleNewImageSelection(this.pendingPlayer);
+    this.showImageWarning = false;
+  }
+
+  private async handleNewImageSelection(player: 'imgplayer1' | 'imgplayer2') {
+  const imageSelected = await this.backgroundImagesService.selectImageFromGallery(player);
+  if (!imageSelected) return;
+
+  const newImg = this.backgroundImagesService.getImage(player);
+  if (newImg) {
+    this.imgChanged.emit({ player: player, img: newImg });
   }
 }
-
-// UPLOAD IMAGES
- async selectImage(player: 'imgplayer1' | 'imgplayer2') {
-    await this.backgroundImagesService.selectImageFromGallery(player);
-    this.imgChanged.emit({ player: player, img: this.backgroundImagesService.getImage(player) || '' });
-  }
-
 }

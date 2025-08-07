@@ -1,6 +1,10 @@
 .timer-display{
   font-size: large;
 }
+.shadow{
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8),
+           0 0 8px rgba(0, 0, 0, 0.795);
+}
 
 .time-out{
   color: #1e1e1e;

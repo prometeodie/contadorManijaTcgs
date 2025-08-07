@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed} from '@angular/core';
 
 interface TurnTimerState {
   timeLeft: number;
@@ -9,10 +9,17 @@ interface TurnTimerState {
 
 @Injectable({ providedIn: 'root' })
 export class TurnTimerService {
+
+
+  constructor() {
+    this.clickSound.load();
+  }
+
   private timers: Record<1 | 2, TurnTimerState> = {
     1: { timeLeft: 0, running: false, rafId: 0, lastTimestamp: 0 },
     2: { timeLeft: 0, running: false, rafId: 0, lastTimestamp: 0 },
   };
+  private clickSound = new Audio('assets/sounds/next.ogg');
 
   private originalDurationMs = 0;
 
@@ -90,10 +97,10 @@ export class TurnTimerService {
     const nextPlayer = currentPlayer === 1 ? 2 : 1;
     this.startTurn(nextPlayer);
 
-    // ✅ Llamamos al callback cuando el turno cambia automáticamente
     if (this.onAutoSwitchCallback) {
       this.onAutoSwitchCallback();
     }
+    this.clickSound.play();
   }
 
   private tick(player: 1 | 2) {
