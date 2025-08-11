@@ -22,6 +22,7 @@ import { StartBtnComponent } from '../components/start-btn/start-btn.component';
 import { PlayerColorChangerComponent } from '../components/player-color-changer/player-color-changer.component';
 import { SoundService } from '../services/sound.service';
 import { TurnTimerService } from '../services/turn-timer.service';
+import { BackgroundImagesService } from '../services/background-images.service';
 
 @Component({
   selector: 'app-home',
@@ -47,6 +48,7 @@ export class HomePage implements OnInit, OnDestroy {
   private zone = inject(NgZone);
   private soundService = inject(SoundService);
   private turnTimerService = inject(TurnTimerService);
+  private backgroundImagesService = inject(BackgroundImagesService);
 
   private subscriptions: Subscription[] = [];
 
@@ -92,7 +94,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.roundTimerIsRunning = this.timerService.isRunning();
   }
 
-  async loadConfiguration(): Promise<void> {
+async loadConfiguration(): Promise<void> {
   const config = await this.dataServicesService.get<ConfigurationData>('configuration');
   this.configuration = config ?? this.dataServicesService.defaultConfig;
   this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
@@ -102,12 +104,25 @@ export class HomePage implements OnInit, OnDestroy {
     await this.dataServicesService.set('configuration', this.configuration);
   }
 
-  const imgP1 = localStorage.getItem('imgplayer1_imgbg');
-  const imgP2 = localStorage.getItem('imgplayer2_imgbg');
-  (imgP1 === 'true')? this.bgImgP1 = true : this.bgImgP1 = false;
-  (imgP2 === 'true')? this.bgImgP2 = true : this.bgImgP2 = false;
-  this.backgroundP1 = (imgP1 === 'true') ? localStorage.getItem('imgplayer1')! : this.configuration.player1Color;
-  this.backgroundP2 = (imgP2 === 'true') ? localStorage.getItem('imgplayer2')! : this.configuration.player2Color;
+  const imgP1 = localStorage.getItem('imgplayer1_imgbg') === 'true';
+  const imgP2 = localStorage.getItem('imgplayer2_imgbg') === 'true';
+
+  this.bgImgP1 = imgP1;
+  this.bgImgP2 = imgP2;
+
+  if (imgP1) {
+    const savedImg1 = await this.backgroundImagesService.getImage('imgplayer1');
+    this.backgroundP1 = savedImg1 ?? this.configuration.player1Color;
+  } else {
+    this.backgroundP1 = this.configuration.player1Color;
+  }
+
+  if (imgP2) {
+    const savedImg2 = await this.backgroundImagesService.getImage('imgplayer2');
+    this.backgroundP2 = savedImg2 ?? this.configuration.player2Color;
+  } else {
+    this.backgroundP2 = this.configuration.player2Color;
+  }
 
   this.cd.detectChanges();
   this.turnTimers();
@@ -178,6 +193,10 @@ export class HomePage implements OnInit, OnDestroy {
     }
   }
 
+  resetImgs(player:string){
+      localStorage.setItem(player, 'false');
+  }
+
   prepareNextMatch() {
     this.timer1?.resetTimer();
     this.timer2?.resetTimer();
@@ -234,6 +253,7 @@ export class HomePage implements OnInit, OnDestroy {
     await this.resetLoadConfiguration();
   }
 
+
   openCloseLifeWindow() {
     this.openCloseLifeConfig = !this.openCloseLifeConfig;
     this.openCloseGameModeConfig = false;
@@ -245,6 +265,8 @@ export class HomePage implements OnInit, OnDestroy {
   this.configuration = { ...(newConfig ?? this.dataServicesService.defaultConfig) };
   this.counter1?.resetHp(this.configuration.hpValue);
   this.counter2?.resetHp(this.configuration.hpValue);
+  this.resetImgs('imgplayer1_imgbg');
+  this.resetImgs('imgplayer2_imgbg');
 
   this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
   this.isSoundEnable = this.configuration.soundEnabled;

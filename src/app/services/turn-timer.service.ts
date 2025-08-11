@@ -1,4 +1,6 @@
 import { Injectable, signal, computed} from '@angular/core';
+import { Preferences } from '@capacitor/preferences';
+import { ConfigurationData } from '../interfaces/configuration-data.interface';
 
 interface TurnTimerState {
   timeLeft: number;
@@ -28,7 +30,7 @@ export class TurnTimerService {
   private _activePlayer = signal<1 | 2 | null>(null);
   private _turnTimerWasModified = signal<boolean>(false);
 
-  private onAutoSwitchCallback?: () => void; // ✅ Nuevo callback
+  private onAutoSwitchCallback?: () => void;
 
   public activePlayer = computed(() => this._activePlayer());
   public turnTimerWasModified = computed(() => this._turnTimerWasModified());
@@ -49,6 +51,11 @@ export class TurnTimerService {
 
   get timeLeft2() {
     return this._timeLeft2.asReadonly();
+  }
+
+  async getStoreData<T>(key: string): Promise<T | null> {
+    const { value } = await Preferences.get({ key });
+    return value ? (JSON.parse(value) as T) : null;
   }
 
   parseDurationToMs(duration: string): number {
@@ -93,14 +100,17 @@ export class TurnTimerService {
     this.tick(player);
   }
 
-  switchTurn(currentPlayer: 1 | 2) {
+  async switchTurn(currentPlayer: 1 | 2) {
+    const config = await this.getStoreData<ConfigurationData>('configuration');
     const nextPlayer = currentPlayer === 1 ? 2 : 1;
     this.startTurn(nextPlayer);
 
     if (this.onAutoSwitchCallback) {
       this.onAutoSwitchCallback();
     }
-    this.clickSound.play();
+    if(config?.soundEnabled){
+      this.clickSound.play();
+    }
   }
 
   private tick(player: 1 | 2) {
@@ -118,7 +128,6 @@ export class TurnTimerService {
       timer.running = false;
       this.updateSignal(player, 0);
 
-      // ✅ Llamamos a switchTurn y disparamos el callback
       this.switchTurn(player);
       return;
     }

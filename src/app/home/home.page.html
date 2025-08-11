@@ -1,3 +1,4 @@
+<ion-content class="safe-area-padding">
 <ion-app class="home-page" *ngIf="configuration as config">
   <!-- PLAYER 1 -->
   <div class="player-1" [ngClass]="{'chest-timer-enabled': configuration.chessTimerConfig.chessTimerEnabled}">
@@ -8,7 +9,7 @@
         <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" [BgImg]="bgImgP1" class="next-match"></next-match>
       </div>
     </section>
-    <round-timer #round1 class="player-1__round-timer round-timer-right"
+    <round-timer #round1 class="player-1__round-timer round-timer-right"  [BgImg]="bgImgP1"
     [ngClass]="{'round-timer-left': configuration.positionRight, 'round-timer-right': !configuration.positionRight}" *ngIf="configuration?.roundTimerEnabled"
     [time]="configuration.roundTimerDuration" />
 
@@ -112,3 +113,4 @@
   (chessConfigChanged)="resetLoadConfiguration()"
    />
 </ion-app>
+</ion-content>

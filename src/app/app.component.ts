@@ -28,10 +28,10 @@ export class AppComponent {
   async initializeApp() {
     await this.platform.ready();
 
-    if (this.isExpired()) {
-      this.showExpirationAlert();
-      return;
-    }
+    // if (this.isExpired()) {
+    //   this.showExpirationAlert();
+    //   return;
+    // }
 
     try {
       await SplashScreen.hide();

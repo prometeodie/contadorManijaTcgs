@@ -105,16 +105,16 @@ export class PlayerColorChangerComponent implements OnInit {
   }
 
   async selectImage(player: 'imgplayer1' | 'imgplayer2') {
-    const existingImg = this.backgroundImagesService.getImage(player);
-    if (existingImg) {
-      this.savedImageUrl = existingImg;
-      this.pendingPlayer = player;
-      this.pendingImage = existingImg;
-      this.showImageWarning = true;
-    } else {
-      await this.handleNewImageSelection(player);
-    }
+  const existingImg = await this.backgroundImagesService.getImage(player); // ✅ await
+  if (existingImg) {
+    this.savedImageUrl = existingImg;
+    this.pendingPlayer = player;
+    this.pendingImage = existingImg;
+    this.showImageWarning = true;
+  } else {
+    await this.handleNewImageSelection(player);
   }
+}
 
   useSavedImage() {
     localStorage.setItem(`${this.pendingPlayer}_imgbg`, 'true');
@@ -131,7 +131,7 @@ export class PlayerColorChangerComponent implements OnInit {
   const imageSelected = await this.backgroundImagesService.selectImageFromGallery(player);
   if (!imageSelected) return;
 
-  const newImg = this.backgroundImagesService.getImage(player);
+  const newImg = await this.backgroundImagesService.getImage(player); // ✅ await
   if (newImg) {
     this.imgChanged.emit({ player: player, img: newImg });
   }
