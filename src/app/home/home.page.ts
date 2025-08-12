@@ -253,6 +253,14 @@ async loadConfiguration(): Promise<void> {
     await this.resetLoadConfiguration();
   }
 
+  async resetConfiguraion(){
+    await this.resetLoadConfiguration();
+    this.resetImgs('imgplayer1_imgbg');
+    this.resetImgs('imgplayer2_imgbg');
+    this.backgroundP1 = this.configuration.player1Color;
+    this.backgroundP2 = this.configuration.player2Color;
+  }
+
 
   openCloseLifeWindow() {
     this.openCloseLifeConfig = !this.openCloseLifeConfig;
@@ -265,8 +273,6 @@ async loadConfiguration(): Promise<void> {
   this.configuration = { ...(newConfig ?? this.dataServicesService.defaultConfig) };
   this.counter1?.resetHp(this.configuration.hpValue);
   this.counter2?.resetHp(this.configuration.hpValue);
-  this.resetImgs('imgplayer1_imgbg');
-  this.resetImgs('imgplayer2_imgbg');
 
   this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
   this.isSoundEnable = this.configuration.soundEnabled;

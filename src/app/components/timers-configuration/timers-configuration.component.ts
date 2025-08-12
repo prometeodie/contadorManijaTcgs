@@ -15,6 +15,7 @@ import { SoundService } from 'src/app/services/sound.service';
 export class TimersConfigurationComponent implements OnInit {
   @Output() closeConfigWindow = new EventEmitter<void>();
   @Output() isConfigChange = new EventEmitter<void>();
+  @Output() resetConfigChange = new EventEmitter<void>();
 
   private dataService = inject(DataServicesService);
   private soundService = inject(SoundService);
@@ -115,7 +116,7 @@ private updateSoundState() {
     if (confirm('¿Estás seguro que deseas reiniciar la configuración por defecto?')) {
       this.dataService.set('configuration', this.dataService.defaultConfig).then(() => {
         this.getData();
-        this.isConfigChange.emit();
+        this.resetConfigChange.emit();
       });
     }
   }
