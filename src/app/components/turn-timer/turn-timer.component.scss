@@ -3,17 +3,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 0.5rem;
+    padding: 1.5rem;
     position: relative;
 
     &__btn{
       background-color: transparent;
-
       &__icon{
         font-size: xxx-large;
         color: #ffffffc2;
       }
     }
+
   }
 
   .shadow-txt{
@@ -38,8 +38,8 @@
 }
 .popup-container {
     position: absolute;
-    bottom: 84px;
-    left: 34px;
+    bottom: 98px;
+    left: 44px;
     transform: translateX(-50%);
     z-index: 1000;
 }
@@ -48,7 +48,7 @@
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(6px);
   color: white;
-  padding: 0.15rem 0.6rem;
+  padding: 0.15rem 0.45rem;
   border-radius: 0.6rem;
   font-size: xx-small;
   text-align: center;

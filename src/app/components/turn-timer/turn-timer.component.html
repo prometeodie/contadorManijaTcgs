@@ -1,4 +1,4 @@
-<main class="turn-timer">
+<main class="turn-timer" (click)="onClick()">
   <div class="popup-container" *ngIf="activePlayer === null">
     <div class="popup-bubble">
       Click para comenzar
@@ -17,7 +17,7 @@
     {{ timeDisplay() }}
   </div>
 
-  <button class="turn-timer__btn" (click)="onClick()">
+  <button class="turn-timer__btn">
     <ion-icon name="hourglass-outline" class="turn-timer__btn__icon" [ngClass]="{'shadow-icon':BgImg }"></ion-icon>
   </button>
 </main>

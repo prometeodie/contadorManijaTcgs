@@ -17,7 +17,11 @@
 }
 .player-1__turn-timer,
 .player-2__turn-timer{
-  bottom: 0.5rem;
+  bottom: -12px;
+  border-radius: 50%;
+  &:active{
+    background-color: #8c8c8c21;
+  }
 }
 
 .player-1,
@@ -169,10 +173,12 @@
 }
 
 .turn-timer-right{
-  right: 0;
+  right: -15px;
 }
 
-.turn-timer-left,
+.turn-timer-left{
+  left: -15px;
+}
 .matchs-left{
   left: 0;
 }
