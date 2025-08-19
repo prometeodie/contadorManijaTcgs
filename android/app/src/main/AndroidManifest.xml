@@ -3,15 +3,22 @@
   xmlns:tools="http://schemas.android.com/tools"
   package="com.franco.contador">
 
+  <!-- Acceso a internet -->
   <uses-permission android:name="android.permission.INTERNET" />
+
+  <!-- Cámara -->
   <uses-permission android:name="android.permission.CAMERA" />
 
-  <!-- Permisos para almacenamiento -->
-  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> <!-- Android 13+ -->
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+  <!-- Permiso para leer imágenes en Android 13+ -->
+  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
-  <!-- Política de seguridad de red -->
+  <!-- Compatibilidad con Android 12 e inferiores -->
+  <uses-permission
+    android:name="android.permission.READ_EXTERNAL_STORAGE"
+    android:maxSdkVersion="32" />
+
+  <!-- Sin WRITE_EXTERNAL_STORAGE para evitar alerta de app peligrosa -->
+
   <application
     android:allowBackup="true"
     android:icon="@mipmap/ic_launcher"
@@ -21,7 +28,7 @@
     android:theme="@style/AppTheme"
     android:networkSecurityConfig="@xml/network_security_config"
     android:usesCleartextTraffic="false"
-    tools:targetApi="31">
+    tools:targetApi="34">
 
     <activity
       android:name=".MainActivity"

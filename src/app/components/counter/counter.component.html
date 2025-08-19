@@ -36,7 +36,7 @@
         class="counter-container__turns"
         *ngIf="isTurnsTimerActive || isChessTimerActive"
         >
-        <label class="turn-label" [ngClass]="{'shadow':BgImg }" >Turno</label> <strong class="turn-number" [ngClass]="{'shadow':BgImg }">{{ turnsCounter }}</strong>
+        <label class="turn-label" [ngClass]="{'shadow':BgImg }" >{{"TURN" | translate}}</label> <strong class="turn-number" [ngClass]="{'shadow':BgImg }">{{ turnsCounter }}</strong>
       </div>
     </div>
   </section>

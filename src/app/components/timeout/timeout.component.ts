@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { TimerServicesService } from 'src/app/services/timer-services.service';
 
 @Component({
@@ -7,7 +8,7 @@ import { TimerServicesService } from 'src/app/services/timer-services.service';
   templateUrl: './timeout.component.html',
   styleUrls: ['./timeout.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
 })
 export class TimeoutComponent  implements OnInit {
 

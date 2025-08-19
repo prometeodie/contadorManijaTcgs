@@ -1,4 +1,4 @@
-<!-- Elemento invisible para evitar errores de foco al abrir select -->
+
 <button
   id="safe-focus-element"
   style="opacity: 0; width: 0; height: 0; position: absolute; pointer-events: none"
@@ -8,7 +8,8 @@
 <main class="timers-configuration">
   <button class="close-Mark" (click)="closeWindow()" aria-label="Cerrar configuración">&times;</button>
 
-  <h2 class="timers-title">Configuración de timers</h2>
+  <h2 class="timers-title">{{"CONFIGURATION" | translate}}</h2>
+  <languages/>
 
   <section class="sliders">
     <label class="sliders__title">
@@ -17,7 +18,7 @@
         [checked]="roundTimerEnabled"
         (change)="onToggleRoundTimer($event)"
       />
-      Activar Timer de Ronda
+      {{"ENABLE_ROUND_TIMER" | translate}}
     </label>
 
     <label class="sliders__title">
@@ -26,7 +27,7 @@
         [checked]="turnTimerEnabled"
         (change)="onToggleTurnTimer($event)"
       />
-      Activar Timer de turnos
+      {{"ENABLE_TURN_TIMER" | translate}}
     </label>
 
     <label class="sliders__title">
@@ -35,7 +36,7 @@
         [(ngModel)]="threeMatches"
         (change)="saveConfigToLocalStorage()"
       />
-      Activar contador de partidas
+      {{"ENABLE_THREE_MATCHES" | translate}}
     </label>
 
     <label class="sliders__title">
@@ -44,16 +45,16 @@
         [(ngModel)]="sound"
         (change)="saveSoundConfigToLocalStorage()"
       />
-      Activar Sonido
+      {{"ENABLE_SOUND" | translate}}
     </label>
   </section>
 
   <section class="timers-time">
     <!-- RONDA -->
-    <label class="timers-time__label">Contador de Ronda</label>
+    <label class="timers-time__label">{{"ROUND_TIMER" | translate}}</label>
 
     <div class="timers-time__item">
-      <label for="roundHours">Horas</label>
+      <label for="roundHours">{{"HOURS" | translate}}</label>
       <select
         id="roundHours"
         [(ngModel)]="roundHours"
@@ -65,7 +66,7 @@
     </div>
 
     <div class="timers-time__item">
-      <label for="roundMinutes">Minutos</label>
+      <label for="roundMinutes">{{ "MINUTES" | translate}}</label>
       <select
         id="roundMinutes"
         [(ngModel)]="roundMinutes"
@@ -77,7 +78,7 @@
     </div>
 
     <div class="timers-time__item">
-      <label for="roundSeconds">Segundos</label>
+      <label for="roundSeconds">{{"SECONDS" | translate}}</label>
       <select
         id="roundSeconds"
         [(ngModel)]="roundSeconds"
@@ -89,10 +90,10 @@
     </div>
 
     <!-- TURNOS -->
-    <label class="timers-time__label">Contador de turno</label>
+    <label class="timers-time__label">{{"TURN_TIMER" | translate}}</label>
 
     <div class="timers-time__item">
-      <label for="turnMinutes">Minutos</label>
+      <label for="turnMinutes">{{ "MINUTES" | translate}}</label>
       <select
         id="turnMinutes"
         [(ngModel)]="turnMinutes"
@@ -104,7 +105,7 @@
     </div>
 
     <div class="timers-time__item">
-      <label for="turnSeconds">Segundos</label>
+      <label for="turnSeconds">{{"SECONDS" | translate}}</label>
       <select
         id="turnSeconds"
         [(ngModel)]="turnSeconds"
@@ -117,6 +118,6 @@
   </section>
 
   <section class="timers-btn">
-    <button class="btn-reset" (click)="resetConfiguration()">Restablecer configuración</button>
+    <button class="btn-reset" (click)="resetConfiguration()">{{"RESET_CONFIGURATION" | translate}}</button>
   </section>
 </main>

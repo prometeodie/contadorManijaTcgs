@@ -17,6 +17,7 @@ export class MenuComponent implements OnInit {
   @Output() openTimersWindow = new EventEmitter<void>();
   @Output() openLifeWindow = new EventEmitter<void>();
   @Output() openCloseGameModeConfigWindow = new EventEmitter<void>();
+  @Output() playAndPause = new EventEmitter<void>();
   @Output() positionHasChanged = new EventEmitter<void>();
   @Input() positionRight!: boolean;
 
@@ -117,9 +118,15 @@ export class MenuComponent implements OnInit {
 
   pauseAll() {
     this.timerService.sendCommand('pause');
+    this.emitPlayAndPause();
   }
 
   startAll() {
     this.timerService.sendCommand('start');
+    this.emitPlayAndPause();
+  }
+
+  emitPlayAndPause() {
+    this.playAndPause.emit();
   }
 }

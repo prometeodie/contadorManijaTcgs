@@ -13,13 +13,14 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { DataServicesService } from 'src/app/services/data-services.service';
 import { BackgroundImagesService } from 'src/app/services/background-images.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'player-color-changer',
   templateUrl: './player-color-changer.component.html',
   styleUrls: ['./player-color-changer.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule],
+  imports: [CommonModule, IonicModule, TranslateModule],
 })
 export class PlayerColorChangerComponent implements OnInit {
   @Input() playerNumber: 1 | 2 = 1;

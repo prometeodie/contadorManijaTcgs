@@ -23,6 +23,7 @@ import { PlayerColorChangerComponent } from '../components/player-color-changer/
 import { SoundService } from '../services/sound.service';
 import { TurnTimerService } from '../services/turn-timer.service';
 import { BackgroundImagesService } from '../services/background-images.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +32,7 @@ import { BackgroundImagesService } from '../services/background-images.service';
   standalone: true,
   imports: [IonicModule, CounterComponent, RoundTimerComponent, TurnTimerComponent, TimeoutComponent, MenuComponent, CommonModule,
     MatchCounterComponent, NextMatchComponent,TimersConfigurationComponent, LifeConfigurationComponent, GameModesComponent,
-    ChessTimerModeComponent, ChessTimerComponent, StartBtnComponent, PlayerColorChangerComponent],
+    ChessTimerModeComponent, ChessTimerComponent, StartBtnComponent, PlayerColorChangerComponent, TranslateModule ],
 })
 export class HomePage implements OnInit, OnDestroy {
 
@@ -91,6 +92,10 @@ export class HomePage implements OnInit, OnDestroy {
 
   stratRoundTimer(){
     this.timerService.startCountdown(() => {});
+    this.roundTimerIsRunning = this.timerService.isRunning();
+  }
+
+  showStartBtn(){
     this.roundTimerIsRunning = this.timerService.isRunning();
   }
 

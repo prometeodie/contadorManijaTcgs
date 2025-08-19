@@ -1,0 +1,32 @@
+{
+
+  "MATCHES": "Partidas",
+  "TURN": "Turno",
+  "TIME_UP": "¡Se acabó el tiempo!",
+  "TAP_TO_START": "Tap para comenzar",
+
+  "CHESS_MODES": "Modalidades de ajedrez",
+  "BULLET": "Bullet",
+  "BLITZ": "Blitz",
+  "RAPID": "Rapid",
+  "CLASSICAL": "Classical",
+
+  "HOURS": "Horas",
+  "MINUTES": "Minutos",
+  "SECONDS": "Segundos",
+
+  "CONFIGURATION": "Configuración",
+  "ENABLE_ROUND_TIMER": "Activar Timer de Ronda",
+  "ROUND_TIMER": "Timer de Ronda",
+  "ENABLE_TURN_TIMER": "Activar Timer de turnos",
+  "TURN_TIMER": "Timer de turnos",
+  "ENABLE_THREE_MATCHES": "Activar contador de partidas",
+  "ENABLE_SOUND": "Activar Sonido",
+  "RESET_CONFIGURATION": "Restablecer configuración",
+
+  "LANGUAGE": "Idioma",
+
+  "IMAGE_SAVED_PROMPT": "Tienes una imagen guardada ¿Qué deseás hacer?",
+  "USE_SAVED_IMAGE": "Usar imagen guardada",
+  "SELECT_NEW_IMAGE": "Seleccionar nueva"
+}

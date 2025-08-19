@@ -18,11 +18,11 @@
     <img [src]="savedImageUrl" alt="Imagen guardada" class="saved-image" />
   </div>
 
-  <p>Tienes una imagen guardada ¿Qué deseás hacer?</p>
+  <p>{{"IMAGE_SAVED_PROMPT" | translate}}</p>
 
   <div class="btns">
-    <button ion-button (click)="useSavedImage()">Usar imagen guardada</button>
-    <button ion-button color="primary" (click)="selectNewImage()">Seleccionar nueva</button>
+    <button ion-button (click)="useSavedImage()">{{"USE_SAVED_IMAGE" | translate}}</button>
+    <button ion-button color="primary" (click)="selectNewImage()">{{"SELECT_NEW_IMAGE" | translate}}</button>
   </div>
 </div>
 </section>

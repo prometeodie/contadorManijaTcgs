@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet, AlertController } from '@ionic/angular/standalone';
-import { StatusBar, Style } from '@capacitor/status-bar';
 import { Platform } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
+import { StatusBar, Style } from '@capacitor/status-bar';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { App as CapacitorApp } from '@capacitor/app';
+import { Preferences } from '@capacitor/preferences';
+import { LanguagesService } from './services/lenguages.service';
 
 declare var window: any;
 declare var AndroidFullScreen: any;
@@ -13,14 +16,16 @@ declare var AndroidFullScreen: any;
   selector: 'app-root',
   templateUrl: 'app.component.html',
   standalone: true,
-  imports: [IonApp, IonRouterOutlet],
+  imports: [IonApp, IonRouterOutlet], // solo componentes/directivas standalone
 })
 export class AppComponent {
   private expirationDate = new Date('2025-12-23');
+  defaultLang = 'en';
 
   constructor(
     private platform: Platform,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private languages: LanguagesService
   ) {
     this.initializeApp();
   }
@@ -33,6 +38,9 @@ export class AppComponent {
       return;
     }
 
+    // Inicializar idioma guardado
+    await this.languages.initLanguage();
+
     try {
       await SplashScreen.hide();
       await StatusBar.setOverlaysWebView({ overlay: true });
@@ -42,7 +50,6 @@ export class AppComponent {
       this.keepScreenAwake();
       this.activateImmersiveMode();
       this.preloadTimeoutSound();
-
     } catch (err) {
       console.log('❌ Error configurando la app', err);
     }
@@ -56,7 +63,8 @@ export class AppComponent {
   private async showExpirationAlert() {
     const alert = await this.alertController.create({
       header: 'Actualización requerida',
-      message: 'Esta versión ha vencido. Descargá la nueva versión para continuar, o verificá si la app ya cuenta con soporte en el Play Store.',
+      message:
+        'Esta versión ha vencido. Descargá la nueva versión para continuar, o verificá si la app ya cuenta con soporte en el Play Store.',
       buttons: [
         {
           text: 'Descargar',

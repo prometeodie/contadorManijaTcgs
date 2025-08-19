@@ -14,11 +14,12 @@ import { IonicModule } from '@ionic/angular';
 import { TurnTimerService } from 'src/app/services/turn-timer.service';
 import { DataServicesService } from 'src/app/services/data-services.service';
 import { TimerServicesService } from 'src/app/services/timer-services.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'turn-timer',
   standalone: true,
-  imports: [CommonModule, IonicModule],
+  imports: [CommonModule, IonicModule, TranslateModule],
   templateUrl: './turn-timer.component.html',
   styleUrls: ['./turn-timer.component.scss'],
 })

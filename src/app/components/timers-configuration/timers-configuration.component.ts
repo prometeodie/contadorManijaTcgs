@@ -4,13 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { ConfigurationData } from 'src/app/interfaces/configuration-data.interface';
 import { DataServicesService } from 'src/app/services/data-services.service';
 import { SoundService } from 'src/app/services/sound.service';
+import { LanguagesComponent } from '../languages-component/lenguages.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguagesService } from 'src/app/services/lenguages.service';
 
 @Component({
   selector: 'timers-configuration',
   templateUrl: './timers-configuration.component.html',
   styleUrls: ['./timers-configuration.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LanguagesComponent, TranslateModule],
 })
 export class TimersConfigurationComponent implements OnInit {
   @Output() closeConfigWindow = new EventEmitter<void>();
@@ -19,6 +22,7 @@ export class TimersConfigurationComponent implements OnInit {
 
   private dataService = inject(DataServicesService);
   private soundService = inject(SoundService);
+  private languagesService = inject(LanguagesService);
 
   public timerConfig!: ConfigurationData;
 
@@ -116,6 +120,7 @@ private updateSoundState() {
     if (confirm('¿Estás seguro que deseas reiniciar la configuración por defecto?')) {
       this.dataService.set('configuration', this.dataService.defaultConfig).then(() => {
         this.getData();
+        this.languagesService.setLanguage('en');
         this.resetConfigChange.emit();
       });
     }

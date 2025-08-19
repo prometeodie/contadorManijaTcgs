@@ -1,0 +1,31 @@
+{
+  "MATCHES": "Matches",
+  "TURN": "Turn",
+  "TIME_UP": "Time's up!",
+  "TAP_TO_START": "Tap to start",
+
+  "CHESS_MODES": "Chess Modes",
+  "BULLET": "Bullet",
+  "BLITZ": "Blitz",
+  "RAPID": "Rapid",
+  "CLASSICAL": "Classical",
+
+  "HOURS": "Hours",
+  "MINUTES": "Minutes",
+  "SECONDS": "Seconds",
+
+  "CONFIGURATION": "Configuration",
+  "ENABLE_ROUND_TIMER": "Enable Round Timer",
+  "ROUND_TIMER": "Round Timer",
+  "ENABLE_TURN_TIMER": "Enable Turn Timer",
+  "TURN_TIMER": "Turn Timer",
+  "ENABLE_THREE_MATCHES": "Enable Three Matches Counter",
+  "ENABLE_SOUND": "Enable Sound",
+  "RESET_CONFIGURATION": "Reset Configuration",
+
+  "LANGUAGE": "Language",
+
+  "IMAGE_SAVED_PROMPT": "You have a saved image. What would you like to do?",
+  "USE_SAVED_IMAGE": "Use saved image",
+  "SELECT_NEW_IMAGE": "Select new image"
+}

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, effect, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { DataServicesService } from 'src/app/services/data-services.service';
 
 @Component({
@@ -7,7 +8,7 @@ import { DataServicesService } from 'src/app/services/data-services.service';
   templateUrl: './counter.component.html',
   styleUrls: ['./counter.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
 })
 export class CounterComponent implements OnInit {
   @Input() hp: number = 0;

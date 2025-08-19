@@ -1,0 +1,13 @@
+<div class="language">
+  <label for="roundHours">{{"LANGUAGE" | translate}}</label>
+  <select
+  class="language-select"
+  id="roundHours"
+  [(ngModel)]="selectedLang"
+  (change)="onLanguageChange()"
+  >
+  <option *ngFor="let lang of languages" [value]="lang.code">
+    {{ lang.name }}
+  </option>
+  </select>
+</div>

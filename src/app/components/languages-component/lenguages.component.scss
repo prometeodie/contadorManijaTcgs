@@ -1,0 +1,16 @@
+.language {
+  width: 11rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.language label {
+  color: #ddd;
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.language-select{
+  width: 5rem;
+}

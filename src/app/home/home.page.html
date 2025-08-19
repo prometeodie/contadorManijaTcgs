@@ -4,7 +4,7 @@
   <div class="player-1" [ngClass]="{'chest-timer-enabled': configuration.chessTimerConfig.chessTimerEnabled}">
     <section class="matchs" [ngClass]="{'matchs-left': !configuration.positionRight, 'matchs-right': configuration.positionRight}" *ngIf="configuration.threeMatches">
       <div class="matchs-container">
-        <span class="match-text" [ngClass]="{'shadow':bgImgP1}">PARTIDAS</span>
+        <span class="match-text" [ngClass]="{'shadow':bgImgP1}">{{ 'MATCHES' | translate }}</span>
         <match-counter class="match-counter" [matchesCount]="matchesCoutn" [BgImg]="bgImgP1" ></match-counter>
         <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" [BgImg]="bgImgP1" class="next-match"></next-match>
       </div>
@@ -47,6 +47,7 @@
   (openLifeWindow)="openCloseLifeWindow()"
   (openCloseGameModeConfigWindow)="openClosegameModeConfigWindow()"
   (positionHasChanged)="changePosition()"
+  (playAndPause)="showStartBtn()"
   [positionRight]="configuration.positionRight"></menu>
 
   <game-modes class="menu-popup"
@@ -62,7 +63,7 @@
   <div class="player-2" [ngClass]="{'chest-timer-enabled': configuration.chessTimerConfig.chessTimerEnabled}">
     <section class="matchs" [ngClass]="{'matchs-left': configuration.positionRight, 'matchs-right': !configuration.positionRight}" *ngIf="configuration.threeMatches">
       <div class="matchs-container">
-        <span class="match-text" [ngClass]="{'shadow':bgImgP2}">PARTIDAS</span>
+        <span class="match-text" [ngClass]="{'shadow':bgImgP2}">{{ 'MATCHES' | translate }}</span>
         <match-counter class="match-counter" [matchesCount]="matchesCoutn" [BgImg]="bgImgP2"  />
         <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="nextMatch()" [BgImg]="bgImgP2" class="next-match" />
       </div>

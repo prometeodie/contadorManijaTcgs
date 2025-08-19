@@ -5,7 +5,7 @@
     <div class="vs-submenu" [ngClass]="{ 'menu-open': menuOpen }" (click)="$event.stopPropagation()">
       <ul class="submenu-icons">
         <li (click)="resetMatch()"><ion-icon class="icon" name="refresh"></ion-icon></li>
-        <li (click)="openTimersConfiguration()"><ion-icon class="icon" name="timer-outline"></ion-icon></li>
+        <li (click)="openTimersConfiguration()"><ion-icon class="icon" name="cog-outline"></ion-icon></li>
         <li (click)="openlifeConfiguration()"><ion-icon class="icon" name="heart-half"></ion-icon></li>
         <li (click)="openGameConfigMode()"><ion-icon class="icon" name="game-controller-outline"></ion-icon></li>
         <li (click)="positionChanged()" class="icon-size"><ion-icon *ngIf="positionRight" name="chevron-back-outline"></ion-icon>
