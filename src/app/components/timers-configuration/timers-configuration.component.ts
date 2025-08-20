@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ConfigurationData } from 'src/app/interfaces/configuration-data.interface';
 import { DataServicesService } from 'src/app/services/data-services.service';
@@ -7,6 +7,7 @@ import { SoundService } from 'src/app/services/sound.service';
 import { LanguagesComponent } from '../languages-component/lenguages.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguagesService } from 'src/app/services/lenguages.service';
+import { AdsService } from 'src/app/services/ads.service';
 
 @Component({
   selector: 'timers-configuration',
@@ -15,7 +16,7 @@ import { LanguagesService } from 'src/app/services/lenguages.service';
   standalone: true,
   imports: [CommonModule, FormsModule, LanguagesComponent, TranslateModule],
 })
-export class TimersConfigurationComponent implements OnInit {
+export class TimersConfigurationComponent implements OnInit, OnDestroy{
   @Output() closeConfigWindow = new EventEmitter<void>();
   @Output() isConfigChange = new EventEmitter<void>();
   @Output() resetConfigChange = new EventEmitter<void>();
@@ -23,6 +24,7 @@ export class TimersConfigurationComponent implements OnInit {
   private dataService = inject(DataServicesService);
   private soundService = inject(SoundService);
   private languagesService = inject(LanguagesService);
+  private adsService = inject(AdsService);
 
   public timerConfig!: ConfigurationData;
 
@@ -44,7 +46,22 @@ export class TimersConfigurationComponent implements OnInit {
 
   ngOnInit() {
     this.getData();
+    this.ionViewWillEnter();
   }
+
+  ngOnDestroy() {
+    this.adsService.hideBanner(); // seguridad extra
+  }
+   async ionViewWillEnter() {
+    // 👇 Mostrar banner solo cuando se entra a esta página
+    await this.adsService.showBanner('ca-app-pub-3940256099942544/6300978111'); // ID de prueba
+  }
+
+  async ionViewWillLeave() {
+    // 👇 Ocultar el banner al salir de la página
+    await this.adsService.hideBanner();
+  }
+
 
   async getData() {
     const config = await this.dataService.get<ConfigurationData>('configuration');

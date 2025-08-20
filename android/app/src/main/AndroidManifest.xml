@@ -30,6 +30,11 @@
     android:usesCleartextTraffic="false"
     tools:targetApi="34">
 
+    <!-- App ID de prueba de AdMob -->
+    <meta-data
+      android:name="com.google.android.gms.ads.APPLICATION_ID"
+      android:value="ca-app-pub-3940256099942544~3347511713"/>
+
     <activity
       android:name=".MainActivity"
       android:label="@string/title_activity_main"
@@ -53,5 +58,6 @@
         android:name="android.support.FILE_PROVIDER_PATHS"
         android:resource="@xml/file_paths" />
     </provider>
+
   </application>
 </manifest>

@@ -8,6 +8,7 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { App as CapacitorApp } from '@capacitor/app';
 import { Preferences } from '@capacitor/preferences';
 import { LanguagesService } from './services/lenguages.service';
+import { AdsService } from './services/ads.service'; // 👈 Importamos tu servicio de Ads
 
 declare var window: any;
 declare var AndroidFullScreen: any;
@@ -25,7 +26,8 @@ export class AppComponent {
   constructor(
     private platform: Platform,
     private alertController: AlertController,
-    private languages: LanguagesService
+    private languages: LanguagesService,
+    private adsService: AdsService // 👈 Inyectamos el servicio
   ) {
     this.initializeApp();
   }
@@ -50,6 +52,8 @@ export class AppComponent {
       this.keepScreenAwake();
       this.activateImmersiveMode();
       this.preloadTimeoutSound();
+
+      // 🚀 Inicializamos AdMob
     } catch (err) {
       console.log('❌ Error configurando la app', err);
     }
