@@ -23,7 +23,7 @@ import { PlayerColorChangerComponent } from '../components/player-color-changer/
 import { SoundService } from '../services/sound.service';
 import { TurnTimerService } from '../services/turn-timer.service';
 import { BackgroundImagesService } from '../services/background-images.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
@@ -50,6 +50,7 @@ export class HomePage implements OnInit, OnDestroy {
   private soundService = inject(SoundService);
   private turnTimerService = inject(TurnTimerService);
   private backgroundImagesService = inject(BackgroundImagesService);
+  private translateService = inject(TranslateService);
 
   private subscriptions: Subscription[] = [];
 
@@ -141,14 +142,16 @@ async loadConfiguration(): Promise<void> {
 
   matchesCountIncrement() {
     if (this.matchesCoutn < 3){
-      if (confirm('¿Desea pasar a la siguiente partida?')){
+      const message = this.translateService.instant('CONFIRM_NEXT_MATCH');
+      if (confirm(message)){
          this.matchesCoutn++;
          return true;
       } else{
         return false;
       }
     } else{
-      if (confirm('¿Desea reiniciar el contador de combates?')){
+        const message = this.translateService.instant('CONFIRM_RESET_MATCHES');
+      if (confirm(message)){
         this.resetGame();
         return true;
       } else{

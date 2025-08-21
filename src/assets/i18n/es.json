@@ -23,6 +23,8 @@
   "ENABLE_THREE_MATCHES": "Activar contador de partidas",
   "ENABLE_SOUND": "Activar Sonido",
   "RESET_CONFIGURATION": "Restablecer configuración",
+  "CONFIRM_NEXT_MATCH":"¿Desea pasar a la siguiente partida?",
+  "CONFIRM_RESET_MATCHES": "¿Desea reiniciar el contador de combates?",
 
   "LANGUAGE": "Idioma",
 

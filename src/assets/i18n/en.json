@@ -22,6 +22,8 @@
   "ENABLE_THREE_MATCHES": "Enable Three Matches Counter",
   "ENABLE_SOUND": "Enable Sound",
   "RESET_CONFIGURATION": "Reset Configuration",
+  "CONFIRM_NEXT_MATCH": "Do you want to move to the next match?",
+  "CONFIRM_RESET_MATCHES": "Do you want to reset the match counter?",
 
   "LANGUAGE": "Language",
 

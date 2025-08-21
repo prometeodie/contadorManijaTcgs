@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { AdsService } from '../../services/ads.service';
 
 @Component({
   selector: 'next-match',
@@ -13,7 +14,10 @@ export class NextMatchComponent  {
   @Output() nextMatchEvent = new EventEmitter<void>();
   @Input()  BgImg!: boolean;
 
+  private adsService = inject(AdsService);
+
   nextMatch(){
+    this.adsService.increaseCounterAndCheck()
     this.nextMatchEvent.emit();
   }
 }

@@ -4,6 +4,7 @@ import { ChessTimerService } from '../../services/chess-timer.service';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { TurnTimerService } from 'src/app/services/turn-timer.service';
+import { AdsService } from 'src/app/services/ads.service';
 
 @Component({
   selector: 'menu',
@@ -27,6 +28,7 @@ export class MenuComponent implements OnInit {
   private chessTimerService = inject(ChessTimerService);
   private cd = inject(ChangeDetectorRef);
   private turnTimerService = inject(TurnTimerService);
+  private adsService = inject(AdsService);
 
   public isTimerRunning = computed(() => this.timerService.isRunning());
   public ischessTimerRunning = computed(() => this.chessTimerService.isAnyTimerRunning());
@@ -37,6 +39,7 @@ export class MenuComponent implements OnInit {
   ngOnInit() {}
 
   resetMatch() {
+    this.adsService.increaseCounterAndCheck()
     this.resetTimers.emit();
   }
 
