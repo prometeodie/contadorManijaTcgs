@@ -1,23 +1,24 @@
+/* Fondo oscuro tipo Android */
 .backdrop {
   position: fixed;
   inset: 0;
   z-index: 10;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.6); /* más oscuro para parecer Android */
 }
 
-
+/* Caja de diálogo */
 .dialog {
   position: fixed;
   z-index: 11;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: var(--ion-background-color, #fff);
-  padding: 1rem;
+  background: lch(0% 0 0 / 0.92);
+  padding: 1.2rem;
   border-radius: 12px;
-  min-width: 260px;
-  max-width: 80vw;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  min-width: 280px;
+  max-width: 90vw;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
 
   display: flex;
   flex-direction: column;
@@ -28,13 +29,48 @@
   transform: translate(-50%, -50%) rotate(180deg);
 }
 
+/* Texto del mensaje */
 .message {
   text-align: center;
   font-size: 1rem;
+  color: #e0e0e0;
+  margin: 0;
 }
 
+/* Contenedor de botones */
 .buttons {
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
+}
+
+/* Estilo botones */
+.btn {
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+  font-weight: 500;
+}
+
+/* Botón cancelar → gris Android */
+.btn.cancel {
+  background: transparent;
+  color: #5f6368;
+}
+
+.btn.cancel:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Botón confirmar → azul Android */
+.btn.confirm {
+  background: #1a73e8;
+  color: #fff;
+}
+
+.btn.confirm:hover {
+  background: #1669c1;
 }
