@@ -24,6 +24,7 @@ import { SoundService } from '../services/sound.service';
 import { TurnTimerService } from '../services/turn-timer.service';
 import { BackgroundImagesService } from '../services/background-images.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ConfirmDialogComponent } from '../components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +33,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   standalone: true,
   imports: [IonicModule, CounterComponent, RoundTimerComponent, TurnTimerComponent, TimeoutComponent, MenuComponent, CommonModule,
     MatchCounterComponent, NextMatchComponent,TimersConfigurationComponent, LifeConfigurationComponent, GameModesComponent,
-    ChessTimerModeComponent, ChessTimerComponent, StartBtnComponent, PlayerColorChangerComponent, TranslateModule ],
+    ChessTimerModeComponent, ChessTimerComponent, StartBtnComponent, PlayerColorChangerComponent, TranslateModule, ConfirmDialogComponent ],
 })
 export class HomePage implements OnInit, OnDestroy {
 
@@ -70,6 +71,9 @@ export class HomePage implements OnInit, OnDestroy {
   public backgroundP2!:string;
   public bgImgP1!:boolean;
   public bgImgP2!:boolean;
+  public isConfirmDialog: boolean = false;
+  public isConfirmDialogMessage: string = '';
+  public isPopupFlipped: boolean = false;
 
   activeTimer: 1 | 2 | null = null;
 
@@ -140,24 +144,14 @@ async loadConfiguration(): Promise<void> {
 
   }
 
-  matchesCountIncrement() {
+  matchesCountIncrement(isPopUpFlipped: boolean){
     if (this.matchesCoutn < 3){
-      const message = this.translateService.instant('CONFIRM_NEXT_MATCH');
-      if (confirm(message)){
-         this.matchesCoutn++;
-         return true;
-      } else{
-        return false;
-      }
+      this.isConfirmDialogMessage = this.translateService.instant('CONFIRM_NEXT_MATCH');
     } else{
-        const message = this.translateService.instant('CONFIRM_RESET_MATCHES');
-      if (confirm(message)){
-        this.resetGame();
-        return true;
-      } else{
-        return false;
-      }
+      this.isConfirmDialogMessage = this.translateService.instant('CONFIRM_RESET_MATCHES');
     }
+    this.isConfirmDialog = true;
+    this.isPopupFlipped =isPopUpFlipped;
   }
 
   turnsCount(){
@@ -246,11 +240,28 @@ async loadConfiguration(): Promise<void> {
   });
 }
 
+confirmDialog(event:boolean){
+  this.isConfirmDialog = false;
+  if (this.matchesCoutn < 3){
+      if (event){
+         this.matchesCoutn++;
+         this.nextMatch();
+      } else{
+        return;
+      }
+    } else{
+      if (event){
+        this.resetGame();
+        this.nextMatch();
+      } else{
+        return;
+      }
+    }
+}
+
   nextMatch(){
-    if(this.matchesCountIncrement()){
       this.prepareNextMatch();
       this.chessTimerService.resetAllTimersFromStorage();
-    }
   }
 
   async openCloseTimersWindow() {

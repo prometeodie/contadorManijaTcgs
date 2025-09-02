@@ -1,0 +1,14 @@
+<ion-backdrop class="backdrop"></ion-backdrop>
+
+<div class="dialog" [ngClass]="{'flipped': isPopupFlipped}">
+  <p class="message">{{ message }}</p>
+
+  <div class="buttons">
+    <ion-button fill="clear" color="medium" (click)="cancel()">
+      {{ cancelText }}
+    </ion-button>
+    <ion-button fill="solid" color="primary" (click)="confirm()">
+      {{ confirmText }}
+    </ion-button>
+  </div>
+</div>

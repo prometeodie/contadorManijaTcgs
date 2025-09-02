@@ -1,4 +1,4 @@
-<main class="turn-timer" (click)="onClick()">
+<main class="turn-timer" (touchstart)="onClick()">
   <div class="popup-container" *ngIf="activePlayer === null">
     <div class="popup-bubble">
       {{"TAP_TO_START" | translate}}

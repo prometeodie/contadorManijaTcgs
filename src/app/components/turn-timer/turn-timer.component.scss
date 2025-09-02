@@ -9,7 +9,7 @@
     &__btn{
       background-color: transparent;
       &__icon{
-        font-size: xxx-large;
+        font-size: 4rem;
         color: #ffffffc2;
       }
     }
@@ -38,8 +38,8 @@
 }
 .popup-container {
     position: absolute;
-    bottom: 98px;
-    left: 44px;
+    bottom: 114px;
+    left: 56px;
     transform: translateX(-50%);
     z-index: 1000;
 }

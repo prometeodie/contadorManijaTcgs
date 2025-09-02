@@ -156,6 +156,14 @@
   bottom: 0.5rem;
 }
 
+.confirm-dialog{
+  z-index: 9999999;
+}
+
+.fliped{
+  transform: rotate(180deg);
+}
+
 .color-changer-right{
   right:0.5rem;
 }
