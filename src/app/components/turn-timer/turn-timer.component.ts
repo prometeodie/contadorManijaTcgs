@@ -33,11 +33,16 @@ export class TurnTimerComponent implements OnInit {
   private timerServicesService = inject(TimerServicesService);
 
   private durationMs = 0;
+  private holdInterval: any; // 🔹 para manejar el mantener presionado
 
-  public isActive = computed(() => this.timerService.activePlayer() === this.playerNumber);
+  public isActive = computed(
+    () => this.timerService.activePlayer() === this.playerNumber
+  );
 
   public timeLeft = computed(() =>
-    this.playerNumber === 1 ? this.timerService.timeLeft1() : this.timerService.timeLeft2()
+    this.playerNumber === 1
+      ? this.timerService.timeLeft1()
+      : this.timerService.timeLeft2()
   );
 
   public timeDisplay: Signal<string> = computed(() => {
@@ -48,7 +53,6 @@ export class TurnTimerComponent implements OnInit {
   });
 
   constructor() {
-    // Se actualiza solo si el timer fue modificado manualmente desde el servicio
     effect(() => {
       if (this.timerService.turnTimerWasModified()) {
         this.loadTimerConfig(true).catch(console.error);
@@ -70,7 +74,9 @@ export class TurnTimerComponent implements OnInit {
 
   async loadTimerConfig(forceReset: boolean = false) {
     const config = await this.dataService.get<any>('configuration');
-    const durationStr = config?.turnTimerDuration ?? this.dataService.defaultConfig.turnTimerDuration;
+    const durationStr =
+      config?.turnTimerDuration ??
+      this.dataService.defaultConfig.turnTimerDuration;
     const newDuration = this.timerService.parseDurationToMs(durationStr);
 
     if (forceReset || newDuration !== this.durationMs) {
@@ -83,6 +89,7 @@ export class TurnTimerComponent implements OnInit {
     await this.loadTimerConfig(true);
   }
 
+  // 🔹 Acción normal de click/turno
   onClick() {
     const current = this.timerService.activePlayer();
 
@@ -96,6 +103,19 @@ export class TurnTimerComponent implements OnInit {
     } else if (current === this.playerNumber) {
       this.timerService.switchTurn(this.playerNumber);
     }
+  }
+
+  // 🔹 Empieza a ejecutar onClick de forma repetida
+  startPress() {
+    this.onClick(); // se ejecuta al toque
+    this.holdInterval = setInterval(() => {
+      this.onClick();
+    }, 300); // cada 300ms (puedes ajustar)
+  }
+
+  // 🔹 Detiene la ejecución repetida
+  endPress() {
+    clearInterval(this.holdInterval);
   }
 
   private pad(n: number): string {

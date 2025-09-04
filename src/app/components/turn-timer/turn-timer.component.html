@@ -1,4 +1,10 @@
-<main class="turn-timer" (touchstart)="onClick()">
+<main class="turn-timer"
+      (mousedown)="startPress()"
+      (mouseup)="endPress()"
+      (mouseleave)="endPress()"
+      (touchstart)="startPress()"
+      (touchend)="endPress()">
+
   <div class="popup-container" *ngIf="activePlayer === null">
     <div class="popup-bubble">
       {{"TAP_TO_START" | translate}}
@@ -18,6 +24,10 @@
   </div>
 
   <button class="turn-timer__btn">
-    <ion-icon name="hourglass-outline" class="turn-timer__btn__icon" [ngClass]="{'shadow-icon':BgImg }"></ion-icon>
+    <ion-icon
+      name="hourglass-outline"
+      class="turn-timer__btn__icon"
+      [ngClass]="{'shadow-icon':BgImg }">
+    </ion-icon>
   </button>
 </main>

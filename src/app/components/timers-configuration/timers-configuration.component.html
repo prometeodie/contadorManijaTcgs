@@ -9,58 +9,59 @@
   <button class="close-Mark" (click)="closeWindow()" aria-label="Cerrar configuración">&times;</button>
 
   <h2 class="timers-title">{{"CONFIGURATION" | translate}}</h2>
-  <languages/>
+    <languages/>
 
-  <section class="sliders">
-    <label class="sliders__title">
-      <input
+
+    <section class="sliders">
+      <label class="sliders__title">
+        <input
         type="checkbox"
         [checked]="roundTimerEnabled"
         (change)="onToggleRoundTimer($event)"
-      />
-      {{"ENABLE_ROUND_TIMER" | translate}}
-    </label>
+        />
+        {{"ENABLE_ROUND_TIMER" | translate}}
+      </label>
 
-    <label class="sliders__title">
-      <input
+      <label class="sliders__title">
+        <input
         type="checkbox"
         [checked]="turnTimerEnabled"
         (change)="onToggleTurnTimer($event)"
-      />
-      {{"ENABLE_TURN_TIMER" | translate}}
-    </label>
+        />
+        {{"ENABLE_TURN_TIMER" | translate}}
+      </label>
 
-    <label class="sliders__title">
-      <input
+      <label class="sliders__title">
+        <input
         type="checkbox"
         [(ngModel)]="threeMatches"
         (change)="saveConfigToLocalStorage()"
-      />
-      {{"ENABLE_THREE_MATCHES" | translate}}
-    </label>
+        />
+        {{"ENABLE_THREE_MATCHES" | translate}}
+      </label>
 
-    <label class="sliders__title">
-      <input
+      <label class="sliders__title">
+        <input
         type="checkbox"
         [(ngModel)]="sound"
         (change)="saveSoundConfigToLocalStorage()"
-      />
-      {{"ENABLE_SOUND" | translate}}
-    </label>
-  </section>
+        />
+        {{"ENABLE_SOUND" | translate}}
+      </label>
+    </section>
 
-  <section class="timers-time">
-    <!-- RONDA -->
-    <label class="timers-time__label">{{"ROUND_TIMER" | translate}}</label>
+    <section class="timers-time">
+      <!-- RONDA -->
+      <label class="timers-time__label">{{"ROUND_TIMER" | translate}}</label>
 
-    <div class="timers-time__item">
-      <label for="roundHours">{{"HOURS" | translate}}</label>
-      <select
+      <div class="timers-time__item">
+        <label for="roundHours">{{"HOURS" | translate}}</label>
+        <select
         id="roundHours"
         [(ngModel)]="roundHours"
         (focus)="focusSafeElement()"
         (change)="saveConfigToLocalStorage()"
-      >
+        >
         <option *ngFor="let h of hourOptions" [value]="h">{{ h }}</option>
       </select>
     </div>
@@ -68,56 +69,60 @@
     <div class="timers-time__item">
       <label for="roundMinutes">{{ "MINUTES" | translate}}</label>
       <select
-        id="roundMinutes"
-        [(ngModel)]="roundMinutes"
-        (focus)="focusSafeElement()"
-        (change)="saveConfigToLocalStorage()"
+      id="roundMinutes"
+      [(ngModel)]="roundMinutes"
+      (focus)="focusSafeElement()"
+      (change)="saveConfigToLocalStorage()"
       >
-        <option *ngFor="let m of minuteOptions" [value]="m">{{ m }}</option>
-      </select>
-    </div>
+      <option *ngFor="let m of minuteOptions" [value]="m">{{ m }}</option>
+    </select>
+  </div>
 
-    <div class="timers-time__item">
-      <label for="roundSeconds">{{"SECONDS" | translate}}</label>
-      <select
-        id="roundSeconds"
-        [(ngModel)]="roundSeconds"
-        (focus)="focusSafeElement()"
-        (change)="saveConfigToLocalStorage()"
-      >
-        <option *ngFor="let s of secondOptions" [value]="s">{{ s }}</option>
-      </select>
-    </div>
+  <div class="timers-time__item">
+    <label for="roundSeconds">{{"SECONDS" | translate}}</label>
+    <select
+    id="roundSeconds"
+    [(ngModel)]="roundSeconds"
+    (focus)="focusSafeElement()"
+    (change)="saveConfigToLocalStorage()"
+    >
+    <option *ngFor="let s of secondOptions" [value]="s">{{ s }}</option>
+  </select>
+</div>
 
-    <!-- TURNOS -->
-    <label class="timers-time__label">{{"TURN_TIMER" | translate}}</label>
+<!-- TURNOS -->
+<label class="timers-time__label">{{"TURN_TIMER" | translate}}</label>
 
-    <div class="timers-time__item">
-      <label for="turnMinutes">{{ "MINUTES" | translate}}</label>
-      <select
-        id="turnMinutes"
-        [(ngModel)]="turnMinutes"
-        (focus)="focusSafeElement()"
-        (change)="saveConfigToLocalStorage()"
-      >
-        <option *ngFor="let m of minuteOptions" [value]="m">{{ m }}</option>
-      </select>
-    </div>
+<div class="timers-time__item">
+  <label for="turnMinutes">{{ "MINUTES" | translate}}</label>
+  <select
+  id="turnMinutes"
+  [(ngModel)]="turnMinutes"
+  (focus)="focusSafeElement()"
+  (change)="saveConfigToLocalStorage()"
+  >
+  <option *ngFor="let m of minuteOptions" [value]="m">{{ m }}</option>
+</select>
+</div>
 
-    <div class="timers-time__item">
-      <label for="turnSeconds">{{"SECONDS" | translate}}</label>
-      <select
-        id="turnSeconds"
-        [(ngModel)]="turnSeconds"
-        (focus)="focusSafeElement()"
-        (change)="saveConfigToLocalStorage()"
-      >
-        <option *ngFor="let s of secondOptions" [value]="s">{{ s }}</option>
-      </select>
-    </div>
-  </section>
+<div class="timers-time__item">
+  <label for="turnSeconds">{{"SECONDS" | translate}}</label>
+  <select
+  id="turnSeconds"
+  [(ngModel)]="turnSeconds"
+  (focus)="focusSafeElement()"
+  (change)="saveConfigToLocalStorage()"
+  >
+  <option *ngFor="let s of secondOptions" [value]="s">{{ s }}</option>
+</select>
+</div>
+</section>
 
-  <section class="timers-btn">
-    <button class="btn-reset" (click)="resetConfiguration()">{{"RESET_CONFIGURATION" | translate}}</button>
-  </section>
+<section class="timers-btn">
+  <button class="btn-reset" (click)="resetConfiguration()">{{"RESET_CONFIGURATION" | translate}}</button>
+</section>
+<section class="footer">
+  <a class="footer__link" href="https://sites.google.com/view/timetoduel-tcgs-privacy-policy/p%C3%A1gina-principal">Privacy Policy</a>
+  <a class="footer__link" href="google.com">Suport this App c:</a>
+</section>
 </main>
