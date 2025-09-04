@@ -5,7 +5,7 @@ import { ConfigurationData } from 'src/app/interfaces/configuration-data.interfa
 import { DataServicesService } from 'src/app/services/data-services.service';
 import { SoundService } from 'src/app/services/sound.service';
 import { LanguagesComponent } from '../languages-component/lenguages.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguagesService } from 'src/app/services/lenguages.service';
 import { AdsService } from 'src/app/services/ads.service';
 
@@ -25,7 +25,7 @@ export class TimersConfigurationComponent implements OnInit, OnDestroy{
   private soundService = inject(SoundService);
   private languagesService = inject(LanguagesService);
   private adsService = inject(AdsService);
-
+  private translateService = inject(TranslateService);
   public timerConfig!: ConfigurationData;
 
   hourOptions = Array.from({ length: 24 }, (_, i) => i);
@@ -134,7 +134,7 @@ private updateSoundState() {
   }
 
   resetConfiguration() {
-    if (confirm('¿Estás seguro que deseas reiniciar la configuración por defecto?')) {
+    if (confirm(this.translateService.instant('RESET_CONFIG_CONFIRM'))) {
       this.dataService.set('configuration', this.dataService.defaultConfig).then(() => {
         this.getData();
         this.languagesService.setLanguage('en');
@@ -147,9 +147,7 @@ private updateSoundState() {
     const checked = (event.target as HTMLInputElement).checked;
 
     if (checked && this.timerConfig.chessTimerConfig.chessTimerEnabled) {
-      const confirmDisable = confirm(
-        'Los temporizadores no se pueden activar si el temporizador de ajedrez está habilitado. ¿Deseas desactivar el temporizador de ajedrez?'
-      );
+      const confirmDisable = confirm(this.translateService.instant('DISABLE_CHESS_TIMER'));
 
       if (confirmDisable) {
         this.timerConfig.chessTimerConfig.chessTimerEnabled = false;
@@ -169,9 +167,7 @@ private updateSoundState() {
     const checked = (event.target as HTMLInputElement).checked;
 
     if (checked && this.timerConfig.chessTimerConfig.chessTimerEnabled) {
-      const confirmDisable = confirm(
-        'Los temporizadores no se pueden activar si el temporizador de ajedrez está habilitado. ¿Deseas desactivar el temporizador de ajedrez?'
-      );
+      const confirmDisable = confirm(this.translateService.instant('DISABLE_CHESS_TIMER'))
 
       if (confirmDisable) {
         this.timerConfig.chessTimerConfig.chessTimerEnabled = false;

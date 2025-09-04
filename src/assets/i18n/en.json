@@ -22,6 +22,8 @@
   "ENABLE_THREE_MATCHES": "Enable Three Matches Counter",
   "ENABLE_SOUND": "Enable Sound",
   "RESET_CONFIGURATION": "Reset Configuration",
+  "DISABLE_CHESS_TIMER": "Timers cannot be activated if the chess timer is enabled. Do you want to disable the chess timer?",
+  "RESET_CONFIG_CONFIRM": "Are you sure you want to reset to default settings?",
   "CONFIRM_NEXT_MATCH": "Do you want to move to the next match?",
   "CONFIRM_RESET_MATCHES": "Do you want to reset the match counter?",
 

@@ -44,5 +44,6 @@ export class ChessTimerModeComponent  implements OnInit {
   async changeChessTimerConfig(duration: string, increment: string, chessTimerEnabled: boolean) {
   await this.dataService.updateChessTimerConfig({ duration, increment, chessTimerEnabled });
   this.chessConfigChanged.emit();
+  this.closeWindow();
 }
 }

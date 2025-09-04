@@ -33,6 +33,7 @@
     "@capacitor/screen-orientation": "^7.0.1",
     "@capacitor/splash-screen": "^7.0.1",
     "@capacitor/status-bar": "^7.0.1",
+    "@capawesome/capacitor-app-update": "^7.0.1",
     "@ionic/angular": "^8.5.7",
     "@ionic/core": "^6.0.0",
     "@ngx-translate/core": "^17.0.0",

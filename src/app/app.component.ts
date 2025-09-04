@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
-import { IonApp, IonRouterOutlet, AlertController } from '@ionic/angular/standalone';
+import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Platform } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { App as CapacitorApp } from '@capacitor/app';
-import { Preferences } from '@capacitor/preferences';
 import { LanguagesService } from './services/lenguages.service';
-import { AdsService } from './services/ads.service'; // 👈 Importamos tu servicio de Ads
+import { AppUpdate } from '@capawesome/capacitor-app-update';
 
 declare var window: any;
 declare var AndroidFullScreen: any;
@@ -17,28 +14,20 @@ declare var AndroidFullScreen: any;
   selector: 'app-root',
   templateUrl: 'app.component.html',
   standalone: true,
-  imports: [IonApp, IonRouterOutlet], // solo componentes/directivas standalone
+  imports: [IonApp, IonRouterOutlet],
 })
 export class AppComponent {
-  private expirationDate = new Date('2025-12-23');
   defaultLang = 'en';
 
   constructor(
     private platform: Platform,
-    private alertController: AlertController,
     private languages: LanguagesService,
-    private adsService: AdsService // 👈 Inyectamos el servicio
   ) {
     this.initializeApp();
   }
 
   async initializeApp() {
     await this.platform.ready();
-
-    if (this.isExpired()) {
-      this.showExpirationAlert();
-      return;
-    }
 
     // Inicializar idioma guardado
     await this.languages.initLanguage();
@@ -53,39 +42,14 @@ export class AppComponent {
       this.activateImmersiveMode();
       this.preloadTimeoutSound();
 
-      // 🚀 Inicializamos AdMob
+      // 🚀 Inicializamos AdMob (si corresponde)
+
+      // 🔄 Chequear si hay actualización disponible
+      await this.checkForUpdate();
+
     } catch (err) {
       console.log('❌ Error configurando la app', err);
     }
-  }
-
-  private isExpired(): boolean {
-    const now = new Date();
-    return now > this.expirationDate;
-  }
-
-  private async showExpirationAlert() {
-    const alert = await this.alertController.create({
-      header: 'Actualización requerida',
-      message:
-        'Esta versión ha vencido. Descargá la nueva versión para continuar, o verificá si la app ya cuenta con soporte en el Play Store.',
-      buttons: [
-        {
-          text: 'Descargar',
-          handler: async () => {
-            window.open(
-              'https://drive.google.com/drive/folders/1XfpjvcxcbtDYjjF0XED5Je0ewab8vUIZ?usp=sharing',
-              '_system'
-            );
-            await CapacitorApp.exitApp();
-          }
-        }
-      ],
-      backdropDismiss: false,
-      cssClass: 'alert-expired'
-    });
-
-    await alert.present();
   }
 
   private async lockOrientation() {
@@ -123,6 +87,26 @@ export class AppComponent {
       );
     } else {
       console.warn('❌ NativeAudio plugin no disponible');
+    }
+  }
+
+  // ==========================
+  // 🔄 In-App Updates
+  // ==========================
+  private async checkForUpdate() {
+    try {
+      const result = await AppUpdate.getAppUpdateInfo();
+
+      // 2 significa que hay una actualización disponible
+      if (result.updateAvailability === 2) {
+        // ✅ Immediate Update (bloquea hasta actualizar)
+        await AppUpdate.performImmediateUpdate();
+
+        // 👇 Flexible Update (descarga en background)
+        // await AppUpdate.startFlexibleUpdate();
+      }
+    } catch (err) {
+      console.warn('❌ Error chequeando actualización:', err);
     }
   }
 }

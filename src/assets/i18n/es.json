@@ -23,6 +23,8 @@
   "ENABLE_THREE_MATCHES": "Activar contador de partidas",
   "ENABLE_SOUND": "Activar Sonido",
   "RESET_CONFIGURATION": "Restablecer configuración",
+  "DISABLE_CHESS_TIMER":"Los temporizadores no se pueden activar si el temporizador de ajedrez está habilitado. ¿Deseas desactivar el temporizador de ajedrez?",
+  "RESET_CONFIG_CONFIRM":"¿Estás seguro que deseas reiniciar la configuración por defecto?",
   "CONFIRM_NEXT_MATCH":"¿Desea pasar a la siguiente partida?",
   "CONFIRM_RESET_MATCHES": "¿Desea reiniciar el contador de combates?",
 
