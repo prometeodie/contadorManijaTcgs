@@ -1,16 +1,17 @@
 .time-out-alert {
   display: none;
+  position: fixed;
 }
 
 .time-out,
 .time-out-alert__text{
   display: flex;
+  justify-content: center;
 }
 
 .time-out {
   height: 50vh;
   width: 100%;
-  justify-content: center;
   z-index: 9999;
   animation: fadeInOutEpic 3.5s ease-out forwards;
 

@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { ConfigurationData } from 'src/app/interfaces/configuration-data.interface';
 import { DataServicesService } from 'src/app/services/data-services.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'game-modes',
@@ -30,6 +31,7 @@ export class GameModesComponent implements OnInit, AfterViewInit, OnDestroy {
   private dataService = inject(DataServicesService);
   private renderer = inject(Renderer2);
   private elRef = inject(ElementRef);
+  private translateService = inject(TranslateService);
   private removeClickListener!: () => void;
   private removeTouchListener!: () => void;
 
@@ -54,8 +56,8 @@ export class GameModesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async showTimers(show: boolean) {
     const text = show
-      ? '¿Activar todos los timers? '
-      : '¿Desactivar todos los timers?';
+      ? this.translateService.instant('ENABLE_TIMERS')
+      : this.translateService.instant('DISABLE_TIMERS');
 
     if (confirm(text)) {
       const config = await this.dataService.get<ConfigurationData>('configuration');

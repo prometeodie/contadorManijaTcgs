@@ -1,5 +1,5 @@
 <div class="timer"
-     (click)="onClick()"
+     (touchstart)="onClick()"
      [ngClass]="{
        'timer-black': isNoActiveAndNoActiveTimer(),
        'active-timer': isActive(),

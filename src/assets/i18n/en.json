@@ -4,6 +4,8 @@
   "TIME_UP": "Time's up!",
   "TAP_TO_START": "Tap to start",
 
+  "ENABLE_TIMERS": "Enable timers?",
+  "DISABLE_TIMERS": "Disable timers?",
   "CHESS_MODES": "Chess Modes",
   "BULLET": "Bullet",
   "BLITZ": "Blitz",

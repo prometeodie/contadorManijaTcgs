@@ -5,6 +5,8 @@
   "TIME_UP": "¡Se acabó el tiempo!",
   "TAP_TO_START": "Tap para comenzar",
 
+  "ENABLE_TIMERS": "¿Activar timers?",
+  "DISABLE_TIMERS": "¿Desactivar timers?",
   "CHESS_MODES": "Modalidades de ajedrez",
   "BULLET": "Bullet",
   "BLITZ": "Blitz",
