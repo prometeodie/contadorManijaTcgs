@@ -35,7 +35,7 @@ export class AdsService {
     await AdMob.removeBanner().catch(() => {});
 
     const options: BannerAdOptions = {
-      adId, // ID real o de prueba
+      adId,
       adSize: BannerAdSize.ADAPTIVE_BANNER,
       position: BannerAdPosition.BOTTOM_CENTER,
       margin: 0,
@@ -63,7 +63,7 @@ export class AdsService {
     await AdMob.showInterstitial();
     console.log('🎬 Interstitial mostrado');
   }
-
+  
   // -------------------
   // 🚀 Rewarded (Video con recompensa)
   // -------------------
@@ -74,25 +74,23 @@ export class AdsService {
     console.log('🎁 Rewarded mostrado');
   }
 
-  // -------------------
-  // 🚀 Contador para controlar rewarded
-  // -------------------
+
   async saveCounter(value: number) {
     await Preferences.set({ key: this.COUNTER_KEY, value: value.toString() });
     console.log(`💾 Guardado contador con valor: ${value}`);
   }
 
   async increaseCounterAndCheck() {
-    const adId = 'ca-app-pub-3940256099942544/5224354917'; // ⚠️ ID de prueba
+    const adId = INTERSTITIAL;
 
     const { value } = await Preferences.get({ key: this.COUNTER_KEY });
     let counter = value ? parseInt(value, 10) : 0;
 
     counter++;
 
-    if (counter >= 3) {
-      await this.showRewarded(adId);
-      counter = 0; // Reiniciar después de mostrar rewarded
+    if (counter > 3) {
+      await this.showInterstitial(adId);
+      counter = 0;
     }
 
     await this.saveCounter(counter);

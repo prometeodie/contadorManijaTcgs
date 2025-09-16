@@ -30,7 +30,7 @@ export class ChessTimerModeComponent  implements OnInit {
     this.adsService.hideBanner();
   }
    async ionViewWillEnter() {
-    await this.adsService.showBanner('ca-app-pub-3940256099942544/6300978111');
+    await this.adsService.showBanner(BANNER);
   }
 
   async ionViewWillLeave() {

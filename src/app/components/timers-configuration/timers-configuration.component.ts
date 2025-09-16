@@ -53,12 +53,10 @@ export class TimersConfigurationComponent implements OnInit, OnDestroy{
     this.adsService.hideBanner(); // seguridad extra
   }
    async ionViewWillEnter() {
-    // 👇 Mostrar banner solo cuando se entra a esta página
-    await this.adsService.showBanner('ca-app-pub-3940256099942544/6300978111'); // ID de prueba
+    await this.adsService.showBanner(BANNER);
   }
 
   async ionViewWillLeave() {
-    // 👇 Ocultar el banner al salir de la página
     await this.adsService.hideBanner();
   }
 
