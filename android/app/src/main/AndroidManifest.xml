@@ -3,21 +3,8 @@
   xmlns:tools="http://schemas.android.com/tools"
   package="com.franco.contador">
 
-  <!-- Acceso a internet -->
+  <!-- Internet access -->
   <uses-permission android:name="android.permission.INTERNET" />
-
-  <!-- Cámara -->
-  <uses-permission android:name="android.permission.CAMERA" />
-
-  <!-- Permiso para leer imágenes en Android 13+ -->
-  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-
-  <!-- Compatibilidad con Android 12 e inferiores -->
-  <uses-permission
-    android:name="android.permission.READ_EXTERNAL_STORAGE"
-    android:maxSdkVersion="32" />
-
-  <!-- Sin WRITE_EXTERNAL_STORAGE para evitar alerta de app peligrosa -->
 
   <application
     android:allowBackup="true"
@@ -30,10 +17,10 @@
     android:usesCleartextTraffic="false"
     tools:targetApi="34">
 
-    <!-- App ID de prueba de AdMob -->
+    <!-- AdMob Application ID -->
     <meta-data
       android:name="com.google.android.gms.ads.APPLICATION_ID"
-      android:value="ca-app-pub-3940256099942544~3347511713"/>
+      android:value="ca-app-pub-2812109592223754~8319044382" />
 
     <activity
       android:name=".MainActivity"
@@ -49,6 +36,7 @@
       </intent-filter>
     </activity>
 
+    <!-- FileProvider for sharing files securely -->
     <provider
       android:name="androidx.core.content.FileProvider"
       android:authorities="${applicationId}.fileprovider"

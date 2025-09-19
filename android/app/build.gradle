@@ -5,11 +5,11 @@ android {
   compileSdk rootProject.ext.compileSdkVersion
 
   defaultConfig {
-    applicationId "com.franco.contador"
+    applicationId "com.shoG.contador"
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 1
-    versionName "1.0"
+    versionCode 2
+    versionName "1.0.1"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     aaptOptions {
       // Archivos y carpetas a ignorar en assets
@@ -17,13 +17,12 @@ android {
     }
   }
 
-  // ✅ Configuración para firmar el APK
   signingConfigs {
     release {
-      storeFile file("C:/Users/Franco/Documents/my-release-key.jks") // <- Cambiar por la ruta real
-      storePassword "TuStorePassword"                                 // <- Tu contraseña del keystore
-      keyAlias "TuAlias"                                              // <- Tu alias
-      keyPassword "TuKeyPassword"                                     // <- Contraseña de la key
+      storeFile file("C:/Users/Franco/Documents/my-release-key.jks")
+      storePassword "Wishmaster7"
+      keyAlias "ShoG"
+      keyPassword "Wishmaster666"
     }
   }
 

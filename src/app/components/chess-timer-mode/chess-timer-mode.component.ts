@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { AdsService } from 'src/app/services/ads.service';
 import { DataServicesService } from 'src/app/services/data-services.service';
+import { BANNER } from 'src/assets/googleAdsKey/adsKey';
 
 @Component({
   selector: 'chess-timer-mode',

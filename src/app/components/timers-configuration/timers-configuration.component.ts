@@ -8,6 +8,7 @@ import { LanguagesComponent } from '../languages-component/lenguages.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguagesService } from 'src/app/services/lenguages.service';
 import { AdsService } from 'src/app/services/ads.service';
+import { BANNER } from 'src/assets/googleAdsKey/adsKey';
 
 @Component({
   selector: 'timers-configuration',

@@ -7,6 +7,7 @@ import {
   RewardAdOptions,
 } from '@capacitor-community/admob';
 import { Preferences } from '@capacitor/preferences';
+import { INTERSTITIAL } from 'src/assets/googleAdsKey/adsKey';
 
 @Injectable({
   providedIn: 'root',
