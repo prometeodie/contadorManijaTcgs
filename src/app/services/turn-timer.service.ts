@@ -114,27 +114,29 @@ export class TurnTimerService {
   }
 
   private tick(player: 1 | 2) {
-    const timer = this.timers[player];
-    if (!timer.running) return;
+  const timer = this.timers[player];
+  if (!timer.running) return;
 
-    const now = performance.now();
-    const elapsed = now - timer.lastTimestamp;
-    timer.lastTimestamp = now;
+  const now = performance.now();
+  const elapsed = now - timer.lastTimestamp;
+  timer.lastTimestamp = now;
 
-    timer.timeLeft -= elapsed;
+  timer.timeLeft -= elapsed;
 
-    if (timer.timeLeft <= 0) {
-      timer.timeLeft = 0;
-      timer.running = false;
-      this.updateSignal(player, 0);
+  if (timer.timeLeft <= 0) {
+    timer.timeLeft = 0;
+    timer.running = false;
+    this.updateSignal(player, 0);
 
-      this.switchTurn(player);
-      return;
-    }
+    this.switchTurn(player);
 
-    this.updateSignal(player, timer.timeLeft);
-    timer.rafId = requestAnimationFrame(() => this.tick(player));
+    return;
   }
+  
+
+  this.updateSignal(player, timer.timeLeft);
+  timer.rafId = requestAnimationFrame(() => this.tick(player));
+}
 
   public isRunning(player: 1 | 2): boolean {
     return this.timers[player]?.running ?? false;
@@ -173,7 +175,7 @@ export class TurnTimerService {
     }
   }
 
-  // ✅ Nuevo método público para setear el callback externo
+
   setAutoSwitchCallback(callback: () => void) {
     this.onAutoSwitchCallback = callback;
   }

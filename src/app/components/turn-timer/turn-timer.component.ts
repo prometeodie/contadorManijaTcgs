@@ -60,7 +60,7 @@ export class TurnTimerComponent implements OnInit {
       }
     });
 
-    // Reacciona a cambios de configuración general
+  
     effect(() => {
       if (this.dataService.configChangedSignal()) {
         this.loadTimerConfig(true).catch(console.error);
@@ -69,7 +69,7 @@ export class TurnTimerComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.loadTimerConfig(false); // primera carga
+    await this.loadTimerConfig(false);
   }
 
   async loadTimerConfig(forceReset: boolean = false) {

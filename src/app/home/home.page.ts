@@ -90,7 +90,6 @@ export class HomePage implements OnInit, OnDestroy {
   });
 }
 
-
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
@@ -164,6 +163,8 @@ async loadConfiguration(): Promise<void> {
       this.fullTurnsCounter = nuevosTurnos;
     }
   }
+
+  
 
   async resetGame() {
     this.prepareNextMatch();
