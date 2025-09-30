@@ -188,7 +188,6 @@ export class ChessTimerService {
     await this.resetTimerFromStorage(2);
   }
 
-  // ✅ Ahora es un método privado de la clase
   public parseDurationToMs(duration: string): number {
     const parts = duration.split(':').map(Number);
     let ms = 0;

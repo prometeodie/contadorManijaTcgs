@@ -33,7 +33,23 @@ export class TurnTimerComponent implements OnInit {
   private timerServicesService = inject(TimerServicesService);
 
   private durationMs = 0;
-  private holdInterval: any; // 🔹 para manejar el mantener presionado
+
+  private holdThreshold = 1200;
+  private holdStartTime = 0;
+  private holdTimer: any;
+
+  public isPaused: boolean = false;
+  public isPressing = false;
+  public progress = 0;
+  public progressInterval: any;
+  public isHolding: boolean = false;
+  public progressDelayTimer: any;
+  public showPopUp!: Signal<boolean>;
+  readonly circumference = 2 * Math.PI * 16;
+
+  get progressOffset() {
+    return this.circumference - (this.progress / 100) * this.circumference;
+  }
 
   public isActive = computed(
     () => this.timerService.activePlayer() === this.playerNumber
@@ -60,7 +76,6 @@ export class TurnTimerComponent implements OnInit {
       }
     });
 
-  
     effect(() => {
       if (this.dataService.configChangedSignal()) {
         this.loadTimerConfig(true).catch(console.error);
@@ -70,6 +85,7 @@ export class TurnTimerComponent implements OnInit {
 
   async ngOnInit() {
     await this.loadTimerConfig(false);
+    this.showPopUp = this.timerService.showPopUp;
   }
 
   async loadTimerConfig(forceReset: boolean = false) {
@@ -89,12 +105,17 @@ export class TurnTimerComponent implements OnInit {
     await this.loadTimerConfig(true);
   }
 
-  // 🔹 Acción normal de click/turno
   onClick() {
     const current = this.timerService.activePlayer();
 
     if (!this.timerServicesService.isRunning()) {
       this.timerServicesService.startCountdown();
+    }
+
+    if (current === this.playerNumber && this.timerService.isPaused(this.playerNumber)) {
+      this.timerService.resumeTurnTimer(this.playerNumber);
+      this.isPaused = false;
+      return;
     }
 
     if (current === null) {
@@ -105,17 +126,75 @@ export class TurnTimerComponent implements OnInit {
     }
   }
 
-  // 🔹 Empieza a ejecutar onClick de forma repetida
   startPress() {
-    this.onClick(); // se ejecuta al toque
-    this.holdInterval = setInterval(() => {
-      this.onClick();
-    }, 300); // cada 300ms (puedes ajustar)
+    const current = this.timerService.activePlayer();
+    if (current !== null && !this.isActive()) return;
+
+    if(this.activePlayer === null){
+      this.timerService.setShowPopUp(true);
+      setTimeout(() => {
+        this.timerService.setShowPopUp(false);
+      }, 7000);
+    }
+
+    clearTimeout(this.holdTimer);
+    clearTimeout(this.progressDelayTimer);
+    clearInterval(this.progressInterval);
+
+    this.holdStartTime = Date.now();
+    this.progress = 0;
+    this.isPressing = false;
+    this.isHolding = true;
+
+    const delayBeforeProgress = 250;
+    const totalHold = this.holdThreshold;
+
+    this.progressDelayTimer = setTimeout(() => {
+      if (!this.isHolding) return;
+
+      this.isPressing = true;
+      const progressStartTime = Date.now();
+
+      this.progressInterval = setInterval(() => {
+        const elapsed = Date.now() - progressStartTime;
+        this.progress = Math.min(
+          (elapsed / (totalHold - delayBeforeProgress)) * 100,
+          100
+        );
+      }, 20);
+    }, delayBeforeProgress);
+
+    this.holdTimer = setTimeout(() => {
+      if (this.isActive()) {
+        this.pauseTimer();
+      }
+      this.timerService.setShowPopUp(false);
+      this.endPress(false);
+    }, totalHold);
   }
 
-  // 🔹 Detiene la ejecución repetida
-  endPress() {
-    clearInterval(this.holdInterval);
+  endPress(triggerClick: boolean = true) {
+    this.isHolding = false;
+    clearTimeout(this.holdTimer);
+    clearTimeout(this.progressDelayTimer);
+    clearInterval(this.progressInterval);
+
+    this.isPressing = false;
+    this.progress = 0;
+
+    if (triggerClick) {
+      const elapsed = Date.now() - this.holdStartTime;
+      if (elapsed < this.holdThreshold) {
+        this.onClick();
+      }
+    }
+  }
+
+  pauseTimer() {
+    if (!this.isActive()) return;
+
+    this.timerService.pauseTurnTimer(this.playerNumber);
+    this.isPaused = true;
   }
 
   private pad(n: number): string {

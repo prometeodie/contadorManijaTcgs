@@ -9,7 +9,7 @@
     &__btn{
       background-color: transparent;
       &__icon{
-        font-size: 4rem;
+        font-size: 5rem;
         color: #ffffffc2;
       }
     }
@@ -38,8 +38,8 @@
 }
 .popup-container {
     position: absolute;
-    bottom: 114px;
-    left: 56px;
+    bottom: 131px;
+    left: 64px;
     transform: translateX(-50%);
     z-index: 1000;
 }
@@ -70,6 +70,41 @@
   border-right: 6px solid transparent;
   border-top: 8px solid rgba(0, 0, 0, 0.6);
 }
+
+.turn-timer {
+  position: relative;
+
+  .turn-timer__btn {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hold-progress {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-90deg); // centra y rota el círculo
+    z-index: 2;
+
+    filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
+  }
+
+  .progress-bg {
+    stroke: rgba(255, 255, 255, 0.2);
+  }
+
+  .progress-bar {
+    stroke: #d500f9;
+    transition: stroke-dashoffset 50ms linear;
+  }
+}
+
+.activePlayer{
+  opacity: 0.4;
+  filter: grayscale(100%);
+  transition: all 0.3s ease;
+}
+
 
 // ANIMATION
 

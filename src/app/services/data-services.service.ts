@@ -56,7 +56,6 @@ export class DataServicesService {
     await Preferences.clear();
   }
 
-  // Método para setear la signal boolean por parámetro
   public setConfigChanged(value: boolean) {
     this._configChangedSignal.set(value);
   }

@@ -74,6 +74,7 @@ export class HomePage implements OnInit, OnDestroy {
   public isConfirmDialog: boolean = false;
   public isConfirmDialogMessage: string = '';
   public isPopupFlipped: boolean = false;
+  public isReset:boolean = false;
 
   activeTimer: 1 | 2 | null = null;
 
@@ -164,7 +165,7 @@ async loadConfiguration(): Promise<void> {
     }
   }
 
-  
+
 
   async resetGame() {
     this.prepareNextMatch();
@@ -178,6 +179,7 @@ async loadConfiguration(): Promise<void> {
     this.matchesCoutn = 1;
     this.activeTimer = null;
     this.timerService.showBubblePopUp(true);
+    this.turnTimerService.setShowPopUp(false);
     await this.chessTimerService.resetAllTimersFromStorage();
     this.dataServicesService.setConfiglifeAnimation(true);
   }

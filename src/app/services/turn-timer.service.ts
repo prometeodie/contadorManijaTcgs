@@ -7,6 +7,7 @@ interface TurnTimerState {
   running: boolean;
   rafId: number;
   lastTimestamp: number;
+  paused: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -18,8 +19,8 @@ export class TurnTimerService {
   }
 
   private timers: Record<1 | 2, TurnTimerState> = {
-    1: { timeLeft: 0, running: false, rafId: 0, lastTimestamp: 0 },
-    2: { timeLeft: 0, running: false, rafId: 0, lastTimestamp: 0 },
+    1: { timeLeft: 0, running: false, rafId: 0, lastTimestamp: 0, paused: false },
+    2: { timeLeft: 0, running: false, rafId: 0, lastTimestamp: 0, paused: false },
   };
   private clickSound = new Audio('assets/sounds/next.ogg');
 
@@ -32,6 +33,9 @@ export class TurnTimerService {
 
   private onAutoSwitchCallback?: () => void;
 
+  private _showPopUp = signal(false);
+
+  public showPopUp = computed(() => this._showPopUp());
   public activePlayer = computed(() => this._activePlayer());
   public turnTimerWasModified = computed(() => this._turnTimerWasModified());
 
@@ -56,6 +60,10 @@ export class TurnTimerService {
   async getStoreData<T>(key: string): Promise<T | null> {
     const { value } = await Preferences.get({ key });
     return value ? (JSON.parse(value) as T) : null;
+  }
+
+  setShowPopUp(value: boolean) {
+  this._showPopUp.set(value);
   }
 
   parseDurationToMs(duration: string): number {
@@ -132,7 +140,7 @@ export class TurnTimerService {
 
     return;
   }
-  
+
 
   this.updateSignal(player, timer.timeLeft);
   timer.rafId = requestAnimationFrame(() => this.tick(player));
@@ -150,22 +158,28 @@ export class TurnTimerService {
     });
   }
 
-  pauseTurnTimer(player: 1 | 2) {
-    const timer = this.timers[player];
-    if (timer.running) {
-      cancelAnimationFrame(timer.rafId);
-      timer.running = false;
-    }
+ pauseTurnTimer(player: 1 | 2) {
+  const timer = this.timers[player];
+  if (timer.running) {
+    cancelAnimationFrame(timer.rafId);
+    timer.running = false;
+    timer.paused = true;
   }
+}
 
-  resumeTurnTimer(player: 1 | 2) {
-    const timer = this.timers[player];
-    if (!timer.running && timer.timeLeft > 0) {
-      timer.running = true;
-      timer.lastTimestamp = performance.now();
-      this.tick(player);
-    }
+resumeTurnTimer(player: 1 | 2) {
+  const timer = this.timers[player];
+  if (!timer.running && timer.timeLeft > 0 && timer.paused) {
+    timer.running = true;
+    timer.paused = false;
+    timer.lastTimestamp = performance.now();
+    this.tick(player);
   }
+}
+
+isPaused(player: 1 | 2): boolean {
+  return this.timers[player].paused === true;
+}
 
   private updateSignal(player: 1 | 2, value: number) {
     if (player === 1) {

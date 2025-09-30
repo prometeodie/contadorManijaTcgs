@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 import { TranslateService } from '@ngx-translate/core';
-
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +10,13 @@ export class LanguagesService {
   private defaultLang = 'en';
   private storageKey = 'app_language';
 
-constructor(private translate: TranslateService) {
-  this.translate.addLangs(['en', 'es']);
-  this.translate.use(this.defaultLang);
-}
+  private currentLangSubject = new BehaviorSubject<string>(this.defaultLang);
+  currentLang$ = this.currentLangSubject.asObservable();
+
+  constructor(private translate: TranslateService) {
+    this.translate.addLangs(['en', 'es']);
+    this.translate.use(this.defaultLang);
+  }
 
   /** Inicializa el idioma al iniciar la app */
   async initLanguage() {
@@ -26,11 +29,12 @@ constructor(private translate: TranslateService) {
   async setLanguage(lang: string) {
     this.translate.use(lang);
     await Preferences.set({ key: this.storageKey, value: lang });
+    this.currentLangSubject.next(lang);
   }
 
   /** Obtener idioma actual */
   getCurrentLang(): string {
-    return this.translate.currentLang || this.defaultLang;
+    return this.translate.getCurrentLang() || this.defaultLang;
   }
 
   /** Lista de idiomas disponibles */

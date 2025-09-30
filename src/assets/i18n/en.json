@@ -3,6 +3,7 @@
   "TURN": "Turn",
   "TIME_UP": "Time's up!",
   "TAP_TO_START": "Tap to start",
+  "PRESS_HOLD_PAUSE":"hold to pause",
 
   "ENABLE_TIMERS": "Enable timers?",
   "DISABLE_TIMERS": "Disable timers?",
