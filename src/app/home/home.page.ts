@@ -165,24 +165,30 @@ async loadConfiguration(): Promise<void> {
     }
   }
 
-
-
   async resetGame() {
-    this.prepareNextMatch();
+  this.prepareNextMatch();
 
-    this.resetTimers();
-    this.turnTimerService.markTurnTimerAsModified(true);
-    this.timerService.setInitialTime(this.timerService.totalSeconds());
-    this.timerService.setIsRunningFalse();
-    this.roundTimerIsRunning = this.timerService.isRunning();
-    this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
-    this.matchesCoutn = 1;
-    this.activeTimer = null;
-    this.timerService.showBubblePopUp(true);
-    this.turnTimerService.setShowPopUp(false);
-    await this.chessTimerService.resetAllTimersFromStorage();
-    this.dataServicesService.setConfiglifeAnimation(true);
-  }
+  this.resetTimers();
+  this.turnTimerService.markTurnTimerAsModified(true);
+  this.timerService.setInitialTime(this.timerService.totalSeconds());
+  this.timerService.setIsRunningFalse();
+
+  this.roundTimerIsRunning = this.timerService.isRunning();
+  this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
+  this.matchesCoutn = 1;
+  this.activeTimer = null;
+
+  this.timerService.showBubblePopUp(true);
+  this.turnTimerService.setShowPopUp(false);
+
+  this.turnTimerService.unpauseAll();
+
+  this.turnTimerService.initTimers(this.timerService.totalSeconds());
+  this.turnTimerService.startTurn(1);
+
+  await this.chessTimerService.resetAllTimersFromStorage();
+  this.dataServicesService.setConfiglifeAnimation(true);
+}
 
   resetTimers() {
     if(this.round1?.resetTimer) {
@@ -201,21 +207,24 @@ async loadConfiguration(): Promise<void> {
   resetImgs(player:string){
       localStorage.setItem(player, 'false');
   }
-
   prepareNextMatch() {
-    this.timer1?.resetTimer();
-    this.timer2?.resetTimer();
-    if(this.counter1?.resetHp) {
-      this.counter1.resetHp(this.configuration.hpValue);
-    }
-    if(this.counter2?.resetHp) {
-      this.counter2.resetHp(this.configuration.hpValue);
-    }
+  this.timer1?.resetTimer();
+  this.timer2?.resetTimer();
 
-    this.turnsCounter = 1;
-    this.fullTurnsCounter = 1;
-    this.activeTimer = null;
+  if(this.counter1?.resetHp) {
+    this.counter1.resetHp(this.configuration.hpValue);
   }
+  if(this.counter2?.resetHp) {
+    this.counter2.resetHp(this.configuration.hpValue);
+  }
+
+  this.turnsCounter = 1;
+  this.fullTurnsCounter = 1;
+  this.activeTimer = null;
+  this.turnTimerService.unpauseAll();
+
+  this.turnTimerService.startTurn(1);
+}
 
   async changePlayerColor(event: { player: 1 | 2; color: string }) {
     const config = await this.dataServicesService.get<ConfigurationData>('configuration');

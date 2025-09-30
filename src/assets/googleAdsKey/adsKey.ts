@@ -1,4 +1,2 @@
 export const BANNER="ca-app-pub-2812109592223754/1000381895"
 export const INTERSTITIAL="ca-app-pub-2812109592223754/7170258329"
-
-
