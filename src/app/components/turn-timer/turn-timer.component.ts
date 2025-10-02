@@ -165,31 +165,32 @@ export class TurnTimerComponent implements OnInit {
       }, 20);
     }, delayBeforeProgress);
 
-    this.holdTimer = setTimeout(() => {
+        this.holdTimer = setTimeout(() => {
       if (this.isActive()) {
         this.pauseTimer();
       }
       this.timerService.setShowPopUp(false);
-      this.endPress(false);
+      // ⚡ No llamamos endPress(false) acá, solo marcamos que ya fue hold
+      this.isHolding = false;
     }, totalHold);
   }
 
   endPress(triggerClick: boolean = true) {
-    this.isHolding = false;
-    clearTimeout(this.holdTimer);
-    clearTimeout(this.progressDelayTimer);
-    clearInterval(this.progressInterval);
+  clearTimeout(this.holdTimer);
+  clearTimeout(this.progressDelayTimer);
+  clearInterval(this.progressInterval);
 
-    this.isPressing = false;
-    this.progress = 0;
+  this.isPressing = false;
+  this.progress = 0;
 
-    if (triggerClick) {
-      const elapsed = Date.now() - this.holdStartTime;
-      if (elapsed < this.holdThreshold) {
-        this.onClick();
-      }
+  if (triggerClick) {
+    const elapsed = Date.now() - this.holdStartTime;
+    if (elapsed < this.holdThreshold) {
+      this.onClick();   // click normal
     }
+    // ⚡ si fue >= holdThreshold ya pausó en startPress, no hace falta llamar click
   }
+}
 
   pauseTimer() {
     if (!this.isActive()) return;

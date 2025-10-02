@@ -67,7 +67,9 @@ export class MenuComponent implements OnInit {
       if (this.turnTimerService.isRunning(current)) {
         this.turnTimerService.pauseTurnTimer(current);
       } else {
-        this.turnTimerService.resumeTurnTimer(current);
+        if(this.timerService.isRoundTimerRunning()){
+          this.turnTimerService.resumeTurnTimer(current);
+        }
       }
     }
   } else {

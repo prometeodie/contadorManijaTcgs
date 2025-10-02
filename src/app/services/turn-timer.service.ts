@@ -7,7 +7,7 @@ interface TurnTimerState {
   running: boolean;
   rafId: number;
   lastTimestamp: number;
-  paused: boolean;
+  paused:boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -18,10 +18,23 @@ export class TurnTimerService {
     this.clickSound.load();
   }
 
-  private timers: Record<1 | 2, TurnTimerState> = {
-    1: { timeLeft: 0, running: false, rafId: 0, lastTimestamp: 0, paused: false },
-    2: { timeLeft: 0, running: false, rafId: 0, lastTimestamp: 0, paused: false },
-  };
+ private timers: Record<1 | 2, TurnTimerState> = {
+  1: {
+    timeLeft: 0,
+    running: false,
+    rafId: 0,
+    lastTimestamp: 0,
+    paused: false
+  },
+  2: {
+    timeLeft: 0,
+    running: false,
+    rafId: 0,
+    lastTimestamp: 0,
+    paused: false
+  }
+};
+
   private clickSound = new Audio('assets/sounds/next.ogg');
 
   private originalDurationMs = 0;
@@ -163,15 +176,14 @@ export class TurnTimerService {
   if (timer.running) {
     cancelAnimationFrame(timer.rafId);
     timer.running = false;
-    timer.paused = true;
+    this.timers[player].paused = true;
   }
 }
 
 resumeTurnTimer(player: 1 | 2) {
-  const timer = this.timers[player];
+  const timer = this.timers[player];1
   if (!timer.running && timer.timeLeft > 0 && timer.paused) {
     timer.running = true;
-    timer.paused = false;
     timer.lastTimestamp = performance.now();
     this.tick(player);
   }
