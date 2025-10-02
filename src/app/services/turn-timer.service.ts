@@ -193,11 +193,6 @@ isPaused(player: 1 | 2): boolean {
   return this.timers[player].paused === true;
 }
 
-unpauseAll(): void {
-  this.timers[1].paused = false;
-  this.timers[2].paused = false;
-}
-
   private updateSignal(player: 1 | 2, value: number) {
     if (player === 1) {
       this._timeLeft1.set(value);

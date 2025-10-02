@@ -5,17 +5,13 @@ android {
   compileSdk rootProject.ext.compileSdkVersion
 
   defaultConfig {
-    applicationId "com.shoG.contador.debug"
+    applicationId "com.shoG.contador.debug" // o cualquier otro ID único
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 2
-    versionName "1.0.1"
-    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    aaptOptions {
-      // Archivos y carpetas a ignorar en assets
-      ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
-    }
+    versionCode 1
+    versionName "1.0.0"
   }
+
 
   signingConfigs {
     release {

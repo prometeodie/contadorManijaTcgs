@@ -114,7 +114,7 @@ export class TurnTimerComponent implements OnInit {
 
     if (current === this.playerNumber && this.timerService.isPaused(this.playerNumber)) {
       this.timerService.resumeTurnTimer(this.playerNumber);
-      this.isPaused = this.timerService.isPaused(this.playerNumber);
+      this.isPaused = false;
       return;
     }
 
@@ -131,7 +131,6 @@ export class TurnTimerComponent implements OnInit {
     if (current !== null && !this.isActive()) return;
 
     if(this.activePlayer === null){
-      this.isPaused = false;
       this.timerService.setShowPopUp(true);
       setTimeout(() => {
         this.timerService.setShowPopUp(false);
@@ -196,7 +195,7 @@ export class TurnTimerComponent implements OnInit {
     if (!this.isActive()) return;
 
     this.timerService.pauseTurnTimer(this.playerNumber);
-    this.isPaused = this.timerService.isPaused(this.playerNumber);
+    this.isPaused = true;
   }
 
   private pad(n: number): string {
