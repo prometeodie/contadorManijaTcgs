@@ -3,12 +3,14 @@
       (touchend)="endPress()">
 
 
-<div class="popup-container" *ngIf="activePlayer === null || isPaused">
+<div class="popup-container" *ngIf="activePlayer === null || (activePlayer === playerNumber && isPaused(activePlayer))">
   <div class="popup-bubble">
     {{"TAP_TO_START" | translate}}
     <div class="popup-arrow"></div>
   </div>
 </div>
+
+
 
 <div class="popup-container" *ngIf="showPopUp()">
   <div class="popup-bubble">

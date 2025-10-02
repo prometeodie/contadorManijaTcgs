@@ -38,7 +38,6 @@ export class TurnTimerComponent implements OnInit {
   private holdStartTime = 0;
   private holdTimer: any;
 
-  public isPaused: boolean = false;
   public isPressing = false;
   public progress = 0;
   public progressInterval: any;
@@ -112,9 +111,8 @@ export class TurnTimerComponent implements OnInit {
       this.timerServicesService.startCountdown();
     }
 
-    if (current === this.playerNumber && this.timerService.isPaused(this.playerNumber)) {
+    if (current === this.playerNumber && this.timerService.isPaused(current)) {
       this.timerService.resumeTurnTimer(this.playerNumber);
-      this.isPaused = false;
       return;
     }
 
@@ -125,6 +123,8 @@ export class TurnTimerComponent implements OnInit {
       this.timerService.switchTurn(this.playerNumber);
     }
   }
+
+
 
   startPress() {
     const current = this.timerService.activePlayer();
@@ -169,7 +169,6 @@ export class TurnTimerComponent implements OnInit {
         this.pauseTimer();
       }
       this.timerService.setShowPopUp(false);
-      // ⚡ No llamamos endPress(false) acá, solo marcamos que ya fue hold
       this.isHolding = false;
     }, totalHold);
   }
@@ -187,22 +186,25 @@ export class TurnTimerComponent implements OnInit {
     if (elapsed < this.holdThreshold) {
       this.onClick();   // click normal
     }
-    // ⚡ si fue >= holdThreshold ya pausó en startPress, no hace falta llamar click
   }
 }
+
+ get activePlayer() {
+    return this.timerService.activePlayer();
+  }
+
+  isPaused(player: 1 | 2) {
+    return this.timerService.isPaused(player);
+  }
 
   pauseTimer() {
     if (!this.isActive()) return;
 
     this.timerService.pauseTurnTimer(this.playerNumber);
-    this.isPaused = true;
   }
 
   private pad(n: number): string {
     return n.toString().padStart(2, '0');
   }
 
-  get activePlayer() {
-    return this.timerService.activePlayer();
-  }
 }

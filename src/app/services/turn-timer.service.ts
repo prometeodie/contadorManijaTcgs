@@ -1,4 +1,4 @@
-import { Injectable, signal, computed} from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 import { ConfigurationData } from '../interfaces/configuration-data.interface';
 
@@ -7,52 +7,42 @@ interface TurnTimerState {
   running: boolean;
   rafId: number;
   lastTimestamp: number;
-  paused:boolean;
 }
 
 @Injectable({ providedIn: 'root' })
 export class TurnTimerService {
 
-
   constructor() {
     this.clickSound.load();
   }
 
- private timers: Record<1 | 2, TurnTimerState> = {
-  1: {
-    timeLeft: 0,
-    running: false,
-    rafId: 0,
-    lastTimestamp: 0,
-    paused: false
-  },
-  2: {
-    timeLeft: 0,
-    running: false,
-    rafId: 0,
-    lastTimestamp: 0,
-    paused: false
-  }
-};
+  private timers: Record<1 | 2, TurnTimerState> = {
+    1: { timeLeft: 0, running: false, rafId: 0, lastTimestamp: 0 },
+    2: { timeLeft: 0, running: false, rafId: 0, lastTimestamp: 0 },
+  };
 
   private clickSound = new Audio('assets/sounds/next.ogg');
-
   private originalDurationMs = 0;
 
   private _timeLeft1 = signal(0);
   private _timeLeft2 = signal(0);
   private _activePlayer = signal<1 | 2 | null>(null);
   private _turnTimerWasModified = signal<boolean>(false);
-
-  private onAutoSwitchCallback?: () => void;
-
   private _showPopUp = signal(false);
 
+  // Signals de pausa por jugador
+  private _paused1 = signal(false);
+  private _paused2 = signal(false);
+
+  // Computeds públicos
+  public paused1 = computed(() => this._paused1());
+  public paused2 = computed(() => this._paused2());
   public showPopUp = computed(() => this._showPopUp());
   public activePlayer = computed(() => this._activePlayer());
   public turnTimerWasModified = computed(() => this._turnTimerWasModified());
 
   private autoSwitchedTurn = signal(false);
+  private onAutoSwitchCallback?: () => void;
 
   public setAutoSwitchedTurn(value: boolean) {
     this.autoSwitchedTurn.set(value);
@@ -76,7 +66,7 @@ export class TurnTimerService {
   }
 
   setShowPopUp(value: boolean) {
-  this._showPopUp.set(value);
+    this._showPopUp.set(value);
   }
 
   parseDurationToMs(duration: string): number {
@@ -97,6 +87,8 @@ export class TurnTimerService {
     this._timeLeft1.set(ms);
     this._timeLeft2.set(ms);
 
+    this._paused1.set(false);
+    this._paused2.set(false);
     this._activePlayer.set(null);
 
     this.stopAll();
@@ -129,35 +121,33 @@ export class TurnTimerService {
     if (this.onAutoSwitchCallback) {
       this.onAutoSwitchCallback();
     }
-    if(config?.soundEnabled){
+    if (config?.soundEnabled) {
       this.clickSound.play();
     }
   }
 
   private tick(player: 1 | 2) {
-  const timer = this.timers[player];
-  if (!timer.running) return;
+    const timer = this.timers[player];
+    if (!timer.running) return;
 
-  const now = performance.now();
-  const elapsed = now - timer.lastTimestamp;
-  timer.lastTimestamp = now;
+    const now = performance.now();
+    const elapsed = now - timer.lastTimestamp;
+    timer.lastTimestamp = now;
 
-  timer.timeLeft -= elapsed;
+    timer.timeLeft -= elapsed;
 
-  if (timer.timeLeft <= 0) {
-    timer.timeLeft = 0;
-    timer.running = false;
-    this.updateSignal(player, 0);
+    if (timer.timeLeft <= 0) {
+      timer.timeLeft = 0;
+      timer.running = false;
+      this.updateSignal(player, 0);
 
-    this.switchTurn(player);
+      this.switchTurn(player);
+      return;
+    }
 
-    return;
+    this.updateSignal(player, timer.timeLeft);
+    timer.rafId = requestAnimationFrame(() => this.tick(player));
   }
-
-
-  this.updateSignal(player, timer.timeLeft);
-  timer.rafId = requestAnimationFrame(() => this.tick(player));
-}
 
   public isRunning(player: 1 | 2): boolean {
     return this.timers[player]?.running ?? false;
@@ -171,27 +161,43 @@ export class TurnTimerService {
     });
   }
 
- pauseTurnTimer(player: 1 | 2) {
-  const timer = this.timers[player];
-  if (timer.running) {
-    cancelAnimationFrame(timer.rafId);
-    timer.running = false;
-    this.timers[player].paused = true;
-  }
-}
+  // -------------------
+  // Métodos de pausa
+  // -------------------
 
-resumeTurnTimer(player: 1 | 2) {
-  const timer = this.timers[player];1
-  if (!timer.running && timer.timeLeft > 0 && timer.paused) {
-    timer.running = true;
-    timer.lastTimestamp = performance.now();
-    this.tick(player);
+  pauseTurnTimer(player: 1 | 2) {
+    this.pause(player);
   }
-}
 
-isPaused(player: 1 | 2): boolean {
-  return this.timers[player].paused === true;
-}
+  resumeTurnTimer(player: 1 | 2) {
+    this.resume(player);
+  }
+
+  private pause(player: 1 | 2) {
+    const timer = this.timers[player];
+    if (timer.running) {
+      cancelAnimationFrame(timer.rafId);
+      timer.running = false;
+      if (player === 1) this._paused1.set(true);
+      else this._paused2.set(true);
+    }
+  }
+
+  private resume(player: 1 | 2) {
+    const timer = this.timers[player];
+    const pausedSignal = player === 1 ? this._paused1 : this._paused2;
+
+    if (!timer.running && timer.timeLeft > 0 && pausedSignal()) {
+      timer.running = true;
+      pausedSignal.set(false);
+      timer.lastTimestamp = performance.now();
+      this.tick(player);
+    }
+  }
+
+  isPaused(player: 1 | 2): boolean {
+    return player === 1 ? this._paused1() : this._paused2();
+  }
 
   private updateSignal(player: 1 | 2, value: number) {
     if (player === 1) {
@@ -200,7 +206,6 @@ isPaused(player: 1 | 2): boolean {
       this._timeLeft2.set(value);
     }
   }
-
 
   setAutoSwitchCallback(callback: () => void) {
     this.onAutoSwitchCallback = callback;
