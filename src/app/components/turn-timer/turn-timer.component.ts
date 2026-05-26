@@ -43,7 +43,7 @@ export class TurnTimerComponent implements OnInit {
   public progressInterval: any;
   public isHolding: boolean = false;
   public progressDelayTimer: any;
-  public showPopUp!: Signal<boolean>;
+  public showPopUp = this.timerService.showPopUp;
   readonly circumference = 2 * Math.PI * 16;
 
   get progressOffset() {

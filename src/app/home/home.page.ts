@@ -25,6 +25,9 @@ import { TurnTimerService } from '../services/turn-timer.service';
 import { BackgroundImagesService } from '../services/background-images.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ConfirmDialogComponent } from '../components/confirm-dialog/confirm-dialog.component';
+import { TcgIconsSelectorComponent } from '../components/tcg-icons-selector/tcg-icons-selector.component';
+import { TokenIconsDisplayComponent } from '../components/token-icons-display/token-icons-display.component';
+import { TokenIconsService } from '../services/token-icons-service.service';
 
 @Component({
   selector: 'app-home',
@@ -33,7 +36,8 @@ import { ConfirmDialogComponent } from '../components/confirm-dialog/confirm-dia
   standalone: true,
   imports: [IonicModule, CounterComponent, RoundTimerComponent, TurnTimerComponent, TimeoutComponent, MenuComponent, CommonModule,
     MatchCounterComponent, NextMatchComponent,TimersConfigurationComponent, LifeConfigurationComponent, GameModesComponent,
-    ChessTimerModeComponent, ChessTimerComponent, StartBtnComponent, PlayerColorChangerComponent, TranslateModule, ConfirmDialogComponent ],
+    ChessTimerModeComponent, ChessTimerComponent, StartBtnComponent, PlayerColorChangerComponent, TranslateModule, ConfirmDialogComponent,
+     TcgIconsSelectorComponent, TokenIconsDisplayComponent],
 })
 export class HomePage implements OnInit, OnDestroy {
 
@@ -52,6 +56,8 @@ export class HomePage implements OnInit, OnDestroy {
   private turnTimerService = inject(TurnTimerService);
   private backgroundImagesService = inject(BackgroundImagesService);
   private translateService = inject(TranslateService);
+  private tokenIconService = inject(TokenIconsService);
+
 
   private subscriptions: Subscription[] = [];
 
@@ -75,20 +81,40 @@ export class HomePage implements OnInit, OnDestroy {
   public isConfirmDialogMessage: string = '';
   public isPopupFlipped: boolean = false;
   public isReset:boolean = false;
+  public showPlayer1Selector = false;
+  public showPlayer2Selector = false;
+  public player1Icons: string[] = [];
+  public player2Icons: string[] = [];
 
   activeTimer: 1 | 2 | null = null;
 
- ngOnInit() {
-  this.loadConfiguration();
+async ngOnInit() {
 
-  this.soundService.soundEnabled$.subscribe(enabled => {
-    this.isSoundEnable = enabled;
-    this.cd.detectChanges();
-  });
+  try {
 
-  this.turnTimerService.setAutoSwitchCallback(() => {
-    this.turnsCount();
-  });
+    await this.loadConfiguration();
+
+    this.player1Icons =
+      await this.tokenIconService.getPlayerIcons(1);
+
+    this.player2Icons =
+      await this.tokenIconService.getPlayerIcons(2);
+
+    this.soundService.soundEnabled$.subscribe(enabled => {
+      this.isSoundEnable = enabled;
+      this.cd.detectChanges();
+    });
+
+    this.turnTimerService.setAutoSwitchCallback(() => {
+      this.turnsCount();
+    });
+
+  } catch(error) {
+
+    console.error('ERROR EN NGONINIT', error);
+
+  }
+
 }
 
   ngOnDestroy(): void {
@@ -289,6 +315,17 @@ confirmDialog(event:boolean){
     this.openCloseGameModeConfig = false;
     this.cd.detectChanges();
   }
+
+  closeSelector(player: 1 | 2): void {
+
+  if(player === 1) {
+    this.showPlayer1Selector = false;
+    return;
+  }
+
+  this.showPlayer2Selector = false;
+
+}
 
   async resetLoadConfiguration() {
   const newConfig = await this.dataServicesService.get<ConfigurationData>('configuration');

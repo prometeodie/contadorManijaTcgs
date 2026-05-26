@@ -1,0 +1,29 @@
+.token-icons{
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 0.5rem;
+
+  flex-wrap: wrap;
+}
+
+.token-icons__item{
+
+  width: 2rem;
+  height: 2rem;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 0.6rem;
+
+  background-color: rgba(0,0,0,0.35);
+
+  color: white;
+
+  font-size: 1rem;
+}

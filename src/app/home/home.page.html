@@ -8,6 +8,9 @@
         <match-counter class="match-counter" [matchesCount]="matchesCoutn" [BgImg]="bgImgP1" ></match-counter>
         <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="matchesCountIncrement(true)" [BgImg]="bgImgP1" class="next-match"></next-match>
       </div>
+      <token-icons-display
+  [icons]="player1Icons"
+/>
     </section>
     <round-timer #round1 class="player-1__round-timer round-timer-right"  [BgImg]="bgImgP1"
     [ngClass]="{'round-timer-left': configuration.positionRight, 'round-timer-right': !configuration.positionRight}" *ngIf="configuration?.roundTimerEnabled"
@@ -39,8 +42,28 @@
     <player-color-changer   [playerNumber]="1"  [BgImg]="bgImgP1" player="imgplayer1" [position]="!configuration.positionRight"
     (colorChanged)="changePlayerColor($event)" (imgChanged)="imgPlayerChange($event)" class="color-changer"
      [ngClass]="{'color-changer-right': !configuration.positionRight, 'color-changer-left': configuration.positionRight}"/>
+     <button
+       type="button"
+       class="token-selector-btn"
+       [ngClass]="{
+         'token-selector-btn-changer-right': !configuration.positionRight,
+         'token-selector-btn-changer-left': configuration.positionRight
+       }"
+       (click)="showPlayer1Selector = !showPlayer1Selector"
+     >
+       <i class="fa-solid fa-coins"></i>
+     </button>
   </div>
-<!-- END PLAYER 1 -->
+ @if(showPlayer1Selector) {
+  <icons-selector
+    class="player-1-selector"
+    [player]="1"
+    (closeSelector)="closeSelector($event)"
+  />
+}
+
+
+  <!-- END PLAYER 1 -->
 
   <menu class="menu" (resetTimers)="resetGame()"
   (openTimersWindow)="openCloseTimersWindow()"
@@ -98,7 +121,27 @@
     (colorChanged)="changePlayerColor($event)" (imgChanged)="imgPlayerChange($event)"
     class="color-changer"
     [ngClass]="{'color-changer-right': configuration.positionRight, 'color-changer-left': !configuration.positionRight}"/>
+
+   <button
+  type="button"
+  class="token-selector-btn"
+  [ngClass]="{
+    'token-selector-btn-changer-right': configuration.positionRight,
+    'token-selector-btn-changer-left': !configuration.positionRight
+  }"
+  (click)="showPlayer2Selector = !showPlayer2Selector"
+>
+  <i class="fa-solid fa-coins"></i>
+</button>
+
   </div>
+@if(showPlayer2Selector) {
+  <icons-selector
+    class="player-2-selector"
+    [player]="2"
+    (closeSelector)="closeSelector($event)"
+  />
+}
 <!-- END PLAYER 2 -->
 
   <timers-configuration
@@ -117,4 +160,7 @@
 
    <confirm-dialog *ngIf="isConfirmDialog" [message]="isConfirmDialogMessage" [isPopupFlipped]="isPopupFlipped" (confirmed)="confirmDialog($event)" class="confirm-dialog" />
 </ion-app>
+
 </ion-content>
+
+

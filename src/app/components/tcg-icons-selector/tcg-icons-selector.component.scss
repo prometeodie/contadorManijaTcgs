@@ -1,0 +1,159 @@
+:host{
+  position: fixed;
+
+  left: 0;
+
+  width: 100%;
+  height: 50vh;
+
+  z-index: 999999;
+
+  display: block;
+}
+
+/* PLAYER 1 */
+
+:host(.player-1-selector){
+  top: 0;
+
+  transform: rotate(180deg);
+}
+
+/* PLAYER 2 */
+
+:host(.player-2-selector){
+  bottom: 0;
+}
+
+.icons-selector{
+
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(0,0,0,0.92);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  padding: 0.5rem;
+
+  min-height: 0;
+}
+
+/* HEADER */
+
+.icons-selector__header{
+
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color: white;
+
+  height: 2rem;
+}
+
+/* SELECTED ICONS */
+
+.icons-selector__selected{
+
+  flex: 0 0 3.2rem;
+
+  display: flex;
+  align-items: center;
+
+  gap: 0.5rem;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  white-space: nowrap;
+
+  min-width: 0;
+
+  padding-bottom: 0.3rem;
+}
+
+.icons-selector__selected button{
+
+  flex: 0 0 auto;
+
+  width: 2.5rem;
+  height: 2.5rem;
+
+  border: none;
+  border-radius: 0.7rem;
+
+  background-color: #3b3b3b;
+
+  color: white;
+
+  font-size: 1.2rem;
+}
+
+/* DIVIDER */
+
+.icons-selector__divider{
+
+  flex: 0 0 auto;
+
+  height: 1px;
+
+  background-color: rgba(255,255,255,0.15);
+
+  margin-bottom: 0.5rem;
+}
+
+/* GRID */
+
+.icons-selector__grid{
+
+  flex: 1 1 auto;
+
+  min-height: 0;
+
+  overflow-y: auto;
+
+  display: grid;
+
+  grid-template-columns: repeat(5, 1fr);
+
+  gap: 0.5rem;
+
+  align-content: start;
+
+  padding-bottom: 1rem;
+}
+
+/* ICONS */
+
+.icon-btn{
+
+  aspect-ratio: 1;
+
+  border: none;
+  border-radius: 0.8rem;
+
+  background-color: #2d2d2d;
+
+  color: white;
+
+  font-size: 1.5rem;
+
+}
+
+.icon-btn.selected{
+
+  background-color: #4d6bff;
+}
+
+.close-mark{
+  background-color: #000000d1;
+  font-size: larger;
+}

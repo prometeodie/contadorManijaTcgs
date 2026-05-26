@@ -24,7 +24,7 @@ export class AdsService {
   // -------------------
   public async initializeAdmob() {
     await AdMob.initialize({
-      initializeForTesting: true, // ⚠️ Cambiar a false en producción
+      initializeForTesting: false, // ⚠️ Cambiar a false en producción
     });
     console.log('✅ AdMob inicializado');
   }
@@ -64,7 +64,7 @@ export class AdsService {
     await AdMob.showInterstitial();
     console.log('🎬 Interstitial mostrado');
   }
-  
+
   // -------------------
   // 🚀 Rewarded (Video con recompensa)
   // -------------------

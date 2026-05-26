@@ -202,3 +202,69 @@
 .start-btn-right{
     right: 0.7rem;
 }
+
+
+.icon-selector{
+  position: fixed;
+
+  left: 0;
+
+  width: 100%;
+
+  height: 50vh;
+
+  z-index: 999999;
+}
+
+.icon-selector-player-1{
+  top: 0;
+
+  transform: rotate(180deg);
+}
+
+.icon-selector-player-2{
+  bottom: 0;
+}
+
+.token-selector-btn{
+  position: absolute;
+
+  background: transparent;
+
+  border: none;
+
+  padding: 0.5rem;
+
+  font-size: 2rem;
+
+  color: rgba(255, 255, 255, 0.76);
+
+  border-radius: 50%;
+
+  z-index: 1;
+
+  &:active{
+    transform: scale(0.9);
+  }
+}
+
+.token-selector-btn{
+  bottom: 0.8rem;
+}
+
+.token-selector-btn-changer-right{
+  right: 4rem;
+}
+
+.token-selector-btn-changer-left{
+  left: 4rem;
+}
+
+:host(.player-1-selector){
+  top: 0;
+  transform: rotate(180deg);
+}
+
+:host(.player-2-selector){
+  bottom: 0;
+}
