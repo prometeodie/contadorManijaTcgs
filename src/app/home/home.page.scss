@@ -15,10 +15,12 @@
   padding-top: 1rem;
   z-index: 1;
 }
+
 .player-1__turn-timer,
 .player-2__turn-timer{
   bottom: -12px;
   border-radius: 50%;
+
   &:active{
     background-color: #8c8c8c21;
   }
@@ -101,21 +103,22 @@
 }
 
 .player-1{
-    transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .match-counter{
   top: 1.3rem;
 }
 
-   .matchs {
+.matchs {
   position: absolute;
   margin: 0.6rem;
   width: fit-content;
-  max-width: 100%; // Esto evita que se “escape”
+  max-width: 100%;
 }
+
 .next-match{
-    top: 2.5rem
+  top: 2.5rem
 }
 
 .match-text{
@@ -126,8 +129,9 @@
 }
 
 .shadow{
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8),
-             0 0 8px rgba(0, 0, 0, 0.6);
+  text-shadow:
+    2px 2px 4px rgba(0, 0, 0, 0.8),
+    0 0 8px rgba(0, 0, 0, 0.6);
 }
 
 .windows-configuration{
@@ -187,6 +191,7 @@
 .turn-timer-left{
   left: -15px;
 }
+
 .matchs-left{
   left: 0;
 }
@@ -196,13 +201,12 @@
 }
 
 .start-btn-left{
-    left: 0.7rem;
+  left: 0.7rem;
 }
 
 .start-btn-right{
-    right: 0.7rem;
+  right: 0.7rem;
 }
-
 
 .icon-selector{
   position: fixed;
@@ -218,7 +222,6 @@
 
 .icon-selector-player-1{
   top: 0;
-
   transform: rotate(180deg);
 }
 
@@ -268,3 +271,29 @@
 :host(.player-2-selector){
   bottom: 0;
 }
+
+/* TOKENS */
+
+.player-1__tokens,
+.player-2__tokens{
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  width: 100%;
+
+  padding-inline: 1rem;
+
+  box-sizing: border-box;
+
+  z-index: 20;
+
+  pointer-events: auto;
+}
+
+
+.player-1__tokens,.player-2__tokens{
+  top: 5.5rem;
+}
+

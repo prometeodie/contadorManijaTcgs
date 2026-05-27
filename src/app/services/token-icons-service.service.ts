@@ -1,17 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 
+export type TokenIcon = {
+  id: string;
+  icon: string;
+};
+
 @Injectable({
   providedIn: 'root',
 })
 export class TokenIconsService {
 
   private readonly PLAYER_1_KEY = 'player_1_icons';
+
   private readonly PLAYER_2_KEY = 'player_2_icons';
 
   async savePlayerIcons(
     player: 1 | 2,
-    icons: string[]
+    icons: TokenIcon[]
   ): Promise<void> {
 
     const key =
@@ -23,11 +29,12 @@ export class TokenIconsService {
       key,
       value: JSON.stringify(icons),
     });
+
   }
 
   async getPlayerIcons(
     player: 1 | 2
-  ): Promise<string[]> {
+  ): Promise<TokenIcon[]> {
 
     const key =
       player === 1
@@ -36,11 +43,27 @@ export class TokenIconsService {
 
     const { value } = await Preferences.get({ key });
 
-    if (!value) {
+    if(!value) {
       return [];
     }
 
-    return JSON.parse(value);
+    const parsed = JSON.parse(value);
+
+    // Compatibilidad con datos viejos guardados como string[]
+    if(
+      Array.isArray(parsed) &&
+      typeof parsed[0] === 'string'
+    ) {
+
+      return parsed.map((icon: string) => ({
+        id: crypto.randomUUID(),
+        icon
+      }));
+
+    }
+
+    return parsed;
+
   }
 
 }

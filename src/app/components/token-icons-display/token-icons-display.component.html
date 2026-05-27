@@ -1,16 +1,47 @@
 <div class="token-icons">
 
-  @for(icon of icons; track icon) {
+  <!-- LEFT -->
+  <div class="token-icons__column token-icons__column--left">
 
-    <div class="token-icons__item">
+    @for (icon of leftIcons(); track icon.id; let i = $index) {
 
-      <i
-        class="fa-solid"
-        [ngClass]="icon"
-      ></i>
+      <div
+        class="token-icons__item"
+        [class.token-icons__item--active-left]="isActive(icon)"
+        (click)="toggleIcon(icon)"
+      >
 
-    </div>
+        <i
+          class="fa-solid"
+          [ngClass]="icon.icon"
+        ></i>
 
-  }
+      </div>
+
+    }
+
+  </div>
+
+  <!-- RIGHT -->
+  <div class="token-icons__column token-icons__column--right">
+
+    @for (icon of rightIcons(); track icon.id; let i = $index) {
+
+      <div
+        class="token-icons__item"
+        [class.token-icons__item--active-right]="isActive(icon)"
+        (click)="toggleIcon(icon)"
+      >
+
+        <i
+          class="fa-solid"
+          [ngClass]="icon.icon"
+        ></i>
+
+      </div>
+
+    }
+
+  </div>
 
 </div>

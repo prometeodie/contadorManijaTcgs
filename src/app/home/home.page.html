@@ -8,10 +8,18 @@
         <match-counter class="match-counter" [matchesCount]="matchesCoutn" [BgImg]="bgImgP1" ></match-counter>
         <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="matchesCountIncrement(true)" [BgImg]="bgImgP1" class="next-match"></next-match>
       </div>
-      <token-icons-display
+    </section>
+    <div
+class="player-1__tokens"
+[ngClass]="{
+  'player-1__tokens-right': !configuration.positionRight,
+  'player-1__tokens-left': configuration.positionRight
+}"
+>
+<token-icons-display
   [icons]="player1Icons"
 />
-    </section>
+</div>
     <round-timer #round1 class="player-1__round-timer round-timer-right"  [BgImg]="bgImgP1"
     [ngClass]="{'round-timer-left': configuration.positionRight, 'round-timer-right': !configuration.positionRight}" *ngIf="configuration?.roundTimerEnabled"
     [time]="configuration.roundTimerDuration" />
@@ -56,12 +64,12 @@
   </div>
  @if(showPlayer1Selector) {
   <icons-selector
-    class="player-1-selector"
-    [player]="1"
-    (closeSelector)="closeSelector($event)"
-  />
+  class="player-1-selector"
+  [player]="1"
+  (closeSelector)="closeSelector($event)"
+  (iconsChanged)="reloadPlayerIcons()"
+/>
 }
-
 
   <!-- END PLAYER 1 -->
 
@@ -91,6 +99,17 @@
         <next-match *ngIf="configuration.threeMatches" (nextMatchEvent)="matchesCountIncrement(false)" [BgImg]="bgImgP2" class="next-match" />
       </div>
     </section>
+    <div
+    class="player-2__tokens"
+    [ngClass]="{
+      'player-2__tokens-right': configuration.positionRight,
+      'player-2__tokens-left': !configuration.positionRight
+    }"
+  >
+  <token-icons-display
+  [icons]="player2Icons"
+  />
+</div>
     <round-timer #round2 class="player-2__round-timer round-timer-left"
     [BgImg]="bgImgP2"
     [ngClass]="{'round-timer-left': !configuration.positionRight, 'round-timer-right': configuration.positionRight}"
@@ -137,10 +156,11 @@
   </div>
 @if(showPlayer2Selector) {
   <icons-selector
-    class="player-2-selector"
-    [player]="2"
-    (closeSelector)="closeSelector($event)"
-  />
+  class="player-2-selector"
+  [player]="2"
+  (closeSelector)="closeSelector($event)"
+  (iconsChanged)="reloadPlayerIcons()"
+/>
 }
 <!-- END PLAYER 2 -->
 

@@ -1,29 +1,93 @@
 .token-icons{
 
+  width: 100%;
+
   display: flex;
 
   align-items: center;
 
-  gap: 0.5rem;
+  justify-content: space-between;
 
-  flex-wrap: wrap;
+  gap: 2.5rem;
+
+  overflow: hidden;
 }
+
+.token-icons__column{
+
+  flex: 1;
+
+  min-width: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: clamp(0.25rem, 1vw, 0.8rem);
+}
+
+/* izquierda */
+
+.token-icons__column--left{
+  justify-content: flex-start;
+}
+
+/* derecha */
+
+.token-icons__column--right{
+  justify-content: flex-end;
+}
+
+/* ITEMS */
 
 .token-icons__item{
 
-  width: 2rem;
-  height: 2rem;
+  width: clamp(3rem, 10vw, 4.2rem);
+  height: clamp(3rem, 10vw, 4.2rem);
+
+  min-width: 0;
 
   display: flex;
 
   align-items: center;
   justify-content: center;
 
-  border-radius: 0.6rem;
+  border-radius: 1rem;
 
   background-color: rgba(0,0,0,0.35);
 
   color: white;
 
-  font-size: 1rem;
+  font-size: clamp(1.2rem, 4.5vw, 2rem);
+
+  backdrop-filter: blur(3px);
+
+  flex-shrink: 1;
+
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    transform 0.15s;
+
+  &:active{
+    transform: scale(0.92);
+  }
+}
+
+/* ACTIVE COLORS */
+
+.token-icons__item--active-left{
+  color: #00E5FF;
+
+  text-shadow:
+    0 0 6px rgba(0,0,0,0.9),
+    0 0 10px rgba(0,0,0,0.7);
+}
+
+.token-icons__item--active-right{
+  color: #FFD600;
+
+  text-shadow:
+    0 0 6px rgba(0,0,0,0.9),
+    0 0 10px rgba(0,0,0,0.7);
 }

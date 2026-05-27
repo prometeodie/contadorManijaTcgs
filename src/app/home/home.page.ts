@@ -27,7 +27,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ConfirmDialogComponent } from '../components/confirm-dialog/confirm-dialog.component';
 import { TcgIconsSelectorComponent } from '../components/tcg-icons-selector/tcg-icons-selector.component';
 import { TokenIconsDisplayComponent } from '../components/token-icons-display/token-icons-display.component';
-import { TokenIconsService } from '../services/token-icons-service.service';
+import { TokenIcon, TokenIconsService } from '../services/token-icons-service.service';
 
 @Component({
   selector: 'app-home',
@@ -83,8 +83,8 @@ export class HomePage implements OnInit, OnDestroy {
   public isReset:boolean = false;
   public showPlayer1Selector = false;
   public showPlayer2Selector = false;
-  public player1Icons: string[] = [];
-  public player2Icons: string[] = [];
+ public player1Icons: TokenIcon[] = [];
+  public player2Icons: TokenIcon[] = [];
 
   activeTimer: 1 | 2 | null = null;
 
@@ -365,4 +365,16 @@ confirmDialog(event:boolean){
   get timer2(): TurnTimerComponent | undefined {
     return this.turnTimersList?.get(1);
   }
+
+  async reloadPlayerIcons(): Promise<void> {
+
+  this.player1Icons =
+    await this.tokenIconService.getPlayerIcons(1);
+
+  this.player2Icons =
+    await this.tokenIconService.getPlayerIcons(2);
+
+  this.cd.detectChanges();
+
+}
 }

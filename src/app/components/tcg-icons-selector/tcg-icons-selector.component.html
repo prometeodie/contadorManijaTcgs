@@ -3,27 +3,21 @@
   <div class="icons-selector__header">
 
     <div class="icons-selector__close">
-
-  <button
-    type="button"
-    (click)="close()"
-  >
-    <i class="fa-solid fa-xmark close-mark"></i>
-  </button>
-
-</div>
-
+      <button type="button" (click)="close()">
+        <i class="fa-solid fa-xmark close-mark"></i>
+      </button>
+    </div>
 
     <span>
-     Tokens Seleccionados {{ selectedIcons.length }}/{{ maxIcons }}
+      Tokens Seleccionados {{ selectedIcons.length }}/{{ maxIcons }}
     </span>
 
   </div>
 
-
+  <!-- SELECTED -->
   <div class="icons-selector__selected">
 
-    @for(icon of selectedIcons; track $index; let i = $index) {
+    @for (icon of selectedIcons; track icon.id; let i = $index) {
 
       <button
         type="button"
@@ -31,7 +25,7 @@
       >
         <i
           class="fa-solid"
-          [ngClass]="icon"
+          [ngClass]="icon.icon"
         ></i>
       </button>
 
@@ -41,9 +35,10 @@
 
   <div class="icons-selector__divider"></div>
 
+  <!-- GRID -->
   <div class="icons-selector__grid">
 
-    @for(icon of allIcons; track icon) {
+    @for (icon of allIcons; track icon) {
 
       <button
         type="button"
