@@ -18,6 +18,7 @@ class="player-1__tokens"
 >
 <token-icons-display
   [icons]="player1Icons"
+  [resetTrigger]="tokenResetTrigger"
 />
 </div>
     <round-timer #round1 class="player-1__round-timer round-timer-right"  [BgImg]="bgImgP1"
@@ -108,6 +109,7 @@ class="player-1__tokens"
   >
   <token-icons-display
   [icons]="player2Icons"
+  [resetTrigger]="tokenResetTrigger"
   />
 </div>
     <round-timer #round2 class="player-2__round-timer round-timer-left"

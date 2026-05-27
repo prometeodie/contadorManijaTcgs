@@ -38,3 +38,11 @@
   --ion-background-color: #ffffff;
   --ion-text-color: #ffffff;
 }
+
+
+html,
+body,
+ion-app,
+ion-content {
+  --padding-top: 0px;
+}

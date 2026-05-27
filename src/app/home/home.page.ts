@@ -83,9 +83,9 @@ export class HomePage implements OnInit, OnDestroy {
   public isReset:boolean = false;
   public showPlayer1Selector = false;
   public showPlayer2Selector = false;
- public player1Icons: TokenIcon[] = [];
+  public player1Icons: TokenIcon[] = [];
   public player2Icons: TokenIcon[] = [];
-
+  public tokenResetTrigger: number = 0;
   activeTimer: 1 | 2 | null = null;
 
 async ngOnInit() {
@@ -193,22 +193,42 @@ async loadConfiguration(): Promise<void> {
 
 
 
-  async resetGame() {
-    this.prepareNextMatch();
+async resetGame() {
 
-    this.resetTimers();
-    this.turnTimerService.markTurnTimerAsModified(true);
-    this.timerService.setInitialTime(this.timerService.totalSeconds());
-    this.timerService.setIsRunningFalse();
-    this.roundTimerIsRunning = this.timerService.isRunning();
-    this.isTurnTimerEnable = this.configuration.turnTimerEnabled;
-    this.matchesCoutn = 1;
-    this.activeTimer = null;
-    this.timerService.showBubblePopUp(true);
-    this.turnTimerService.setShowPopUp(false);
-    await this.chessTimerService.resetAllTimersFromStorage();
-    this.dataServicesService.setConfiglifeAnimation(true);
-  }
+  this.prepareNextMatch();
+
+  this.resetTimers();
+
+  this.turnTimerService.markTurnTimerAsModified(true);
+
+  this.timerService.setInitialTime(
+    this.timerService.totalSeconds()
+  );
+
+  this.timerService.setIsRunningFalse();
+
+  this.roundTimerIsRunning =
+    this.timerService.isRunning();
+
+  this.isTurnTimerEnable =
+    this.configuration.turnTimerEnabled;
+
+  this.matchesCoutn = 1;
+
+  this.activeTimer = null;
+
+  this.timerService.showBubblePopUp(true);
+
+  this.turnTimerService.setShowPopUp(false);
+
+  await this.chessTimerService.resetAllTimersFromStorage();
+
+  this.dataServicesService.setConfiglifeAnimation(true);
+
+  // ✅ RESET ICONOS
+  this.tokenResetTrigger++;
+
+}
 
   resetTimers() {
     if(this.round1?.resetTimer) {
@@ -241,6 +261,7 @@ async loadConfiguration(): Promise<void> {
     this.turnsCounter = 1;
     this.fullTurnsCounter = 1;
     this.activeTimer = null;
+    this.tokenResetTrigger++;
   }
 
   async changePlayerColor(event: { player: 1 | 2; color: string }) {

@@ -1,5 +1,14 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {
+  CommonModule
+} from '@angular/common';
+
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
+
 import { TokenIcon } from '../tcg-icons-selector/tcg-icons-selector.component';
 
 @Component({
@@ -9,12 +18,23 @@ import { TokenIcon } from '../tcg-icons-selector/tcg-icons-selector.component';
   templateUrl: './token-icons-display.component.html',
   styleUrls: ['./token-icons-display.component.scss']
 })
-export class TokenIconsDisplayComponent {
+export class TokenIconsDisplayComponent implements OnChanges {
 
   @Input() icons: TokenIcon[] = [];
 
-  // ✅ UN SOLO ESTADO GLOBAL (clave del fix)
+  // 👇 trigger externo
+  @Input() resetTrigger = 0;
+
   activeIcons = new Set<string>();
+
+  ngOnChanges(changes: SimpleChanges): void {
+
+    // 👇 cuando cambia el trigger → reset
+    if (changes['resetTrigger'] && !changes['resetTrigger'].firstChange) {
+      this.resetIcons();
+    }
+
+  }
 
   leftIcons(): TokenIcon[] {
     const middle = Math.ceil(this.icons.length / 2);
@@ -26,10 +46,8 @@ export class TokenIconsDisplayComponent {
     return this.icons.slice(middle);
   }
 
-  // -------------------------
-  // TOGGLE UNIFICADO
-  // -------------------------
   toggleIcon(icon: TokenIcon): void {
+
     const key = icon.id;
 
     if (this.activeIcons.has(key)) {
@@ -38,12 +56,15 @@ export class TokenIconsDisplayComponent {
     }
 
     this.activeIcons.add(key);
+
   }
 
-  // -------------------------
-  // ACTIVE CHECK UNIFICADO
-  // -------------------------
   isActive(icon: TokenIcon): boolean {
     return this.activeIcons.has(icon.id);
   }
+
+  resetIcons(): void {
+    this.activeIcons.clear();
+  }
+
 }
