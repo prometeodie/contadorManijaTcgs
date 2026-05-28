@@ -35,5 +35,7 @@
 
   "IMAGE_SAVED_PROMPT": "Tienes una imagen guardada ¿Qué deseás hacer?",
   "USE_SAVED_IMAGE": "Usar imagen guardada",
-  "SELECT_NEW_IMAGE": "Seleccionar nueva"
+  "SELECT_NEW_IMAGE": "Seleccionar nueva",
+  "SELECTED_TOKENS": "Tokens Sleccionados"
+
 }

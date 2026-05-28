@@ -34,5 +34,6 @@
 
   "IMAGE_SAVED_PROMPT": "You have a saved image. What would you like to do?",
   "USE_SAVED_IMAGE": "Use saved image",
-  "SELECT_NEW_IMAGE": "Select new image"
+  "SELECT_NEW_IMAGE": "Select new image",
+  "SELECTED_TOKENS": "Selected Tokens"
 }

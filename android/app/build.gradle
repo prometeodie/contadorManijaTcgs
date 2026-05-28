@@ -5,20 +5,27 @@ android {
   compileSdk rootProject.ext.compileSdkVersion
 
   defaultConfig {
-    applicationId "com.shoG.contador.debug" // o cualquier otro ID único
+    // IMPORTANTE: debe coincidir con Google Play
+    applicationId "com.shoG.contador"
+
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 1
-    versionName "1.0.0"
-  }
 
+    // IMPORTANTE: subir versión siempre
+    versionCode 5
+    versionName "1.0.3"
+  }
 
   signingConfigs {
     release {
       storeFile file("C:/Users/Franco/Documents/my-release-key.jks")
+
+      // Password correcta (la que ya validaste con keytool)
       storePassword "Wishmaster7"
-      keyAlias "ShoG"
-      keyPassword "Wishmaster666"
+      keyAlias "shog"
+
+      // normalmente es la misma que storePassword
+      keyPassword "Wishmaster7"
     }
   }
 
@@ -26,13 +33,15 @@ android {
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+      // CLAVE: asegurar firma release real
       signingConfig signingConfigs.release
     }
   }
 }
 
 repositories {
-  flatDir{
+  flatDir {
     dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
   }
 }
@@ -43,12 +52,14 @@ dependencies {
   implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
   implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
   implementation project(':capacitor-android')
+
   testImplementation "junit:junit:$junitVersion"
   androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
   androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+
   implementation project(':capacitor-cordova-android-plugins')
 
-  // Agregados
+  // Play App Update
   implementation 'com.google.android.play:app-update:2.1.0'
   implementation 'com.google.android.play:app-update-ktx:2.1.0'
 }

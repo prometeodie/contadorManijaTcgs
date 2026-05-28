@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import {
   Component,
   EventEmitter,
   Input,
   OnInit,
   Output,
-  inject
+  inject,
+
 } from '@angular/core';
 
 import { TokenIconsService } from 'src/app/services/token-icons-service.service';
@@ -20,7 +22,7 @@ export type TokenIcon = {
   templateUrl: './tcg-icons-selector.component.html',
   styleUrls: ['./tcg-icons-selector.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, TranslateModule]
 })
 export class TcgIconsSelectorComponent implements OnInit {
 
