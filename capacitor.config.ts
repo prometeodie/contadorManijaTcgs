@@ -12,16 +12,21 @@ const config: CapacitorConfig = {
       androidScaleType: "CENTER_CROP",
       showSpinner: false
     },
+    StatusBar: {
+      overlaysWebView: false,
+      style: 'DEFAULT',
+      backgroundColor: '#000000', // ← que matchee con tu app
+    },
     Camera: {
       photoAlbumPermission: 'Necesitamos acceso a tus fotos para que puedas seleccionar imágenes de fondo',
       cameraPermission: 'Necesitamos acceso a tu cámara para tomar fotos',
-      promptToSelectPhotos: true,  // Android 13+ permite seleccionar fotos específicas
+      promptToSelectPhotos: true,
     },
     Permissions: {
       photos: {
         name: 'photos',
         include: ['read', 'write'],
-        maxAge: 30  // Días antes de volver a pedir permiso si fue denegado
+        maxAge: 30
       },
       camera: {
         name: 'camera',
@@ -32,11 +37,8 @@ const config: CapacitorConfig = {
   },
   android: {
     allowMixedContent: true,
-    buildOptions: {
-      keystorePath: 'path/to/your/keystore.jks',
-      keystoreAlias: 'your-alias',
-    }
-  }
+    adjustMarginsForEdgeToEdge: 'auto',
+} as any,
 };
 
 export default config;

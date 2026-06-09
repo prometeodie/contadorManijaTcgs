@@ -6,6 +6,7 @@ import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { LanguagesService } from './services/lenguages.service';
 import { AppUpdate } from '@capawesome/capacitor-app-update';
+import { NavigationBar } from '@capgo/capacitor-navigation-bar';
 
 declare var window: any;
 declare var AndroidFullScreen: any;
@@ -28,19 +29,20 @@ export class AppComponent {
 
   async initializeApp() {
     await this.platform.ready();
+    console.log('AndroidFullScreen disponible:', !!window.AndroidFullScreen);
+
 
     // Inicializar idioma guardado
     await this.languages.initLanguage();
 
     try {
-      await SplashScreen.hide();
       await StatusBar.setOverlaysWebView({ overlay: true });
       await StatusBar.setStyle({ style: Style.Dark });
-
       await this.lockOrientation();
       this.keepScreenAwake();
-      this.activateImmersiveMode();
+      await this.activateImmersiveMode(); // ← hacelo async
       this.preloadTimeoutSound();
+      await this.checkForUpdate();
 
       // 🚀 Inicializamos AdMob (si corresponde)
 
@@ -67,16 +69,14 @@ export class AppComponent {
       console.warn('❌ Plugin Insomnia no disponible');
     }
   }
-
-  private activateImmersiveMode() {
-    if (window.AndroidFullScreen) {
-      AndroidFullScreen.immersiveMode(
-        (error: any) => console.error('❌ Error al activar modo inmersivo', error)
-      );
-    } else {
-      console.warn('❌ AndroidFullScreen plugin no disponible');
+private async activateImmersiveMode() {
+    try {
+        await StatusBar.hide();
+        console.log('✅ StatusBar ocultada');
+    } catch (error) {
+        console.warn('❌ Error ocultando StatusBar:', error);
     }
-  }
+}
 
   private preloadTimeoutSound() {
     if (window.plugins && window.plugins.NativeAudio) {

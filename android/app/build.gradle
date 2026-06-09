@@ -12,8 +12,8 @@ android {
     targetSdkVersion rootProject.ext.targetSdkVersion
 
     // IMPORTANTE: subir versión siempre
-    versionCode 5
-    versionName "1.0.3"
+    versionCode 8
+    versionName "1.0.4"
   }
 
   signingConfigs {

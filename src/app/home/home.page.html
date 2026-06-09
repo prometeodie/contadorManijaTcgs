@@ -16,10 +16,12 @@ class="player-1__tokens"
   'player-1__tokens-left': configuration.positionRight
 }"
 >
-<token-icons-display
-  [icons]="player1Icons"
-  [resetTrigger]="tokenResetTrigger"
-/>
+@if(!configuration.chessTimerConfig.chessTimerEnabled){
+  <token-icons-display
+    [icons]="player1Icons"
+    [resetTrigger]="tokenResetTrigger"
+  />
+}
 </div>
     <round-timer #round1 class="player-1__round-timer round-timer-right"  [BgImg]="bgImgP1"
     [ngClass]="{'round-timer-left': configuration.positionRight, 'round-timer-right': !configuration.positionRight}" *ngIf="configuration?.roundTimerEnabled"
@@ -31,7 +33,7 @@ class="player-1__tokens"
                         [turnsCounter]="fullTurnsCounter"
                         [isSoundEnable]="isSoundEnable"
                         [BgImg]="bgImgP1"
-                        [isChessTimerActive]=" configuration.chessTimerConfig.chessTimerEnabled"
+                        [isChessTimerActive]="configuration.chessTimerConfig.chessTimerEnabled"
                         class="player-1__counter" />
     <turn-timer
       class="player-1__turn-timer"
@@ -52,19 +54,21 @@ class="player-1__tokens"
     (colorChanged)="changePlayerColor($event)" (imgChanged)="imgPlayerChange($event)" class="color-changer"
      [ngClass]="{'color-changer-right': !configuration.positionRight, 'color-changer-left': configuration.positionRight}"/>
      <!-- TOKEN BUTTON -->
-     <button
-       type="button"
-       class="token-selector-btn"
-       [ngClass]="{
-         'token-selector-btn-changer-right': !configuration.positionRight,
-         'token-selector-btn-changer-left': configuration.positionRight
-       }"
-       (click)="showPlayer1Selector = !showPlayer1Selector"
-     >
-       <i class="fa-solid fa-coins"
-       [ngClass]="{
-         'shadow-txt': bgImgP1,}"></i>
-     </button>
+      @if(!configuration.chessTimerConfig.chessTimerEnabled){
+        <button
+          type="button"
+          class="token-selector-btn"
+          [ngClass]="{
+            'token-selector-btn-changer-right': !configuration.positionRight,
+            'token-selector-btn-changer-left': configuration.positionRight
+          }"
+          (click)="showPlayer1Selector = !showPlayer1Selector"
+        >
+          <i class="fa-solid fa-coins"
+          [ngClass]="{
+            'shadow-txt': bgImgP1,}"></i>
+        </button>
+      }
   </div>
  @if(showPlayer1Selector) {
   <icons-selector
@@ -110,10 +114,12 @@ class="player-1__tokens"
       'player-2__tokens-left': !configuration.positionRight
     }"
   >
-  <token-icons-display
-  [icons]="player2Icons"
-  [resetTrigger]="tokenResetTrigger"
-  />
+    @if(!configuration.chessTimerConfig.chessTimerEnabled){
+      <token-icons-display
+      [icons]="player2Icons"
+      [resetTrigger]="tokenResetTrigger"
+      />
+    }
 </div>
     <round-timer #round2 class="player-2__round-timer round-timer-left"
     [BgImg]="bgImgP2"
@@ -146,18 +152,20 @@ class="player-1__tokens"
     class="color-changer"
     [ngClass]="{'color-changer-right': configuration.positionRight, 'color-changer-left': !configuration.positionRight}"/>
     <!-- TOKEN BUTTON -->
-   <button
-  type="button"
-  class="token-selector-btn"
-  [ngClass]="{
-    'token-selector-btn-changer-right': configuration.positionRight,
-    'token-selector-btn-changer-left': !configuration.positionRight
-  }"
-  (click)="showPlayer2Selector = !showPlayer2Selector"
->
-  <i class="fa-solid fa-coins" [ngClass]="{
-         'shadow-txt': bgImgP2,}"></i>
-</button>
+       @if(!configuration.chessTimerConfig.chessTimerEnabled){
+         <button
+        type="button"
+        class="token-selector-btn"
+        [ngClass]="{
+          'token-selector-btn-changer-right': configuration.positionRight,
+          'token-selector-btn-changer-left': !configuration.positionRight
+        }"
+        (click)="showPlayer2Selector = !showPlayer2Selector"
+      >
+        <i class="fa-solid fa-coins" [ngClass]="{
+               'shadow-txt': bgImgP2,}"></i>
+      </button>
+       }
 
   </div>
 @if(showPlayer2Selector) {

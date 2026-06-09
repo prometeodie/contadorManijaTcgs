@@ -2,30 +2,38 @@ package com.franco.contador;
 
 import android.os.Bundle;
 import android.view.WindowManager;
-
-import androidx.activity.EdgeToEdge;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
 
-    // Android 15+ edge-to-edge compatible
-    EdgeToEdge.enable(this);
+        // Todo ANTES de super.onCreate()
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-    super.onCreate(savedInstanceState);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            WindowManager.LayoutParams lp = getWindow().getAttributes();
+            lp.layoutInDisplayCutoutMode =
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            getWindow().setAttributes(lp);
+        }
 
-    // Permitir usar toda la pantalla incluyendo la cámara frontal
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+        super.onCreate(savedInstanceState);
 
-      WindowManager.LayoutParams lp = getWindow().getAttributes();
-
-      lp.layoutInDisplayCutoutMode =
-        WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-
-      getWindow().setAttributes(lp);
+        // Controller DESPUÉS de super porque necesita la ventana inicializada
+        getWindow().getDecorView().post(() -> {
+            WindowInsetsControllerCompat controller = new WindowInsetsControllerCompat(
+                getWindow(), getWindow().getDecorView()
+            );
+            controller.hide(WindowInsetsCompat.Type.systemBars());
+            controller.setSystemBarsBehavior(
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            );
+        });
     }
-  }
 }
